@@ -1,0 +1,16 @@
+deepsnap
+matplotlib
+networkx
+numpy
+scikit-learn
+scipy
+seaborn
+test-tube
+tqdm
+json_numpy
+torch==2.4.0
+torch_geometric==2.6.1
+torch-scatter
+torch-sparse
+torch-spline-conv
+-f https://data.pyg.org/whl/torch-2.4.0+cpu.html
