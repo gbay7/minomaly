@@ -84,6 +84,8 @@ The experimental results are stored in the directory `plots/`.
 
 The discovered anomalous structure patterns are saved in the directory `plots/[experiment]/cluster/`.
 
+![anomalous pattern](imgs/anomaly_pattern.gif)
+
 ## Contact
 
 For questions, issues, or contributions, please create an issue in this repository or contact the author via the repository's GitHub page.
