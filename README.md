@@ -6,7 +6,7 @@ Minomaly is a scalable and interpretable graph anomaly detection method designed
 
 The datasets used in the experiments can be accessed from the following link:
 
-[Download Datasets](https://drive.google.com/drive/folders/162jgos2K8ITkWauyCeG-5vkRUV-9xlQX?usp=sharing) (source: [https://github.com/pygod-team/data](Data Repository for PyGOD))
+[Download Datasets](https://drive.google.com/drive/folders/162jgos2K8ITkWauyCeG-5vkRUV-9xlQX?usp=sharing) (source: [Data Repository for PyGOD](https://github.com/pygod-team/data))
 
 ## Running Minomaly
 
