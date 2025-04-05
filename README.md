@@ -80,7 +80,9 @@ python3 -m minomaly_struct.decoder \
 
 ## Results
 
-The experimental results are stored in the directory `plots/`.
+The experimental results are stored in the directory [plots](plots/). 
+
+The paper results (C1, A1, F1, F2, F3) are provided in the same directory.
 
 ### Anomalous Patterns
 
@@ -90,7 +92,7 @@ The discovered anomalous structure patterns are saved in the directory `plots/[e
 
 ## Benchmark
 
-The code of the benchmark of the other methods is stored in the directory `gbay-bond_benchmark/`.
+The code of the benchmark of the other methods is stored in the directory [gbay-bond_benchmark](gbay-bond_benchmark/).
 
 ## Contact
 
