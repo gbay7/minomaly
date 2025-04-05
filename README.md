@@ -2,6 +2,8 @@
 
 Minomaly is a scalable and interpretable graph anomaly detection method designed to identify rare and anomalous subgraph structures of nodes in large-scale graphs. This repository provides the implementation of Minomaly, along with datasets, instructions for running the method, and access to experimental results.
 
+![approach](imgs/approach.png)
+
 ## Datasets
 
 The datasets used in the experiments can be accessed from the following link:
@@ -85,6 +87,10 @@ The experimental results are stored in the directory `plots/`.
 The discovered anomalous structure patterns are saved in the directory `plots/[experiment]/cluster/`.
 
 ![anomalous pattern](imgs/anomaly_pattern.gif)
+
+## Benchmark
+
+The code of the benchmark of the other methods is stored in the directory `gbay-bond_benchmark/`.
 
 ## Contact
 
