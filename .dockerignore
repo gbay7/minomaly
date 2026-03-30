@@ -1,0 +1,13 @@
+code-original/
+latex-project/
+Minomaly.zip
+.git/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.claude/
+plots/
+results/
+savings/
+*.pth.tar

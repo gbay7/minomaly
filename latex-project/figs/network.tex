@@ -1,0 +1,298 @@
+\begin{tikzpicture}[
+    node distance=1.5cm and 2cm,
+    box/.style={rectangle, font=\bfseries, draw=materialBlueDark, rounded corners=3pt, minimum width=2.5cm, minimum height=1.2cm, fill=materialBlueLight, align=center},
+    inputbox/.style={rectangle, font=\bfseries, draw=materialGreen!70!black, minimum width=2.5cm, minimum height=1.2cm, fill=materialGreenLight, align=center},
+    outputbox/.style={rectangle, font=\bfseries, draw=materialRedLight!70!materialRed, minimum width=2.5cm, minimum height=1.2cm, fill=materialRedLight, align=center},
+    processbox/.style={rectangle, font=\bfseries, draw=materialPurple!70!black, minimum width=2.5cm, minimum height=1.2cm, fill=materialPurpleLight, align=center},
+    arrow/.style={->, >=stealth, draw=materialGrey, thick},
+    doublearrow/.style={-Implies, double equal sign distance, line width=1pt, draw=materialGrey},
+    graphnode/.style={circle, draw=materialBlueDark, fill=materialBlueLight, minimum size=0.1cm, inner sep=0.5pt},
+    anchornode/.style={circle, draw=materialOrangeDark, fill=materialOrangeLight, minimum size=0.1cm, inner sep=0.5pt, very thick},
+    empnode/.style={circle, draw=materialBlueDark, fill=white, minimum size=0.1cm, inner sep=0.5pt},
+    embednode/.style={circle, draw=materialOrangeDark, fill=materialOrangeLight, minimum size=0.25cm, inner sep=0pt},
+    posembed/.style={circle, draw=materialGreen, fill=materialGreenLight, minimum size=0.25cm, inner sep=0pt},
+    negembed/.style={circle, draw=materialRedLight!70!materialRed, fill=materialRedLight, minimum size=0.25cm, inner sep=0pt},
+    layer/.style={rectangle, draw=materialBlueDark, rounded corners=2pt, minimum width=3cm, minimum height=0.6cm, fill=materialBlueLight, align=center, font=\small},
+    phase/.style={rectangle, font=\bfseries, draw=none, fill=materialGreyLight, inner sep=4pt, rounded corners=10pt},
+    phase-label/.style={fill=materialBlue!40, text=black, font=\bfseries, inner sep=5pt, rounded corners=3pt},
+]
+
+% Main title
+
+\begin{scope}[local bounding box=input_section]
+    % Input section
+    \begin{scope}[local bounding box=input_section]
+    \node[phase-label] at (0, 9.5) {Subgraph Matching Neural Network Architecture};
+    % \node[inputbox] (g1_input) at (-7, 8) {$G_1$};
+    % \node[inputbox] (g2_input) at (-7, 6) {$G_2$};
+    
+    % Graph G1 visualization
+    \node (g1_vis) at (-4, 8) {
+        \begin{tikzpicture}[scale=0.4]
+            \node[anchornode] (a1) at (0,0) {$u$};
+            \node[graphnode] (a2) at (1,0.7) {};
+            \node[graphnode] (a3) at (1,-0.7) {};
+            
+            \draw[thick, materialGrey] (a1) -- (a2);
+            \draw[thick, materialGrey] (a1) -- (a3);
+            
+            % Draw a subtle dashed boundary
+            \draw[dashed, materialBlueDark, rounded corners] (-0.5,-1.2) rectangle (1.5,1.2);
+        \end{tikzpicture}
+    };
+    
+    % Graph G2 visualization
+    \node (g2_vis) at (-4, 6) {
+        \begin{tikzpicture}[scale=0.4]
+            \node[anchornode] (b1) at (0,0) {$u$};
+            \node[graphnode] (b2) at (1,0.7) {};
+            \node[graphnode] (b3) at (1,-0.7) {};
+            \node[graphnode] (b4) at (2,0.7) {};
+            \node[graphnode] (b5) at (2,-0.7) {};
+            
+            \draw[thick, materialGrey] (b1) -- (b2);
+            \draw[thick, materialGrey] (b1) -- (b3);
+            \draw[thick, materialGrey] (b2) -- (b4);
+            \draw[thick, materialGrey] (b3) -- (b5);
+            
+            % Draw a subtle dashed boundary
+            \draw[dashed, materialBlueDark, rounded corners] (-0.5,-1.2) rectangle (2.5,1.2);
+        \end{tikzpicture}
+    };
+    
+    % Connect with double arrows
+    % \draw[doublearrow] (g1_input) -- (g1_vis);
+    % \draw[doublearrow] (g2_input) -- (g2_vis);
+    
+    \node[below=1pt of g1_vis, align=center, font=\small] (anchor) {$G_1$};
+    \node[below=1pt of g2_vis, align=center, font=\small] (anchor) {$G_2$};
+
+\end{scope}
+
+% GNN Processing Section
+\begin{scope}[local bounding box=gnn_section]
+    \node[box] (gnn) at (-0.7, 8) {GraphSAGE GNN};
+    
+    % GNN Architecture visualization
+    \node[below=0.7cm of gnn] (gnn_arch) {
+        \begin{tikzpicture}[scale=0.6]
+            % Draw GNN layers
+            \node[layer] (l1) at (0,0) {Conv Layer 1};
+            \node[layer] (l2) at (0,-0.8) {Conv Layer 2};
+            \node[layer] (l3) at (0,-1.6) {$\dots$};
+            \node[layer] (l4) at (0,-2.4) {Conv Layer 8};
+            
+            % Draw skip connections
+            \draw[->, materialGrey, dashed] (l1.east) to[out=0,in=0] (l4.east);
+            \draw[->, materialGrey, dashed] (l2.east) to[out=0,in=0] (l4.east);
+
+            \node[layer, fill=materialOrangeLight, draw=materialOrangeDark] (pre) at (0,0.8) {Pre-processing Layer};
+
+            % Post-processing layer
+            \node[layer, fill=materialOrangeLight, draw=materialOrangeDark] (post) at (0,-3.2) {Post-processing Layer};
+            \node[below=0.1cm of post, align=center, font=\small] {Linear + LeakyReLU};
+            
+            % Arrows
+            % \draw[arrow] (l1) -- (l2);
+            % \draw[arrow] (l2) -- (l3);
+            % \draw[arrow] (l3) -- (l4);
+            % \draw[arrow] (l4) -- (post);
+        \end{tikzpicture}
+    };
+    
+    % Arrows from inputs to GNN
+    \draw[arrow] (g1_vis) -- (gnn);
+    \draw[arrow] (g2_vis) -- ([yshift=-0.3cm]gnn.west);
+\end{scope}
+
+% Order Embedding Section
+\begin{scope}[local bounding box=embedding_section]
+    \node[box, fill=materialOrangeLight, draw=materialOrangeDark] (embed) at (3.5, 8) {Order Embedding\\$\phi(G_1), \phi(G_2)$};
+    
+    % Embedding visualization
+    \node[below=0.7cm of embed] (embed_vis) {
+        \begin{tikzpicture}[scale=0.7]
+            \draw[->, materialGrey] (-1.2,-1.2) -- (1.5,-1.2) node[right] {$x_1$};
+            \draw[->, materialGrey] (-1.2,-1.2) -- (-1.2,1.5) node[above] {$x_2$};
+            
+            \node[embednode] (e1) at (-0.7,0.2) {};
+            \node[embednode] (e2) at (0.5,0.8) {};
+            
+            % Label embeddings
+            \node[below=0.5pt of e1, font=\footnotesize] {$\phi(G_1)$};
+            \node[above=0.5pt of e2, font=\footnotesize] {$\phi(G_2)$};
+            
+            % Show partial order
+            % \draw[dashed, materialGrey] (e1) -- ($(e1) + (3,3)$);
+            \draw[materialOrangeDark, ->, thick] (e1) -- (e2);
+            \node[below right=0.1cm of e2, font=\footnotesize] {$\phi(G_1) \preceq \phi(G_2)$};
+        \end{tikzpicture}
+    };
+    
+    \draw[arrow] (gnn) -- (embed);
+    \draw[doublearrow] (embed) -- (embed_vis);
+\end{scope}
+
+% Classification Section
+\begin{scope}[local bounding box=classification_section]
+    % \node[box] (concat) at (8, 7) {Concatenate\\Embeddings};
+    \node[box] (mlp) at (7.5, 8) {MLP\\Binary Classifier};
+    \node[outputbox] (output) at (7.5, 6) {Output: $G_1 \subseteq G_2$};
+    
+    \draw[arrow] (embed) -- (mlp);
+    \draw[arrow] (mlp) -- (output);
+\end{scope}
+
+\end{scope}
+
+% Training Section
+\begin{scope}[local bounding box=training_section, shift={(1.25,-1)}]
+    \node[phase-label] (train_label) at (0, 3) {Training Process};
+    
+    % Positive examples
+    \node[inputbox] (pos_ex) at (-6, 1.5) {Positive Examples\\$G_1^+ \subseteq G_2^+$};
+    
+    \node[right=1.2cm of pos_ex] (pos_vis) {
+        \begin{tikzpicture}[scale=0.5]
+            % G1+
+            \begin{scope}[shift={(-2.5,0)}]
+                \node[anchornode] (p1) at (0,0) {$u$};
+                \node[graphnode] (p2) at (1,0.7) {};
+                \node[graphnode] (p3) at (1,-0.7) {};
+                
+                \draw[thick, materialGrey] (p1) -- (p2);
+                \draw[thick, materialGrey] (p1) -- (p3);
+                
+                \node[below] at (0.5,-1) {$G_1^+$};
+            \end{scope}
+            
+            % Arrow
+            % \draw[arrow] (0,0) -- (1.8,0);
+            \node[above] at (0,-0.5) {$\subseteq$};
+            
+            % G2+
+            \begin{scope}[shift={(1,0)}]
+                \node[anchornode] (q1) at (0,0) {$u$};
+                \node[graphnode] (q2) at (1,0.7) {};
+                \node[graphnode] (q3) at (1,-0.7) {};
+                \node[graphnode] (q4) at (2,0.7) {};
+                \node[graphnode] (q5) at (2,-0.7) {};
+                
+                \draw[thick, materialGrey] (q1) -- (q2);
+                \draw[thick, materialGrey] (q1) -- (q3);
+                \draw[thick, materialGrey] (q2) -- (q4);
+                \draw[thick, materialGrey] (q3) -- (q5);
+                
+                \node[below] at (1,-1) {$G_2^+$};
+            \end{scope}
+        \end{tikzpicture}
+    };
+    
+    % Negative examples
+    \node[outputbox] (neg_ex) at (-6, -0.5) {Negative Examples\\$G_1^- \not\subseteq G_2^-$};
+    
+    \node[right=1.2cm of neg_ex] (neg_vis) {
+        \begin{tikzpicture}[scale=0.5]
+            % G1-
+            \begin{scope}[shift={(-2.5,0)}]
+                \node[anchornode] (n1) at (0,0) {$u$};
+                \node[graphnode] (n2) at (1,0.7) {};
+                \node[graphnode] (n3) at (1,-0.7) {};
+                \node[graphnode] (n4) at (0,1.4) {};
+                
+                \draw[thick, materialGrey] (n1) -- (n2);
+                \draw[thick, materialGrey] (n1) -- (n3);
+                \draw[thick, materialGrey] (n1) -- (n4);
+                
+                \node[below] at (0.5,-1) {$G_1^-$};
+            \end{scope}
+            
+            % Arrow with not subseteq
+            % \draw[arrow] (1.2,0) -- (1.8,0);
+            \node[above] at (0,-0.5) {$\not\subseteq$};
+            
+            % G2-
+            \begin{scope}[shift={(1,0)}]
+                \node[anchornode] (m1) at (0,0) {$u$};
+                \node[graphnode] (m2) at (1,0.7) {};
+                \node[graphnode] (m3) at (1,-0.7) {};
+                \node[graphnode] (m4) at (2,0.7) {};
+                
+                \draw[thick, materialGrey] (m1) -- (m2);
+                \draw[thick, materialGrey] (m1) -- (m3);
+                \draw[thick, materialGrey] (m2) -- (m4);
+                
+                \node[below] at (1,-1) {$G_2^-$};
+            \end{scope}
+        \end{tikzpicture}
+    };
+    
+    % Loss Function
+    \node[processbox] (loss) at (3, 0.5) {Loss Function \\ (\ref{eq:loss_function})};
+    
+    % \node[below=0.7cm of loss] (loss_eq) {
+    %     \begin{tikzpicture}
+    %         \node[align=center, font=\scriptsize] {
+    %             $E(G_1, G_2) = \sum_{i} \|\max(0, \phi_i(G_1) - \phi_i(G_2))\|^2$ \\[10pt]
+    %             $\sum\limits_{(G^+_1, G^+_2)} E(G^+_1, G^+_2) + \sum\limits_{(G^-_1, G^-_2)} \max(0, \alpha - E(G^-_1, G^-_2))$
+    %         };
+    %     \end{tikzpicture}
+    % };
+    
+    % Loss visualization
+    \node[right=1cm of loss] (loss_vis) {
+        \begin{tikzpicture}[scale=0.7]
+            \draw[->, materialGrey] (-1.5,-1.2) -- (1.5,-1.2) node[right] {$x_1$};
+            \draw[->, materialGrey] (-1.5,-1.2) -- (-1.5,1.5) node[above] {$x_2$};
+            
+            % % Positive pair
+            \node[posembed] (p1) at (-1,0) {};
+            \node[posembed] (p2) at (0,1) {};
+            \draw[materialGreen, ->, thick] (p1) -- (p2);
+            
+            % Negative pair
+            \node[negembed] (n1) at (1.5,-0.5) {};
+            \node[negembed] (n2) at (1,0.5) {};
+            \draw[materialRed, ->, thick, dashed] (n1) -- (n2) coordinate[midway] (arrow_mid);
+
+            
+            % Margin visualization
+            % \draw[materialGrey, dotted] (-1.4,1.3) -- (1.3,-1.2);
+            \node[right=2pt of arrow_mid,font=\scriptsize,color=red] {$\ge \alpha$-margin};
+
+
+            \node[below=0.5pt of p1, font=\scriptsize,color=materialGreen] {$\phi(G^+_1)$};
+            \node[above=0.5pt of p2, font=\scriptsize,color=materialGreen] {$\phi(G^+_2)$};
+
+            \node[left=1pt of n1, font=\scriptsize,color=materialRed] {$\phi(G^-_1)$};
+            \node[above right=0.1pt and 0pt of n2, font=\scriptsize,color=materialRed] {$\phi(G^-_2)$};
+        \end{tikzpicture}
+    };
+    
+    % Connections
+    \draw[doublearrow] (pos_ex) -- (pos_vis);
+    \draw[doublearrow] (neg_ex) -- (neg_vis);
+    \draw[arrow] (pos_vis) -- (loss);
+    \draw[arrow] (neg_vis) -- (loss);
+    \draw[doublearrow] (loss) -- (loss_vis);
+    % \draw[arrow] (loss) -- (loss_eq);
+\end{scope}
+
+% Background rectangles for the sections
+\begin{pgfonlayer}{background}
+    \node[phase, fit=(input_section)] {};
+    \node[phase, fit=(gnn_section)] {};
+    \node[phase, fit=(embedding_section)] {};
+    \node[phase, fit=(classification_section)] {};
+    \node[phase, fit=(training_section) (train_label)] {};
+\end{pgfonlayer}
+
+% Main flow arrows
+% \draw[arrow, very thick] (input_section.east) -- (gnn_section.west);
+% \draw[arrow, very thick] (gnn_section.east) -- (embedding_section.west);
+% \draw[arrow, very thick] (embedding_section.east) -- (classification_section.west);
+
+% Training feedback arrow
+\draw[arrow, dashed, thick] (embedding_section.south) to[out=-20,in=0] ([yshift=1cm]loss.east);
+
+\end{tikzpicture}

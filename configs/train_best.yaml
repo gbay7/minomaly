@@ -1,0 +1,33 @@
+# Best config: Hybrid + SAGE + projection + softplus + GLASS labeling
+device:
+  device: auto
+
+model:
+  method_type: hybrid
+  conv_type: SAGE
+  skip: learnable
+  n_layers: 8
+  hidden_dim: 64
+  margin: 0.1
+  dropout: 0.0
+  input_dim: 2
+  model_path: ckpt/model.pt
+
+training:
+  enabled: true
+  n_batches: 50000
+  batch_size: 64
+  lr: 0.0001
+  weight_decay: 0.0
+  optimizer: adam
+  scheduler: none
+  eval_interval: 2000
+  val_size: 4096
+  min_graph_size: 5
+  max_graph_size: 29
+  checkpoint_dir: ckpt
+  node_anchored: true
+  clip_grad: 1.0
+
+seed: 42
+batch_size: 1000

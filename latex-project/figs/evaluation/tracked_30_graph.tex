@@ -1,0 +1,21 @@
+\begin{tikzpicture}
+  \draw
+    (0.0:2) node[fill=orange, minimum size=4mm, circle, draw] (30){30}
+    (51.429:2) node[fill=green, minimum size=2mm, circle, draw] (1416){1416}
+    (102.857:2) node[fill=green, minimum size=2mm, circle, draw] (2343){2343}
+    (154.286:2) node[fill=green, minimum size=2mm, circle, draw] (697){697}
+    (205.714:2) node[fill=green, minimum size=2mm, circle, draw] (1080){1080}
+    (257.143:2) node[fill=green, minimum size=2mm, circle, draw] (738){738}
+    (308.571:2) node[fill=green, minimum size=2mm, circle, draw] (2162){2162};
+  \begin{scope}[-]
+    \draw (30) to (1416);
+    \draw (30) to (2343);
+    \draw (30) to (697);
+    \draw (30) to (2162);
+    \draw (30) to (738);
+    \draw (697) to (1080);
+    \draw (1080) to (738);
+    \draw (1080) to (2162);
+    \draw (738) to (2162);
+  \end{scope}
+\end{tikzpicture}

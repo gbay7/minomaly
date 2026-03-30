@@ -1,0 +1,120 @@
+\section*{Action Items for Paper Revision}
+
+\subsection*{Reviewer \#1}
+
+\subsubsection*{Comment 1: Positioning with SPMiner}
+\begin{itemize}
+    \item[$\square$] Highlight divergence from SPMiner in \textbf{Related Works} section
+    \item[$\square$] Highlight divergence from SPMiner in \textbf{Discussion} section
+\end{itemize}
+
+\subsubsection*{Comment 2: Dataset Diversity}
+\begin{itemize}
+    \item[$\square$] Test different injection ratios (beyond 5\%)
+    \item[$\square$] Test different motifs (beyond cliques)
+    \item[$\square$] Test different thresholds for hyperparameter interpretability
+\end{itemize}
+
+\subsubsection*{Comment 3: Interpretability Support}
+\begin{itemize}
+    \item[$\square$] Add summary table in \textbf{empirical section} with extracted patterns and sizes
+    \item[$\square$] Include discussion about the patterns
+\end{itemize}
+
+\subsection*{Reviewer \#2}
+
+\subsubsection*{Comment 1: Graph Mining Literature}
+\begin{itemize}
+    \item[$\square$] Optionally add method names next to references [8-10]
+\end{itemize}
+
+\subsubsection*{Comment 2: Pattern Extraction}
+\begin{itemize}
+    \item[$\square$] Add details about \textbf{tree sampling method} (Kashtan et al., 2004)
+\end{itemize}
+
+\subsubsection*{Comment 3: GNN Training Data}
+\begin{itemize}
+    \item[$\square$] Explicitly mention synthetic data generation methods:
+    \begin{itemize}
+        \item Erdős-Rényi Graph
+        \item Watts-Strogatz Graph
+        \item Barabási-Albert Graph
+        \item Power Law Cluster Graph
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Comment 7: Missing References}
+\begin{itemize}
+    \item[$\square$] Add references for deep learning interpretability claims
+\end{itemize}
+
+\subsubsection*{Comment 8: Reference Clarification}
+\begin{itemize}
+    \item[$\square$] Clarify how references [8-10] relate to anomaly detection
+    \item[$\square$] Better explain outlier detection methods relevance
+\end{itemize}
+
+\subsubsection*{Comment 9: Reference [3] Correction}
+\begin{itemize}
+    \item[$\square$] Find and add journal information for reference [3]
+\end{itemize}
+
+\subsubsection*{Comment 11: Terminology}
+\begin{itemize}
+    \item[$\square$] Standardize ``vertex'' vs ``node'' throughout paper
+\end{itemize}
+
+\subsection*{Reviewer \#3}
+
+\subsubsection*{Comment 1: Definition Clarity}
+\begin{itemize}
+    \item[$\square$] Clarify which definitions in Section 3 are preliminary vs novel
+\end{itemize}
+
+\subsubsection*{Comment 3: Rare Subgraphs Motivation}
+\begin{itemize}
+    \item[$\square$] Expand motivation for defining anomalies as rare small subgraphs
+    \item[$\square$] Add reference [3] near rarity assumption claim
+\end{itemize}
+
+\subsubsection*{Comment 7: $T_F$ Parameter (Future work)}
+\begin{itemize}
+    \item[$\square$] Conduct mathematical study relating real frequency to OES-based frequency
+\end{itemize}
+
+\subsubsection*{Comment 8: GraphSAGE Justification}
+\begin{itemize}
+    \item[$\square$] Justify GraphSAGE usage and highlight scalability advantages
+\end{itemize}
+
+\subsection*{Priority Levels}
+
+\paragraph{High Priority:}
+\begin{enumerate}
+    \item Pattern table + discussion (R1-C3)
+    \item Synthetic data methods (R2-C3)
+    \item Tree sampling details (R2-C2)
+    \item Preliminary vs novel definitions (R3-C1)
+    \item Add reference [3] (R3-C3)
+    \item Standardize terminology (R2-C11)
+    \item Deep learning references (R2-C7)
+\end{enumerate}
+
+\paragraph{Medium Priority:}
+\begin{enumerate}
+    \setcounter{enumi}{7}
+    \item SPMiner divergence (R1-C1)
+    \item Rare subgraphs motivation (R3-C3)
+    \item GraphSAGE justification (R3-C8)
+    \item References [8-10] clarification (R2-C8)
+    \item Fix reference [3] (R2-C9)
+\end{enumerate}
+
+\paragraph{Low Priority (Future/Optional):}
+\begin{enumerate}
+    \setcounter{enumi}{12}
+    \item Different ratios/motifs testing (R1-C2)
+    \item $T_F$ mathematical study (R3-C7)
+    \item Method names for [8-10] (R2-C1)
+\end{enumerate}

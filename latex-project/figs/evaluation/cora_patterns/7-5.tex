@@ -1,0 +1,28 @@
+\begin{tikzpicture}
+  \draw
+    (119.059:1.914) node[fill={rgb,140:red,255;green,0;blue,0}, minimum size=2mm, circle, draw, text=white] (1224){1224}
+    (12.604:2.175) node[fill=green!70!black, minimum size=2mm, circle, draw, text=white] (778){778}
+    (58.042:1.926) node[fill=green!70!black, minimum size=2mm, circle, draw, text=white] (779){779}
+    (193.013:3.079) node[fill=green!70!black, minimum size=2mm, circle, draw, text=white] (1525){1525}
+    (190.555:0.719) node[fill=green!70!black, minimum size=2mm, circle, draw, text=white] (1370){1370}
+    (266.660:1.926) node[fill=green!70!black, minimum size=2mm, circle, draw, text=white] (1914){1914}
+    (327.226:1.912) node[fill=green!70!black, minimum size=2mm, circle, draw, text=white] (1919){1919};
+  \begin{scope}[-]
+    \draw (1224) to (778);
+    \draw (1224) to (779);
+    \draw (1224) to (1370);
+    \draw (1224) to (1525);
+    \draw (1224) to (1919);
+    \draw (778) to (779);
+    \draw (778) to (1370);
+    \draw (778) to (1914);
+    \draw (778) to (1919);
+    \draw (779) to (1370);
+    \draw (779) to (1914);
+    \draw (779) to (1919);
+    \draw (1525) to (1370);
+    \draw (1525) to (1914);
+    \draw (1370) to (1919);
+    \draw (1914) to (1919);
+  \end{scope}
+\end{tikzpicture}
