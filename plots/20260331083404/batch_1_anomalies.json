@@ -1,0 +1,82 @@
+{
+    "stats": {
+        "stat_results": {
+            "accuracy": 0.9741506646971935,
+            "recall": 0.014285714285714285,
+            "precision": 0.5,
+            "f1": 0.027777777777777776,
+            "auroc": 0.5069506119354489,
+            "ap": 0.03262291622705212,
+            "tp": 1,
+            "tn": 2637,
+            "fp": 1,
+            "fn": 69,
+            "true_pred_nodes": [
+                1053
+            ],
+            "optimal_threshold": 0.012900000000000023,
+            "roc_curve": {
+                "fpr": [
+                    0.0,
+                    0.0003790750568612585,
+                    0.0003790750568612585,
+                    1.0
+                ],
+                "tpr": [
+                    0.0,
+                    0.0,
+                    0.014285714285714285,
+                    1.0
+                ],
+                "thresholds": [
+                    Infinity,
+                    0.9896,
+                    0.9871,
+                    0.0
+                ]
+            }
+        },
+        "predicted_anomalies_len": 2,
+        "batch_number": 1,
+        "batch_time": "0:00:01.075850",
+        "total_time": "0:00:01.075850",
+        "cumulative_verified": 2,
+        "copied_pending": 12
+    },
+    "anomalies": [
+        {
+            "anchor": 395,
+            "neigh": [
+                395,
+                640,
+                1147,
+                2367,
+                1090,
+                1598,
+                765
+            ],
+            "score": 0.0104,
+            "freq": 0.0104,
+            "weight": 0.00258493353028065,
+            "original": true,
+            "is_true": false
+        },
+        {
+            "anchor": 1053,
+            "neigh": [
+                1053,
+                738,
+                2056,
+                459,
+                2386,
+                1623,
+                311
+            ],
+            "score": 0.0129,
+            "freq": 0.0129,
+            "weight": 0.00258493353028065,
+            "original": true,
+            "is_true": true
+        }
+    ]
+}

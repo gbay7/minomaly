@@ -297,15 +297,7 @@ class MinomalyPipeline:
                         "copied_pending": len(count_copied),
                     },
                     "anomalies": [
-                        {
-                            "anchor": b.anchor(),
-                            "neigh": list(b.neigh),
-                            "score": b.score,
-                            "freq": b.freq,
-                            "weight": b.weight,
-                            "original": b.original,
-                            "is_true": b.anchor() in set(anomalous_nodes_flat),
-                        }
+                        {**b.to_dict(), "is_true": b.anchor() in set(anomalous_nodes_flat)}
                         for b in agent_verified
                     ],
                 }
@@ -344,15 +336,7 @@ class MinomalyPipeline:
             "total_time": str(total_time),
             "gpu_memory": torch.cuda.max_memory_allocated() / (1024**3) if torch.cuda.is_available() else 0,
             "all_verified_beams": [
-                {
-                    "anchor": b.anchor(),
-                    "neigh": list(b.neigh),
-                    "score": b.score,
-                    "freq": b.freq,
-                    "weight": b.weight,
-                    "original": b.original,
-                    "is_true": b.anchor() in set(anomalous_nodes_flat),
-                }
+                {**b.to_dict(), "is_true": b.anchor() in set(anomalous_nodes_flat)}
                 for b in verified
             ],
         }

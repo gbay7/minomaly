@@ -127,7 +127,7 @@ class StrengthSearchAgent:
             beam_sets.append(BeamSet([beam]))
 
         steps = 1
-        while beam_sets and steps <= self.max_steps:
+        while beam_sets and steps < self.max_steps:
             steps += 1
             beam_sets = self._step(beam_sets, steps, cb)
 

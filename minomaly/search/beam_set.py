@@ -130,6 +130,7 @@ class BeamSet:
         # Assign scores to beams
         for i, beam in enumerate(self.beams):
             beam.freq = (freq_counts[i].item() / total_n_embs) if total_n_embs > 0 else 0.0
+            beam.freq_history.append((len(beam.neigh), beam.freq))
             beam.score = scorer(beam.freq, beam.weight, alpha, beam.last_score)
 
             if unchange_direction:

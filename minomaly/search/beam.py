@@ -26,6 +26,7 @@ class Beam:
         "node", "graph", "neigh", "frontier", "visited", "emb",
         "score", "freq", "weight", "unchange", "last_score", "original",
         "_add_self_loop", "_node_anchored", "_input_dim",
+        "freq_history",  # list of (step, freq) for tracking df/ds
     )
 
     def __init__(
@@ -68,6 +69,7 @@ class Beam:
         self.emb: Optional[torch.Tensor] = None
         self.score: Optional[float] = None
         self.freq: Optional[float] = None
+        self.freq_history: list[tuple[int, float]] = []  # (step, freq)
 
         tw = total_weight if total_weight is not None else graph.num_nodes
         self.weight: float = len(self.neigh) / tw
@@ -97,7 +99,8 @@ class Beam:
         if max_cands is not None and len(frontier) > max_cands:
             frontier = random.sample(frontier, max_cands)
 
-        return [
+        parent_history = list(self.freq_history)
+        candidates = [
             Beam(
                 node=cand,
                 graph=self.graph,
@@ -113,6 +116,9 @@ class Beam:
             )
             for cand in frontier
         ]
+        for c in candidates:
+            c.freq_history = list(parent_history)
+        return candidates
 
     # ── Embedding ─────────────────────────────────────────────────────
 
@@ -123,7 +129,7 @@ class Beam:
         in SORTED order (not anchor-first), preserving the same anchor
         position as the parent graph's node ordering.
         """
-        from torch_geometric.data import Data
+        from torch_geometric.data import Data as _Data
         from torch_geometric.utils import coalesce
 
         neigh_set = set(self.neigh)
@@ -206,6 +212,7 @@ class Beam:
             freq_count += supergraphs.sum().item()
 
         self.freq = freq_count / n_embs if n_embs > 0 else 0.0
+        self.freq_history.append((len(self.neigh), self.freq))
         self.score = scorer(self.freq, self.weight, alpha, self.last_score)
 
         # Track convergence
@@ -259,6 +266,7 @@ class Beam:
         beam._add_self_loop = self._add_self_loop
         beam._node_anchored = self._node_anchored
         beam._input_dim = self._input_dim
+        beam.freq_history = list(self.freq_history)
         return beam
 
     # ── Identity ──────────────────────────────────────────────────────
@@ -287,6 +295,7 @@ class Beam:
             "last_score": self.last_score,
             "unchange": self.unchange,
             "original": self.original,
+            "freq_history": self.freq_history,
         }
 
     def __repr__(self) -> str:
