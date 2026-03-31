@@ -1,0 +1,174 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\usepackage{xcolor}
+
+\geometry{margin=2.5cm}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{example}{Example}
+
+\newcommand{\Freq}{\mathrm{Freq}}
+\newcommand{\freq}{\mathrm{freq}}
+\newcommand{\GG}{\mathcal{G}}
+\newcommand{\PP}{\mathcal{P}}
+
+\newcommand\subsetsim{\mathrel{\substack{
+  \textstyle\subset\\[-0.2ex]\textstyle\sim}}}
+
+\title{Relation Between Supergraph-Based Frequency ($\Freq_G$)\\and Exact-Match Frequency ($\freq_{exact}$)}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Definitions}
+
+Let $G = (V, E)$ be a graph. Let $\GG(G)$ denote the set of all connected subgraphs of~$G$.
+
+\begin{definition}[Exact-match frequency]
+For a pattern $P$, the \textbf{exact-match frequency} counts the number of distinct connected subgraphs of $G$ that are isomorphic to $P$:
+\[
+\freq_{exact}(P) \;=\; \big|\{H \in \GG(G) : H \cong P\}\big|
+\]
+\end{definition}
+
+\begin{definition}[Supergraph-based frequency (proposed in the paper)]
+The \textbf{supergraph-based frequency} counts the number of connected subgraphs of $G$ that \emph{contain} an isomorphic copy of $P$:
+\[
+\Freq_G(P) \;=\; |UP_G(P)| \;=\; \big|\{H \in \GG(G) : P \subsetsim H\}\big|
+\]
+where $P \subsetsim H$ means $\exists\, H' \subseteq H$ such that $H' \cong P$ (subgraph isomorphism).
+\end{definition}
+
+\section{Exact Relation}
+
+\begin{theorem}[Summation over the subgraph lattice]\label{thm:relation}
+For any pattern $P$ and any graph $G$:
+\[
+\boxed{\;\Freq_G(P) \;=\; \sum_{\substack{Q \,\in\, \GG(G)/{\cong} \\[2pt] P \,\subsetsim\, Q}} \freq_{exact}(Q)\;}
+\]
+where $\GG(G)/{\cong}$ is the set of isomorphism classes of connected subgraphs of~$G$. Equivalently:
+\[
+\Freq_G(P) \;=\; \freq_{exact}(P) \;+\; \sum_{\substack{Q \,\in\, \GG(G)/{\cong} \\[2pt] P \,\subsetneq_i\, Q}} \freq_{exact}(Q)
+\]
+where $P \subsetneq_i Q$ means $P$ is isomorphic to a \emph{proper} subgraph of $Q$.
+\end{theorem}
+
+\begin{proof}
+Every subgraph $H \in \GG(G)$ belongs to exactly one isomorphism class $[H] \in \GG(G)/{\cong}$. We can therefore partition $UP_G(P)$ by the isomorphism class of its elements:
+\begin{align*}
+\Freq_G(P) \;&=\; \big|\{H \in \GG(G) : P \subsetsim H\}\big| \\[4pt]
+             &=\; \sum_{H \in \GG(G)} \mathbf{1}[P \subsetsim H] \\[4pt]
+             &=\; \sum_{Q \,\in\, \GG(G)/{\cong}} \;\sum_{\substack{H \in \GG(G) \\[1pt] H \cong Q}} \mathbf{1}[P \subsetsim H] \\[4pt]
+             &=\; \sum_{Q \,\in\, \GG(G)/{\cong}} \mathbf{1}[P \subsetsim Q] \cdot \big|\{H \in \GG(G) : H \cong Q\}\big| \\[4pt]
+             &=\; \sum_{\substack{Q \,\in\, \GG(G)/{\cong} \\[2pt] P \,\subsetsim\, Q}} \freq_{exact}(Q).
+\end{align*}
+The key step (line 3 to 4) uses the fact that $P \subsetsim H$ depends only on the isomorphism class of $H$: if $H \cong Q$ and $P \subsetsim Q$, then $P \subsetsim H$.
+
+Separating the term $Q = P$ (where $P \subsetsim P$ trivially via the identity) gives the second form.
+\end{proof}
+
+\section{Interpretation}
+
+\subsection{$\Freq_G$ as a cumulative sum over the subgraph lattice}
+
+The set of isomorphism classes $\GG(G)/{\cong}$ forms a partially ordered set (poset) under $\subsetsim$. The function $\freq_{exact}$ assigns a count to each element of this poset, and $\Freq_G$ is its \textbf{cumulative sum upward} (the zeta transform):
+\[
+\Freq_G(P) = \big(\zeta \cdot \freq_{exact}\big)(P) \;=\; \sum_{Q \,\geq\, P} \freq_{exact}(Q)
+\]
+where $Q \geq P$ means $P \subsetsim Q$ in the poset ordering. This is a standard construction in combinatorics on partially ordered sets.
+
+\subsection{Recovering $\freq_{exact}$ from $\Freq_G$ (M\"obius inversion)}
+
+By M\"obius inversion on the poset $(\GG(G)/{\cong},\; \subsetsim)$, the exact frequency can be recovered:
+\[
+\freq_{exact}(P) \;=\; \sum_{\substack{Q \,\in\, \GG(G)/{\cong} \\[2pt] P \,\subsetsim\, Q}} \mu(P, Q) \cdot \Freq_G(Q)
+\]
+where $\mu$ is the M\"obius function of the subgraph poset, defined recursively by $\mu(P, P) = 1$ and
+\[
+\mu(P, Q) = -\sum_{\substack{R \\[1pt] P \,\subsetsim\, R \,\subsetneq_i\, Q}} \mu(P, R) \quad \text{for } P \subsetneq_i Q.
+\]
+Computing $\mu$ is intractable in general (the subgraph lattice is exponentially large), but this shows that $\Freq_G$ and $\freq_{exact}$ are \emph{in bijection}: knowing one determines the other completely.
+
+\subsection{Why $\Freq_G$ is the right measure for anomaly detection}
+
+The relation $\Freq_G(P) = \freq_{exact}(P) + \sum_{Q \supsetneq P} \freq_{exact}(Q)$ means:
+
+\begin{itemize}
+\item $\freq_{exact}(P)$ counts the occurrences of $P$ \emph{alone} --- how many times $P$ appears as an exact copy.
+\item $\Freq_G(P)$ counts the occurrences of $P$ \emph{in any context} --- how many subgraphs of $G$ contain $P$ as part of their structure, regardless of what else they contain.
+\end{itemize}
+
+For anomaly detection, $\Freq_G$ is more appropriate because:
+\begin{enumerate}
+\item A pattern $P$ that is rare as an exact match but common inside larger structures is \emph{not} anomalous --- it is a building block of normal behavior. Only $\Freq_G(P)$ captures this: if many larger subgraphs contain $P$, then $\Freq_G(P)$ is high, correctly indicating normality.
+
+\item Conversely, if $\Freq_G(P)$ is low, then $P$ is rare both as an exact match \emph{and} as a substructure of any larger pattern. This is a stronger (and more useful) statement of anomalousness.
+\end{enumerate}
+
+\section{Bounds}
+
+\begin{proposition}[Bounds on $\Freq_G$ in terms of $\freq_{exact}$]
+\label{prop:bounds}
+For any pattern $P$:
+\[
+\freq_{exact}(P) \;\leq\; \Freq_G(P) \;\leq\; \sum_{s \,=\, |V(P)|}^{n} N_s(G)
+\]
+where $N_s(G) = |\{H \in \GG(G) : |V(H)| = s\}|$ is the number of connected subgraphs of $G$ with exactly $s$ nodes.
+
+The lower bound is tight when $P$ is never contained in any strictly larger connected subgraph of $G$ (e.g., $P = G$ itself). The upper bound is tight when $P$ is a single node or edge (contained in every connected subgraph of sufficient size).
+\end{proposition}
+
+\begin{proposition}[Anti-monotonicity from the summation identity]
+If $P_1 \subseteq_i P_2$, then $\{Q : P_2 \subsetsim Q\} \subseteq \{Q : P_1 \subsetsim Q\}$ by transitivity of $\subsetsim$. Therefore:
+\[
+\Freq_G(P_2) = \sum_{Q \,\supseteq\, P_2} \freq_{exact}(Q) \;\leq\; \sum_{Q \,\supseteq\, P_1} \freq_{exact}(Q) = \Freq_G(P_1)
+\]
+since the sum for $P_2$ runs over a subset of the terms in the sum for $P_1$, and all terms $\freq_{exact}(Q) \geq 0$.
+\end{proposition}
+
+\section{Examples}
+
+\begin{example}[Single edge]
+Let $P = K_2$ (a single edge). Then $P \subsetsim H$ for every connected subgraph $H$ with $|V(H)| \geq 2$. So:
+\[
+\Freq_G(K_2) = \sum_{\substack{Q \\[1pt] |V(Q)| \geq 2}} \freq_{exact}(Q) = |\GG(G)| - n
+\]
+since the only connected subgraphs NOT containing an edge are the $n$ isolated nodes. Meanwhile $\freq_{exact}(K_2) = |E|$.
+\end{example}
+
+\begin{example}[Triangle]
+Let $P = K_3$ (a triangle). Then:
+\[
+\Freq_G(K_3) = \freq_{exact}(K_3) + \sum_{\substack{Q \supsetneq K_3}} \freq_{exact}(Q)
+\]
+The first term counts the triangles in $G$. The second counts every larger connected subgraph of $G$ that contains at least one triangle. In dense graphs, $\Freq_G(K_3) \gg \freq_{exact}(K_3)$.
+\end{example}
+
+\begin{example}[Anomalous clique]
+Let $P = K_7$ (a 7-clique injected as an anomaly into a sparse graph like Cora with average degree 4.1). Then:
+\begin{itemize}
+    \item $\freq_{exact}(K_7)$: the number of 7-cliques in $G$. In Cora with 10 injected cliques, $\freq_{exact}(K_7) = 10$.
+    \item $\Freq_G(K_7) = 10 + \sum_{Q \supsetneq K_7} \freq_{exact}(Q)$. Since Cora is sparse, there are very few connected subgraphs larger than 7 nodes that still contain a complete 7-clique. So $\Freq_G(K_7) \approx \freq_{exact}(K_7) = 10$. The two measures nearly coincide for large, rare patterns.
+\end{itemize}
+This illustrates that $\Freq_G(P) \approx \freq_{exact}(P)$ when $P$ is large and rare --- precisely the regime where anomaly detection operates.
+\end{example}
+
+\section{Summary}
+
+The exact, deterministic relation between the two frequency measures is:
+\[
+\boxed{\;\Freq_G(P) = \sum_{\substack{Q \,\in\, \GG(G)/{\cong} \\[2pt] P \,\subsetsim\, Q}} \freq_{exact}(Q) = \freq_{exact}(P) + \sum_{\substack{Q \,\supsetneq\, P}} \freq_{exact}(Q)\;}
+\]
+
+$\Freq_G$ is the zeta transform of $\freq_{exact}$ over the subgraph lattice, and $\freq_{exact}$ is recoverable via M\"obius inversion. For anomaly detection, where the patterns of interest are large and rare, the surplus $\sum_{Q \supsetneq P} \freq_{exact}(Q)$ is small, making $\Freq_G(P) \approx \freq_{exact}(P)$. For small, common patterns, the surplus is large, but this is desirable: it correctly prevents flagging common building blocks as anomalous.
+
+\end{document}

@@ -58,7 +58,11 @@ class StrengthSearchAgent:
         sample_random_cands: Optional[float] = None,
         add_verified_neighs: bool = False,
         min_neigh_repeat: int = 2,
+        input_dim: int = 2,
+        freq_cache: Optional[torch.Tensor] = None,
     ) -> None:
+        self.input_dim = input_dim
+        self.freq_cache = freq_cache  # (K,) per-neighborhood frequencies from Phase 2
         self.model = model
         self.graphs = graphs
         self.embs = embs
@@ -118,6 +122,7 @@ class StrengthSearchAgent:
                 total_weight=self.num_nodes,
                 add_self_loop=self.add_self_loop,
                 node_anchored=self.node_anchored,
+                input_dim=self.input_dim,
             )
             beam_sets.append(BeamSet([beam]))
 
@@ -173,6 +178,7 @@ class StrengthSearchAgent:
         mega_beam_set.compute_all_scores(
             self.embs, self.model, self.scorer,
             self.alpha, self.unchange_direction,
+            freq_cache=self.freq_cache,
         )
 
         # 4-6. Split back and process per beam_set

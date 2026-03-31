@@ -1,0 +1,2365 @@
+{
+  "starting_nodes": [
+    1324,
+    2584,
+    394,
+    962,
+    1131,
+    753,
+    476,
+    1620,
+    684,
+    1037,
+    1072,
+    1260,
+    2238,
+    436,
+    29,
+    1702,
+    853,
+    1464,
+    1827,
+    2311,
+    1241,
+    1689,
+    837,
+    1701,
+    617,
+    2395
+  ],
+  "n_true_anomalies_in_starting": 0,
+  "beams": [
+    {
+      "anchor": 1324,
+      "is_true_anomaly": false,
+      "steps": [
+        {
+          "step": 2,
+          "n_candidates": 2,
+          "n_supergraphs": 10000,
+          "best_freq": 1.0,
+          "best_score": 1.0,
+          "best_node_added": 2265,
+          "best_neigh_size": 2,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 3,
+          "n_candidates": 3,
+          "n_supergraphs": 10000,
+          "best_freq": 0.7759,
+          "best_score": 0.7759,
+          "best_node_added": 2035,
+          "best_neigh_size": 3,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 4,
+          "n_candidates": 4,
+          "n_supergraphs": 9615,
+          "best_freq": 0.7518,
+          "best_score": 0.7518,
+          "best_node_added": 984,
+          "best_neigh_size": 4,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 5,
+          "n_candidates": 5,
+          "n_supergraphs": 7518,
+          "best_freq": 0.705,
+          "best_score": 0.705,
+          "best_node_added": 2034,
+          "best_neigh_size": 5,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 6,
+          "n_candidates": 43,
+          "n_supergraphs": 7129,
+          "best_freq": 0.6606,
+          "best_score": 0.6606,
+          "best_node_added": 1322,
+          "best_neigh_size": 6,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 7,
+          "n_candidates": 43,
+          "n_supergraphs": 6708,
+          "best_freq": 0.6101,
+          "best_score": 0.6101,
+          "best_node_added": 733,
+          "best_neigh_size": 7,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 8,
+          "n_candidates": 70,
+          "n_supergraphs": 6180,
+          "best_freq": 0.5685,
+          "best_score": 0.5685,
+          "best_node_added": 2304,
+          "best_neigh_size": 8,
+          "pruned": false,
+          "verified": false
+        }
+      ],
+      "verified": false,
+      "final_score": null,
+      "final_freq": null,
+      "final_neigh": null
+    },
+    {
+      "anchor": 2584,
+      "is_true_anomaly": false,
+      "steps": [
+        {
+          "step": 2,
+          "n_candidates": 1,
+          "n_supergraphs": 10000,
+          "best_freq": 1.0,
+          "best_score": 1.0,
+          "best_node_added": 876,
+          "best_neigh_size": 2,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 3,
+          "n_candidates": 5,
+          "n_supergraphs": 10000,
+          "best_freq": 0.9615,
+          "best_score": 0.9615,
+          "best_node_added": 834,
+          "best_neigh_size": 3,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 4,
+          "n_candidates": 6,
+          "n_supergraphs": 9615,
+          "best_freq": 0.8218,
+          "best_score": 0.8218,
+          "best_node_added": 2168,
+          "best_neigh_size": 4,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 5,
+          "n_candidates": 11,
+          "n_supergraphs": 9071,
+          "best_freq": 0.79,
+          "best_score": 0.79,
+          "best_node_added": 73,
+          "best_neigh_size": 5,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 6,
+          "n_candidates": 19,
+          "n_supergraphs": 7923,
+          "best_freq": 0.7124,
+          "best_score": 0.7124,
+          "best_node_added": 558,
+          "best_neigh_size": 6,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 7,
+          "n_candidates": 20,
+          "n_supergraphs": 7540,
+          "best_freq": 0.6133,
+          "best_score": 0.6133,
+          "best_node_added": 1358,
+          "best_neigh_size": 7,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 8,
+          "n_candidates": 179,
+          "n_supergraphs": 6710,
+          "best_freq": 0.4736,
+          "best_score": 0.4736,
+          "best_node_added": 1189,
+          "best_neigh_size": 8,
+          "pruned": false,
+          "verified": false
+        }
+      ],
+      "verified": false,
+      "final_score": null,
+      "final_freq": null,
+      "final_neigh": null
+    },
+    {
+      "anchor": 394,
+      "is_true_anomaly": false,
+      "steps": [
+        {
+          "step": 2,
+          "n_candidates": 5,
+          "n_supergraphs": 10000,
+          "best_freq": 1.0,
+          "best_score": 1.0,
+          "best_node_added": 577,
+          "best_neigh_size": 2,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 3,
+          "n_candidates": 12,
+          "n_supergraphs": 10000,
+          "best_freq": 0.5125,
+          "best_score": 0.5125,
+          "best_node_added": 1063,
+          "best_neigh_size": 3,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 4,
+          "n_candidates": 11,
+          "n_supergraphs": 9615,
+          "best_freq": 0.271,
+          "best_score": 0.271,
+          "best_node_added": 2351,
+          "best_neigh_size": 4,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 5,
+          "n_candidates": 10,
+          "n_supergraphs": 4879,
+          "best_freq": 0.11,
+          "best_score": 0.11,
+          "best_node_added": 849,
+          "best_neigh_size": 5,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 6,
+          "n_candidates": 10,
+          "n_supergraphs": 2668,
+          "best_freq": 0.07,
+          "best_score": 0.07,
+          "best_node_added": 1064,
+          "best_neigh_size": 6,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 7,
+          "n_candidates": 9,
+          "n_supergraphs": 1079,
+          "best_freq": 0.0635,
+          "best_score": 0.0635,
+          "best_node_added": 1129,
+          "best_neigh_size": 7,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 8,
+          "n_candidates": 8,
+          "n_supergraphs": 674,
+          "best_freq": 0.0557,
+          "best_score": 0.0557,
+          "best_node_added": 2352,
+          "best_neigh_size": 8,
+          "pruned": false,
+          "verified": false
+        }
+      ],
+      "verified": false,
+      "final_score": null,
+      "final_freq": null,
+      "final_neigh": null
+    },
+    {
+      "anchor": 962,
+      "is_true_anomaly": false,
+      "steps": [
+        {
+          "step": 2,
+          "n_candidates": 7,
+          "n_supergraphs": 10000,
+          "best_freq": 1.0,
+          "best_score": 1.0,
+          "best_node_added": 1665,
+          "best_neigh_size": 2,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 3,
+          "n_candidates": 9,
+          "n_supergraphs": 10000,
+          "best_freq": 0.7759,
+          "best_score": 0.7759,
+          "best_node_added": 1062,
+          "best_neigh_size": 3,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 4,
+          "n_candidates": 10,
+          "n_supergraphs": 9615,
+          "best_freq": 0.3731,
+          "best_score": 0.3731,
+          "best_node_added": 1810,
+          "best_neigh_size": 4,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 5,
+          "n_candidates": 49,
+          "n_supergraphs": 7518,
+          "best_freq": 0.1999,
+          "best_score": 0.1999,
+          "best_node_added": 1808,
+          "best_neigh_size": 5,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 6,
+          "n_candidates": 49,
+          "n_supergraphs": 3565,
+          "best_freq": 0.1079,
+          "best_score": 0.1079,
+          "best_node_added": 1809,
+          "best_neigh_size": 6,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 7,
+          "n_candidates": 48,
+          "n_supergraphs": 1905,
+          "best_freq": 0.0568,
+          "best_score": 0.0568,
+          "best_node_added": 1806,
+          "best_neigh_size": 7,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 8,
+          "n_candidates": 48,
+          "n_supergraphs": 1018,
+          "best_freq": 0.0373,
+          "best_score": 0.0373,
+          "best_node_added": 1807,
+          "best_neigh_size": 8,
+          "pruned": false,
+          "verified": false
+        }
+      ],
+      "verified": false,
+      "final_score": null,
+      "final_freq": null,
+      "final_neigh": null
+    },
+    {
+      "anchor": 1131,
+      "is_true_anomaly": false,
+      "steps": [
+        {
+          "step": 2,
+          "n_candidates": 21,
+          "n_supergraphs": 10000,
+          "best_freq": 1.0,
+          "best_score": 1.0,
+          "best_node_added": 1538,
+          "best_neigh_size": 2,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 3,
+          "n_candidates": 24,
+          "n_supergraphs": 10000,
+          "best_freq": 0.5125,
+          "best_score": 0.5125,
+          "best_node_added": 2185,
+          "best_neigh_size": 3,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 4,
+          "n_candidates": 23,
+          "n_supergraphs": 9615,
+          "best_freq": 0.1398,
+          "best_score": 0.1398,
+          "best_node_added": 1500,
+          "best_neigh_size": 4,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 5,
+          "n_candidates": 22,
+          "n_supergraphs": 4879,
+          "best_freq": 0.057,
+          "best_score": 0.057,
+          "best_node_added": 1133,
+          "best_neigh_size": 5,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 6,
+          "n_candidates": 30,
+          "n_supergraphs": 1440,
+          "best_freq": 0.0508,
+          "best_score": 0.0508,
+          "best_node_added": 1930,
+          "best_neigh_size": 6,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 7,
+          "n_candidates": 30,
+          "n_supergraphs": 564,
+          "best_freq": 0.0369,
+          "best_score": 0.0369,
+          "best_node_added": 436,
+          "best_neigh_size": 7,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 8,
+          "n_candidates": 46,
+          "n_supergraphs": 494,
+          "best_freq": 0.0239,
+          "best_score": 0.0239,
+          "best_node_added": 1215,
+          "best_neigh_size": 8,
+          "pruned": false,
+          "verified": false
+        }
+      ],
+      "verified": false,
+      "final_score": null,
+      "final_freq": null,
+      "final_neigh": null
+    },
+    {
+      "anchor": 753,
+      "is_true_anomaly": false,
+      "steps": [
+        {
+          "step": 2,
+          "n_candidates": 2,
+          "n_supergraphs": 10000,
+          "best_freq": 1.0,
+          "best_score": 1.0,
+          "best_node_added": 1880,
+          "best_neigh_size": 2,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 3,
+          "n_candidates": 3,
+          "n_supergraphs": 10000,
+          "best_freq": 0.5125,
+          "best_score": 0.5125,
+          "best_node_added": 1269,
+          "best_neigh_size": 3,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 4,
+          "n_candidates": 8,
+          "n_supergraphs": 5125,
+          "best_freq": 0.4922,
+          "best_score": 0.4922,
+          "best_node_added": 737,
+          "best_neigh_size": 4,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 5,
+          "n_candidates": 12,
+          "n_supergraphs": 4922,
+          "best_freq": 0.4522,
+          "best_score": 0.4522,
+          "best_node_added": 1630,
+          "best_neigh_size": 5,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 6,
+          "n_candidates": 11,
+          "n_supergraphs": 4760,
+          "best_freq": 0.4057,
+          "best_score": 0.4057,
+          "best_node_added": 2227,
+          "best_neigh_size": 6,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 7,
+          "n_candidates": 14,
+          "n_supergraphs": 4372,
+          "best_freq": 0.3838,
+          "best_score": 0.3838,
+          "best_node_added": 479,
+          "best_neigh_size": 7,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 8,
+          "n_candidates": 14,
+          "n_supergraphs": 3965,
+          "best_freq": 0.364,
+          "best_score": 0.364,
+          "best_node_added": 2178,
+          "best_neigh_size": 8,
+          "pruned": false,
+          "verified": false
+        }
+      ],
+      "verified": false,
+      "final_score": null,
+      "final_freq": null,
+      "final_neigh": null
+    },
+    {
+      "anchor": 476,
+      "is_true_anomaly": false,
+      "steps": [
+        {
+          "step": 2,
+          "n_candidates": 5,
+          "n_supergraphs": 10000,
+          "best_freq": 1.0,
+          "best_score": 1.0,
+          "best_node_added": 1986,
+          "best_neigh_size": 2,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 3,
+          "n_candidates": 68,
+          "n_supergraphs": 10000,
+          "best_freq": 0.7759,
+          "best_score": 0.7759,
+          "best_node_added": 1800,
+          "best_neigh_size": 3,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 4,
+          "n_candidates": 69,
+          "n_supergraphs": 9615,
+          "best_freq": 0.4158,
+          "best_score": 0.4158,
+          "best_node_added": 10,
+          "best_neigh_size": 4,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 5,
+          "n_candidates": 69,
+          "n_supergraphs": 7518,
+          "best_freq": 0.2247,
+          "best_score": 0.2247,
+          "best_node_added": 306,
+          "best_neigh_size": 5,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 6,
+          "n_candidates": 143,
+          "n_supergraphs": 3956,
+          "best_freq": 0.125,
+          "best_score": 0.125,
+          "best_node_added": 1140,
+          "best_neigh_size": 6,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 7,
+          "n_candidates": 142,
+          "n_supergraphs": 1997,
+          "best_freq": 0.106,
+          "best_score": 0.106,
+          "best_node_added": 519,
+          "best_neigh_size": 7,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 8,
+          "n_candidates": 146,
+          "n_supergraphs": 1093,
+          "best_freq": 0.0862,
+          "best_score": 0.0862,
+          "best_node_added": 1072,
+          "best_neigh_size": 8,
+          "pruned": false,
+          "verified": false
+        }
+      ],
+      "verified": false,
+      "final_score": null,
+      "final_freq": null,
+      "final_neigh": null
+    },
+    {
+      "anchor": 1620,
+      "is_true_anomaly": false,
+      "steps": [
+        {
+          "step": 2,
+          "n_candidates": 6,
+          "n_supergraphs": 10000,
+          "best_freq": 1.0,
+          "best_score": 1.0,
+          "best_node_added": 742,
+          "best_neigh_size": 2,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 3,
+          "n_candidates": 6,
+          "n_supergraphs": 10000,
+          "best_freq": 0.5125,
+          "best_score": 0.5125,
+          "best_node_added": 1483,
+          "best_neigh_size": 3,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 4,
+          "n_candidates": 21,
+          "n_supergraphs": 7759,
+          "best_freq": 0.2733,
+          "best_score": 0.2733,
+          "best_node_added": 905,
+          "best_neigh_size": 4,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 5,
+          "n_candidates": 20,
+          "n_supergraphs": 4922,
+          "best_freq": 0.1596,
+          "best_score": 0.1596,
+          "best_node_added": 1358,
+          "best_neigh_size": 5,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 6,
+          "n_candidates": 180,
+          "n_supergraphs": 2691,
+          "best_freq": 0.0914,
+          "best_score": 0.0914,
+          "best_node_added": 359,
+          "best_neigh_size": 6,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 7,
+          "n_candidates": 179,
+          "n_supergraphs": 1511,
+          "best_freq": 0.0557,
+          "best_score": 0.0557,
+          "best_node_added": 2450,
+          "best_neigh_size": 7,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 8,
+          "n_candidates": 179,
+          "n_supergraphs": 855,
+          "best_freq": 0.0294,
+          "best_score": 0.0294,
+          "best_node_added": 1743,
+          "best_neigh_size": 8,
+          "pruned": false,
+          "verified": false
+        }
+      ],
+      "verified": false,
+      "final_score": null,
+      "final_freq": null,
+      "final_neigh": null
+    },
+    {
+      "anchor": 684,
+      "is_true_anomaly": false,
+      "steps": [
+        {
+          "step": 2,
+          "n_candidates": 2,
+          "n_supergraphs": 10000,
+          "best_freq": 1.0,
+          "best_score": 1.0,
+          "best_node_added": 1282,
+          "best_neigh_size": 2,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 3,
+          "n_candidates": 8,
+          "n_supergraphs": 10000,
+          "best_freq": 0.7759,
+          "best_score": 0.7759,
+          "best_node_added": 1358,
+          "best_neigh_size": 3,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 4,
+          "n_candidates": 172,
+          "n_supergraphs": 9615,
+          "best_freq": 0.6688,
+          "best_score": 0.6688,
+          "best_node_added": 1735,
+          "best_neigh_size": 4,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 5,
+          "n_candidates": 174,
+          "n_supergraphs": 7518,
+          "best_freq": 0.296,
+          "best_score": 0.296,
+          "best_node_added": 1483,
+          "best_neigh_size": 5,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 6,
+          "n_candidates": 183,
+          "n_supergraphs": 6298,
+          "best_freq": 0.2121,
+          "best_score": 0.2121,
+          "best_node_added": 1072,
+          "best_neigh_size": 6,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 7,
+          "n_candidates": 204,
+          "n_supergraphs": 2837,
+          "best_freq": 0.1522,
+          "best_score": 0.1522,
+          "best_node_added": 1776,
+          "best_neigh_size": 7,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 8,
+          "n_candidates": 209,
+          "n_supergraphs": 2178,
+          "best_freq": 0.0814,
+          "best_score": 0.0814,
+          "best_node_added": 2324,
+          "best_neigh_size": 8,
+          "pruned": false,
+          "verified": false
+        }
+      ],
+      "verified": false,
+      "final_score": null,
+      "final_freq": null,
+      "final_neigh": null
+    },
+    {
+      "anchor": 1037,
+      "is_true_anomaly": false,
+      "steps": [
+        {
+          "step": 2,
+          "n_candidates": 3,
+          "n_supergraphs": 10000,
+          "best_freq": 1.0,
+          "best_score": 1.0,
+          "best_node_added": 403,
+          "best_neigh_size": 2,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 3,
+          "n_candidates": 7,
+          "n_supergraphs": 10000,
+          "best_freq": 0.5125,
+          "best_score": 0.5125,
+          "best_node_added": 2654,
+          "best_neigh_size": 3,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 4,
+          "n_candidates": 16,
+          "n_supergraphs": 9615,
+          "best_freq": 0.3731,
+          "best_score": 0.3731,
+          "best_node_added": 2447,
+          "best_neigh_size": 4,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 5,
+          "n_candidates": 17,
+          "n_supergraphs": 4879,
+          "best_freq": 0.3565,
+          "best_score": 0.3565,
+          "best_node_added": 641,
+          "best_neigh_size": 5,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 6,
+          "n_candidates": 17,
+          "n_supergraphs": 3565,
+          "best_freq": 0.3371,
+          "best_score": 0.3371,
+          "best_node_added": 806,
+          "best_neigh_size": 6,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 7,
+          "n_candidates": 16,
+          "n_supergraphs": 3452,
+          "best_freq": 0.3116,
+          "best_score": 0.3116,
+          "best_node_added": 1383,
+          "best_neigh_size": 7,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 8,
+          "n_candidates": 15,
+          "n_supergraphs": 3265,
+          "best_freq": 0.2893,
+          "best_score": 0.2893,
+          "best_node_added": 2600,
+          "best_neigh_size": 8,
+          "pruned": false,
+          "verified": false
+        }
+      ],
+      "verified": false,
+      "final_score": null,
+      "final_freq": null,
+      "final_neigh": null
+    },
+    {
+      "anchor": 1072,
+      "is_true_anomaly": false,
+      "steps": [
+        {
+          "step": 2,
+          "n_candidates": 30,
+          "n_supergraphs": 10000,
+          "best_freq": 1.0,
+          "best_score": 1.0,
+          "best_node_added": 773,
+          "best_neigh_size": 2,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 3,
+          "n_candidates": 29,
+          "n_supergraphs": 10000,
+          "best_freq": 0.5125,
+          "best_score": 0.5125,
+          "best_node_added": 1505,
+          "best_neigh_size": 3,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 4,
+          "n_candidates": 38,
+          "n_supergraphs": 7759,
+          "best_freq": 0.2733,
+          "best_score": 0.2733,
+          "best_node_added": 1801,
+          "best_neigh_size": 4,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 5,
+          "n_candidates": 40,
+          "n_supergraphs": 3774,
+          "best_freq": 0.2006,
+          "best_score": 0.2006,
+          "best_node_added": 1797,
+          "best_neigh_size": 5,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 6,
+          "n_candidates": 42,
+          "n_supergraphs": 2006,
+          "best_freq": 0.1204,
+          "best_score": 0.1204,
+          "best_node_added": 306,
+          "best_neigh_size": 6,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 7,
+          "n_candidates": 105,
+          "n_supergraphs": 1249,
+          "best_freq": 0.0658,
+          "best_score": 0.0658,
+          "best_node_added": 1798,
+          "best_neigh_size": 7,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 8,
+          "n_candidates": 104,
+          "n_supergraphs": 1110,
+          "best_freq": 0.0337,
+          "best_score": 0.0337,
+          "best_node_added": 958,
+          "best_neigh_size": 8,
+          "pruned": false,
+          "verified": false
+        }
+      ],
+      "verified": false,
+      "final_score": null,
+      "final_freq": null,
+      "final_neigh": null
+    },
+    {
+      "anchor": 1260,
+      "is_true_anomaly": false,
+      "steps": [
+        {
+          "step": 2,
+          "n_candidates": 2,
+          "n_supergraphs": 10000,
+          "best_freq": 1.0,
+          "best_score": 1.0,
+          "best_node_added": 2250,
+          "best_neigh_size": 2,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 3,
+          "n_candidates": 4,
+          "n_supergraphs": 10000,
+          "best_freq": 0.7759,
+          "best_score": 0.7759,
+          "best_node_added": 1559,
+          "best_neigh_size": 3,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 4,
+          "n_candidates": 3,
+          "n_supergraphs": 9615,
+          "best_freq": 0.6688,
+          "best_score": 0.6688,
+          "best_node_added": 283,
+          "best_neigh_size": 4,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 5,
+          "n_candidates": 2,
+          "n_supergraphs": 7518,
+          "best_freq": 0.6298,
+          "best_score": 0.6298,
+          "best_node_added": 1138,
+          "best_neigh_size": 5,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 6,
+          "n_candidates": 3,
+          "n_supergraphs": 6298,
+          "best_freq": 0.5992,
+          "best_score": 0.5992,
+          "best_node_added": 348,
+          "best_neigh_size": 6,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 7,
+          "n_candidates": 4,
+          "n_supergraphs": 6096,
+          "best_freq": 0.5482,
+          "best_score": 0.5482,
+          "best_node_added": 2248,
+          "best_neigh_size": 7,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 8,
+          "n_candidates": 15,
+          "n_supergraphs": 5751,
+          "best_freq": 0.5209,
+          "best_score": 0.5209,
+          "best_node_added": 996,
+          "best_neigh_size": 8,
+          "pruned": false,
+          "verified": false
+        }
+      ],
+      "verified": false,
+      "final_score": null,
+      "final_freq": null,
+      "final_neigh": null
+    },
+    {
+      "anchor": 2238,
+      "is_true_anomaly": false,
+      "steps": [
+        {
+          "step": 2,
+          "n_candidates": 11,
+          "n_supergraphs": 10000,
+          "best_freq": 1.0,
+          "best_score": 1.0,
+          "best_node_added": 2240,
+          "best_neigh_size": 2,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 3,
+          "n_candidates": 15,
+          "n_supergraphs": 10000,
+          "best_freq": 0.5125,
+          "best_score": 0.5125,
+          "best_node_added": 152,
+          "best_neigh_size": 3,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 4,
+          "n_candidates": 16,
+          "n_supergraphs": 7759,
+          "best_freq": 0.3774,
+          "best_score": 0.3774,
+          "best_node_added": 706,
+          "best_neigh_size": 4,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 5,
+          "n_candidates": 18,
+          "n_supergraphs": 3774,
+          "best_freq": 0.2299,
+          "best_score": 0.2299,
+          "best_node_added": 22,
+          "best_neigh_size": 5,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 6,
+          "n_candidates": 19,
+          "n_supergraphs": 3193,
+          "best_freq": 0.1318,
+          "best_score": 0.1318,
+          "best_node_added": 1702,
+          "best_neigh_size": 6,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 7,
+          "n_candidates": 23,
+          "n_supergraphs": 2071,
+          "best_freq": 0.0579,
+          "best_score": 0.0579,
+          "best_node_added": 1703,
+          "best_neigh_size": 7,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 8,
+          "n_candidates": 28,
+          "n_supergraphs": 1220,
+          "best_freq": 0.0352,
+          "best_score": 0.0352,
+          "best_node_added": 1969,
+          "best_neigh_size": 8,
+          "pruned": false,
+          "verified": false
+        }
+      ],
+      "verified": false,
+      "final_score": null,
+      "final_freq": null,
+      "final_neigh": null
+    },
+    {
+      "anchor": 436,
+      "is_true_anomaly": false,
+      "steps": [
+        {
+          "step": 2,
+          "n_candidates": 18,
+          "n_supergraphs": 10000,
+          "best_freq": 1.0,
+          "best_score": 1.0,
+          "best_node_added": 483,
+          "best_neigh_size": 2,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 3,
+          "n_candidates": 19,
+          "n_supergraphs": 10000,
+          "best_freq": 0.5125,
+          "best_score": 0.5125,
+          "best_node_added": 816,
+          "best_neigh_size": 3,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 4,
+          "n_candidates": 20,
+          "n_supergraphs": 7759,
+          "best_freq": 0.2733,
+          "best_score": 0.2733,
+          "best_node_added": 1980,
+          "best_neigh_size": 4,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 5,
+          "n_candidates": 19,
+          "n_supergraphs": 3774,
+          "best_freq": 0.1586,
+          "best_score": 0.1586,
+          "best_node_added": 2405,
+          "best_neigh_size": 5,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 6,
+          "n_candidates": 19,
+          "n_supergraphs": 2006,
+          "best_freq": 0.0778,
+          "best_score": 0.0778,
+          "best_node_added": 1979,
+          "best_neigh_size": 6,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 7,
+          "n_candidates": 19,
+          "n_supergraphs": 1280,
+          "best_freq": 0.0311,
+          "best_score": 0.0311,
+          "best_node_added": 1842,
+          "best_neigh_size": 7,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 8,
+          "n_candidates": 22,
+          "n_supergraphs": 746,
+          "best_freq": 0.0065,
+          "best_score": 0.0065,
+          "best_node_added": 120,
+          "best_neigh_size": 8,
+          "pruned": false,
+          "verified": true
+        }
+      ],
+      "verified": true,
+      "final_score": 0.0065,
+      "final_freq": 0.0065,
+      "final_neigh": [
+        436,
+        483,
+        816,
+        1980,
+        2405,
+        1979,
+        1842,
+        120
+      ],
+      "final_neigh_true_anomalies": 0,
+      "final_neigh_normal": 8
+    },
+    {
+      "anchor": 29,
+      "is_true_anomaly": false,
+      "steps": [
+        {
+          "step": 2,
+          "n_candidates": 2,
+          "n_supergraphs": 10000,
+          "best_freq": 1.0,
+          "best_score": 1.0,
+          "best_node_added": 963,
+          "best_neigh_size": 2,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 3,
+          "n_candidates": 19,
+          "n_supergraphs": 10000,
+          "best_freq": 0.7759,
+          "best_score": 0.7759,
+          "best_node_added": 2645,
+          "best_neigh_size": 3,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 4,
+          "n_candidates": 18,
+          "n_supergraphs": 9615,
+          "best_freq": 0.6688,
+          "best_score": 0.6688,
+          "best_node_added": 258,
+          "best_neigh_size": 4,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 5,
+          "n_candidates": 21,
+          "n_supergraphs": 7518,
+          "best_freq": 0.4809,
+          "best_score": 0.4809,
+          "best_node_added": 706,
+          "best_neigh_size": 5,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 6,
+          "n_candidates": 21,
+          "n_supergraphs": 6298,
+          "best_freq": 0.3101,
+          "best_score": 0.3101,
+          "best_node_added": 1443,
+          "best_neigh_size": 6,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 7,
+          "n_candidates": 22,
+          "n_supergraphs": 4564,
+          "best_freq": 0.1381,
+          "best_score": 0.1381,
+          "best_node_added": 1094,
+          "best_neigh_size": 7,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 8,
+          "n_candidates": 23,
+          "n_supergraphs": 2968,
+          "best_freq": 0.0912,
+          "best_score": 0.0912,
+          "best_node_added": 1240,
+          "best_neigh_size": 8,
+          "pruned": false,
+          "verified": false
+        }
+      ],
+      "verified": false,
+      "final_score": null,
+      "final_freq": null,
+      "final_neigh": null
+    },
+    {
+      "anchor": 1702,
+      "is_true_anomaly": false,
+      "steps": [
+        {
+          "step": 2,
+          "n_candidates": 10,
+          "n_supergraphs": 10000,
+          "best_freq": 1.0,
+          "best_score": 1.0,
+          "best_node_added": 1703,
+          "best_neigh_size": 2,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 3,
+          "n_candidates": 17,
+          "n_supergraphs": 10000,
+          "best_freq": 0.5125,
+          "best_score": 0.5125,
+          "best_node_added": 463,
+          "best_neigh_size": 3,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 4,
+          "n_candidates": 17,
+          "n_supergraphs": 9615,
+          "best_freq": 0.1398,
+          "best_score": 0.1398,
+          "best_node_added": 1966,
+          "best_neigh_size": 4,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 5,
+          "n_candidates": 22,
+          "n_supergraphs": 4879,
+          "best_freq": 0.0785,
+          "best_score": 0.0785,
+          "best_node_added": 1234,
+          "best_neigh_size": 5,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 6,
+          "n_candidates": 21,
+          "n_supergraphs": 1440,
+          "best_freq": 0.0491,
+          "best_score": 0.0491,
+          "best_node_added": 22,
+          "best_neigh_size": 6,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 7,
+          "n_candidates": 21,
+          "n_supergraphs": 777,
+          "best_freq": 0.035,
+          "best_score": 0.035,
+          "best_node_added": 1971,
+          "best_neigh_size": 7,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 8,
+          "n_candidates": 20,
+          "n_supergraphs": 474,
+          "best_freq": 0.0223,
+          "best_score": 0.0223,
+          "best_node_added": 1970,
+          "best_neigh_size": 8,
+          "pruned": false,
+          "verified": false
+        }
+      ],
+      "verified": false,
+      "final_score": null,
+      "final_freq": null,
+      "final_neigh": null
+    },
+    {
+      "anchor": 853,
+      "is_true_anomaly": false,
+      "steps": [
+        {
+          "step": 2,
+          "n_candidates": 3,
+          "n_supergraphs": 10000,
+          "best_freq": 1.0,
+          "best_score": 1.0,
+          "best_node_added": 1169,
+          "best_neigh_size": 2,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 3,
+          "n_candidates": 23,
+          "n_supergraphs": 10000,
+          "best_freq": 0.5125,
+          "best_score": 0.5125,
+          "best_node_added": 1358,
+          "best_neigh_size": 3,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 4,
+          "n_candidates": 173,
+          "n_supergraphs": 9615,
+          "best_freq": 0.271,
+          "best_score": 0.271,
+          "best_node_added": 1762,
+          "best_neigh_size": 4,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 5,
+          "n_candidates": 172,
+          "n_supergraphs": 4879,
+          "best_freq": 0.1643,
+          "best_score": 0.1643,
+          "best_node_added": 111,
+          "best_neigh_size": 5,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 6,
+          "n_candidates": 172,
+          "n_supergraphs": 2668,
+          "best_freq": 0.0956,
+          "best_score": 0.0956,
+          "best_node_added": 758,
+          "best_neigh_size": 6,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 7,
+          "n_candidates": 171,
+          "n_supergraphs": 1625,
+          "best_freq": 0.0545,
+          "best_score": 0.0545,
+          "best_node_added": 2492,
+          "best_neigh_size": 7,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 8,
+          "n_candidates": 170,
+          "n_supergraphs": 974,
+          "best_freq": 0.0425,
+          "best_score": 0.0425,
+          "best_node_added": 524,
+          "best_neigh_size": 8,
+          "pruned": false,
+          "verified": false
+        }
+      ],
+      "verified": false,
+      "final_score": null,
+      "final_freq": null,
+      "final_neigh": null
+    },
+    {
+      "anchor": 1464,
+      "is_true_anomaly": false,
+      "steps": [
+        {
+          "step": 2,
+          "n_candidates": 9,
+          "n_supergraphs": 10000,
+          "best_freq": 1.0,
+          "best_score": 1.0,
+          "best_node_added": 262,
+          "best_neigh_size": 2,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 3,
+          "n_candidates": 9,
+          "n_supergraphs": 10000,
+          "best_freq": 0.7759,
+          "best_score": 0.7759,
+          "best_node_added": 712,
+          "best_neigh_size": 3,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 4,
+          "n_candidates": 9,
+          "n_supergraphs": 9615,
+          "best_freq": 0.3731,
+          "best_score": 0.3731,
+          "best_node_added": 850,
+          "best_neigh_size": 4,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 5,
+          "n_candidates": 9,
+          "n_supergraphs": 7518,
+          "best_freq": 0.2291,
+          "best_score": 0.2291,
+          "best_node_added": 1482,
+          "best_neigh_size": 5,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 6,
+          "n_candidates": 12,
+          "n_supergraphs": 3565,
+          "best_freq": 0.1355,
+          "best_score": 0.1355,
+          "best_node_added": 1359,
+          "best_neigh_size": 6,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 7,
+          "n_candidates": 11,
+          "n_supergraphs": 2134,
+          "best_freq": 0.0773,
+          "best_score": 0.0773,
+          "best_node_added": 1683,
+          "best_neigh_size": 7,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 8,
+          "n_candidates": 10,
+          "n_supergraphs": 1134,
+          "best_freq": 0.0444,
+          "best_score": 0.0444,
+          "best_node_added": 181,
+          "best_neigh_size": 8,
+          "pruned": false,
+          "verified": false
+        }
+      ],
+      "verified": false,
+      "final_score": null,
+      "final_freq": null,
+      "final_neigh": null
+    },
+    {
+      "anchor": 1827,
+      "is_true_anomaly": false,
+      "steps": [
+        {
+          "step": 2,
+          "n_candidates": 4,
+          "n_supergraphs": 10000,
+          "best_freq": 1.0,
+          "best_score": 1.0,
+          "best_node_added": 1409,
+          "best_neigh_size": 2,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 3,
+          "n_candidates": 4,
+          "n_supergraphs": 10000,
+          "best_freq": 0.5125,
+          "best_score": 0.5125,
+          "best_node_added": 1553,
+          "best_neigh_size": 3,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 4,
+          "n_candidates": 5,
+          "n_supergraphs": 9615,
+          "best_freq": 0.271,
+          "best_score": 0.271,
+          "best_node_added": 1826,
+          "best_neigh_size": 4,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 5,
+          "n_candidates": 9,
+          "n_supergraphs": 4879,
+          "best_freq": 0.1592,
+          "best_score": 0.1592,
+          "best_node_added": 1828,
+          "best_neigh_size": 5,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 6,
+          "n_candidates": 9,
+          "n_supergraphs": 2218,
+          "best_freq": 0.106,
+          "best_score": 0.106,
+          "best_node_added": 1408,
+          "best_neigh_size": 6,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 7,
+          "n_candidates": 9,
+          "n_supergraphs": 1060,
+          "best_freq": 0.0965,
+          "best_score": 0.0965,
+          "best_node_added": 1829,
+          "best_neigh_size": 7,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 8,
+          "n_candidates": 11,
+          "n_supergraphs": 1019,
+          "best_freq": 0.092,
+          "best_score": 0.092,
+          "best_node_added": 940,
+          "best_neigh_size": 8,
+          "pruned": false,
+          "verified": false
+        }
+      ],
+      "verified": false,
+      "final_score": null,
+      "final_freq": null,
+      "final_neigh": null
+    },
+    {
+      "anchor": 2311,
+      "is_true_anomaly": false,
+      "steps": [
+        {
+          "step": 2,
+          "n_candidates": 2,
+          "n_supergraphs": 10000,
+          "best_freq": 1.0,
+          "best_score": 1.0,
+          "best_node_added": 2056,
+          "best_neigh_size": 2,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 3,
+          "n_candidates": 15,
+          "n_supergraphs": 10000,
+          "best_freq": 0.5125,
+          "best_score": 0.5125,
+          "best_node_added": 2576,
+          "best_neigh_size": 3,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 4,
+          "n_candidates": 14,
+          "n_supergraphs": 9615,
+          "best_freq": 0.3634,
+          "best_score": 0.3634,
+          "best_node_added": 1680,
+          "best_neigh_size": 4,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 5,
+          "n_candidates": 13,
+          "n_supergraphs": 4879,
+          "best_freq": 0.3568,
+          "best_score": 0.3568,
+          "best_node_added": 738,
+          "best_neigh_size": 5,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 6,
+          "n_candidates": 18,
+          "n_supergraphs": 3568,
+          "best_freq": 0.3388,
+          "best_score": 0.3388,
+          "best_node_added": 459,
+          "best_neigh_size": 6,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 7,
+          "n_candidates": 20,
+          "n_supergraphs": 3480,
+          "best_freq": 0.2862,
+          "best_score": 0.2862,
+          "best_node_added": 1053,
+          "best_neigh_size": 7,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 8,
+          "n_candidates": 21,
+          "n_supergraphs": 3296,
+          "best_freq": 0.2057,
+          "best_score": 0.2057,
+          "best_node_added": 311,
+          "best_neigh_size": 8,
+          "pruned": false,
+          "verified": false
+        }
+      ],
+      "verified": false,
+      "final_score": null,
+      "final_freq": null,
+      "final_neigh": null
+    },
+    {
+      "anchor": 1241,
+      "is_true_anomaly": false,
+      "steps": [
+        {
+          "step": 2,
+          "n_candidates": 3,
+          "n_supergraphs": 10000,
+          "best_freq": 1.0,
+          "best_score": 1.0,
+          "best_node_added": 1950,
+          "best_neigh_size": 2,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 3,
+          "n_candidates": 15,
+          "n_supergraphs": 10000,
+          "best_freq": 0.5125,
+          "best_score": 0.5125,
+          "best_node_added": 310,
+          "best_neigh_size": 3,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 4,
+          "n_candidates": 21,
+          "n_supergraphs": 9615,
+          "best_freq": 0.3634,
+          "best_score": 0.3634,
+          "best_node_added": 1815,
+          "best_neigh_size": 4,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 5,
+          "n_candidates": 21,
+          "n_supergraphs": 4879,
+          "best_freq": 0.2781,
+          "best_score": 0.2781,
+          "best_node_added": 1944,
+          "best_neigh_size": 5,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 6,
+          "n_candidates": 20,
+          "n_supergraphs": 3568,
+          "best_freq": 0.1204,
+          "best_score": 0.1204,
+          "best_node_added": 1946,
+          "best_neigh_size": 6,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 7,
+          "n_candidates": 19,
+          "n_supergraphs": 2698,
+          "best_freq": 0.0701,
+          "best_score": 0.0701,
+          "best_node_added": 1945,
+          "best_neigh_size": 7,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 8,
+          "n_candidates": 18,
+          "n_supergraphs": 1225,
+          "best_freq": 0.0361,
+          "best_score": 0.0361,
+          "best_node_added": 1272,
+          "best_neigh_size": 8,
+          "pruned": false,
+          "verified": false
+        }
+      ],
+      "verified": false,
+      "final_score": null,
+      "final_freq": null,
+      "final_neigh": null
+    },
+    {
+      "anchor": 1689,
+      "is_true_anomaly": false,
+      "steps": [
+        {
+          "step": 2,
+          "n_candidates": 2,
+          "n_supergraphs": 10000,
+          "best_freq": 1.0,
+          "best_score": 1.0,
+          "best_node_added": 155,
+          "best_neigh_size": 2,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 3,
+          "n_candidates": 6,
+          "n_supergraphs": 10000,
+          "best_freq": 0.5125,
+          "best_score": 0.5125,
+          "best_node_added": 156,
+          "best_neigh_size": 3,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 4,
+          "n_candidates": 5,
+          "n_supergraphs": 9615,
+          "best_freq": 0.3634,
+          "best_score": 0.3634,
+          "best_node_added": 1763,
+          "best_neigh_size": 4,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 5,
+          "n_candidates": 4,
+          "n_supergraphs": 3634,
+          "best_freq": 0.1773,
+          "best_score": 0.1773,
+          "best_node_added": 817,
+          "best_neigh_size": 5,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 6,
+          "n_candidates": 6,
+          "n_supergraphs": 3204,
+          "best_freq": 0.0629,
+          "best_score": 0.0629,
+          "best_node_added": 1358,
+          "best_neigh_size": 6,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 7,
+          "n_candidates": 168,
+          "n_supergraphs": 959,
+          "best_freq": 0.0153,
+          "best_score": 0.0153,
+          "best_node_added": 90,
+          "best_neigh_size": 7,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 8,
+          "n_candidates": 167,
+          "n_supergraphs": 682,
+          "best_freq": 0.0078,
+          "best_score": 0.0078,
+          "best_node_added": 1736,
+          "best_neigh_size": 8,
+          "pruned": false,
+          "verified": true
+        }
+      ],
+      "verified": true,
+      "final_score": 0.0078,
+      "final_freq": 0.0078,
+      "final_neigh": [
+        1689,
+        155,
+        156,
+        1763,
+        817,
+        1358,
+        90,
+        1736
+      ],
+      "final_neigh_true_anomalies": 0,
+      "final_neigh_normal": 8
+    },
+    {
+      "anchor": 837,
+      "is_true_anomaly": false,
+      "steps": [
+        {
+          "step": 2,
+          "n_candidates": 3,
+          "n_supergraphs": 10000,
+          "best_freq": 1.0,
+          "best_score": 1.0,
+          "best_node_added": 2248,
+          "best_neigh_size": 2,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 3,
+          "n_candidates": 15,
+          "n_supergraphs": 10000,
+          "best_freq": 0.7759,
+          "best_score": 0.7759,
+          "best_node_added": 1422,
+          "best_neigh_size": 3,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 4,
+          "n_candidates": 14,
+          "n_supergraphs": 9615,
+          "best_freq": 0.4158,
+          "best_score": 0.4158,
+          "best_node_added": 2670,
+          "best_neigh_size": 4,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 5,
+          "n_candidates": 15,
+          "n_supergraphs": 7518,
+          "best_freq": 0.3956,
+          "best_score": 0.3956,
+          "best_node_added": 996,
+          "best_neigh_size": 5,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 6,
+          "n_candidates": 16,
+          "n_supergraphs": 3956,
+          "best_freq": 0.3663,
+          "best_score": 0.3663,
+          "best_node_added": 2679,
+          "best_neigh_size": 6,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 7,
+          "n_candidates": 18,
+          "n_supergraphs": 3747,
+          "best_freq": 0.3331,
+          "best_score": 0.3331,
+          "best_node_added": 1257,
+          "best_neigh_size": 7,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 8,
+          "n_candidates": 25,
+          "n_supergraphs": 3413,
+          "best_freq": 0.2642,
+          "best_score": 0.2642,
+          "best_node_added": 428,
+          "best_neigh_size": 8,
+          "pruned": false,
+          "verified": false
+        }
+      ],
+      "verified": false,
+      "final_score": null,
+      "final_freq": null,
+      "final_neigh": null
+    },
+    {
+      "anchor": 1701,
+      "is_true_anomaly": false,
+      "steps": [
+        {
+          "step": 2,
+          "n_candidates": 74,
+          "n_supergraphs": 10000,
+          "best_freq": 1.0,
+          "best_score": 1.0,
+          "best_node_added": 1665,
+          "best_neigh_size": 2,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 3,
+          "n_candidates": 76,
+          "n_supergraphs": 10000,
+          "best_freq": 0.7759,
+          "best_score": 0.7759,
+          "best_node_added": 261,
+          "best_neigh_size": 3,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 4,
+          "n_candidates": 77,
+          "n_supergraphs": 7759,
+          "best_freq": 0.3774,
+          "best_score": 0.3774,
+          "best_node_added": 1479,
+          "best_neigh_size": 4,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 5,
+          "n_candidates": 76,
+          "n_supergraphs": 4200,
+          "best_freq": 0.2299,
+          "best_score": 0.2299,
+          "best_node_added": 1799,
+          "best_neigh_size": 5,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 6,
+          "n_candidates": 78,
+          "n_supergraphs": 2299,
+          "best_freq": 0.1355,
+          "best_score": 0.1355,
+          "best_node_added": 13,
+          "best_neigh_size": 6,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 7,
+          "n_candidates": 78,
+          "n_supergraphs": 1355,
+          "best_freq": 0.0773,
+          "best_score": 0.0773,
+          "best_node_added": 784,
+          "best_neigh_size": 7,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 8,
+          "n_candidates": 78,
+          "n_supergraphs": 773,
+          "best_freq": 0.046,
+          "best_score": 0.046,
+          "best_node_added": 1299,
+          "best_neigh_size": 8,
+          "pruned": false,
+          "verified": false
+        }
+      ],
+      "verified": false,
+      "final_score": null,
+      "final_freq": null,
+      "final_neigh": null
+    },
+    {
+      "anchor": 617,
+      "is_true_anomaly": false,
+      "steps": [
+        {
+          "step": 2,
+          "n_candidates": 2,
+          "n_supergraphs": 10000,
+          "best_freq": 1.0,
+          "best_score": 1.0,
+          "best_node_added": 705,
+          "best_neigh_size": 2,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 3,
+          "n_candidates": 2,
+          "n_supergraphs": 10000,
+          "best_freq": 0.7759,
+          "best_score": 0.7759,
+          "best_node_added": 2034,
+          "best_neigh_size": 3,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 4,
+          "n_candidates": 40,
+          "n_supergraphs": 7759,
+          "best_freq": 0.7576,
+          "best_score": 0.7576,
+          "best_node_added": 1665,
+          "best_neigh_size": 4,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 5,
+          "n_candidates": 42,
+          "n_supergraphs": 7576,
+          "best_freq": 0.705,
+          "best_score": 0.705,
+          "best_node_added": 429,
+          "best_neigh_size": 5,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 6,
+          "n_candidates": 52,
+          "n_supergraphs": 7129,
+          "best_freq": 0.6505,
+          "best_score": 0.6505,
+          "best_node_added": 1807,
+          "best_neigh_size": 6,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 7,
+          "n_candidates": 53,
+          "n_supergraphs": 6606,
+          "best_freq": 0.5616,
+          "best_score": 0.5616,
+          "best_node_added": 2041,
+          "best_neigh_size": 7,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 8,
+          "n_candidates": 54,
+          "n_supergraphs": 6094,
+          "best_freq": 0.4871,
+          "best_score": 0.4871,
+          "best_node_added": 86,
+          "best_neigh_size": 8,
+          "pruned": false,
+          "verified": false
+        }
+      ],
+      "verified": false,
+      "final_score": null,
+      "final_freq": null,
+      "final_neigh": null
+    },
+    {
+      "anchor": 2395,
+      "is_true_anomaly": false,
+      "steps": [
+        {
+          "step": 2,
+          "n_candidates": 5,
+          "n_supergraphs": 10000,
+          "best_freq": 1.0,
+          "best_score": 1.0,
+          "best_node_added": 1396,
+          "best_neigh_size": 2,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 3,
+          "n_candidates": 7,
+          "n_supergraphs": 10000,
+          "best_freq": 0.5125,
+          "best_score": 0.5125,
+          "best_node_added": 2228,
+          "best_neigh_size": 3,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 4,
+          "n_candidates": 8,
+          "n_supergraphs": 7759,
+          "best_freq": 0.1402,
+          "best_score": 0.1402,
+          "best_node_added": 2394,
+          "best_neigh_size": 4,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 5,
+          "n_candidates": 17,
+          "n_supergraphs": 2733,
+          "best_freq": 0.1102,
+          "best_score": 0.1102,
+          "best_node_added": 724,
+          "best_neigh_size": 5,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 6,
+          "n_candidates": 17,
+          "n_supergraphs": 1444,
+          "best_freq": 0.0701,
+          "best_score": 0.0701,
+          "best_node_added": 1501,
+          "best_neigh_size": 6,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 7,
+          "n_candidates": 20,
+          "n_supergraphs": 1087,
+          "best_freq": 0.0544,
+          "best_score": 0.0544,
+          "best_node_added": 1399,
+          "best_neigh_size": 7,
+          "pruned": false,
+          "verified": false
+        },
+        {
+          "step": 8,
+          "n_candidates": 20,
+          "n_supergraphs": 675,
+          "best_freq": 0.0519,
+          "best_score": 0.0519,
+          "best_node_added": 1421,
+          "best_neigh_size": 8,
+          "pruned": false,
+          "verified": false
+        }
+      ],
+      "verified": false,
+      "final_score": null,
+      "final_freq": null,
+      "final_neigh": null
+    }
+  ],
+  "total_verified": 2,
+  "total_copied": 14,
+  "analysis": {
+    "tp_anchors": [],
+    "fp_anchors": [
+      436,
+      1689
+    ],
+    "tp_count": 0,
+    "fp_count": 2,
+    "precision_before_copies": 0.0
+  },
+  "fp_details": [
+    {
+      "anchor": 436,
+      "neigh": [
+        436,
+        483,
+        816,
+        1980,
+        2405,
+        1979,
+        1842,
+        120
+      ],
+      "freq": 0.0065,
+      "score": 0.0065,
+      "anomalous_in_neigh": 0,
+      "near_anomaly": false
+    },
+    {
+      "anchor": 1689,
+      "neigh": [
+        1689,
+        155,
+        156,
+        1763,
+        817,
+        1358,
+        90,
+        1736
+      ],
+      "freq": 0.0078,
+      "score": 0.0078,
+      "anomalous_in_neigh": 0,
+      "near_anomaly": false
+    }
+  ]
+}

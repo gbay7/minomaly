@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import random
 
 import numpy as np
@@ -31,8 +32,10 @@ def set_deterministic(seed: int = 42) -> None:
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
 
+    # Required for deterministic CuBLAS on CUDA >= 10.2
+    os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
+
     try:
         torch.use_deterministic_algorithms(True)
     except AttributeError:
-        # Older PyTorch versions may not have this function.
         pass

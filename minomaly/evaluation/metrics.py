@@ -65,8 +65,8 @@ def get_stat_results(
     anchor_to_score: dict[int, float] = {}
     for beam in verified_beams:
         a = beam.anchor()
-        score = 1.0 - beam.score
-        # Keep the highest anomaly score if a node appears multiple times
+        s = beam.score if beam.score is not None else 0.0
+        score = 1.0 - s
         if a not in anchor_to_score or score > anchor_to_score[a]:
             anchor_to_score[a] = score
     y_score = [anchor_to_score.get(node, 0.0) for node in all_nodes]

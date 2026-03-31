@@ -90,6 +90,49 @@ def load_pygod_dataset(
     return data, "node"
 
 
+def load_organic_dataset(
+    name: str,
+    cache_dir: Optional[str] = None,
+) -> tuple:
+    """Load an organic anomaly dataset (e.g. ``elliptic``, ``mgtab``).
+
+    These datasets are prepared by ``datasets/prepare_datasets.py`` and
+    stored in the same cache directory as PyGOD datasets.  They use
+    identical PyGOD bit-encoding for labels:
+    ``(data.y >> 1) & 1 == 1`` for structural anomalies.
+
+    Parameters
+    ----------
+    name:
+        Dataset name (``"elliptic"`` or ``"mgtab"``).
+    cache_dir:
+        Directory containing the ``.pt`` file.  Defaults to
+        ``~/.pygod/data/``.
+
+    Returns
+    -------
+    tuple
+        ``(data, task_name)`` matching :func:`load_pygod_dataset` signature.
+    """
+    if cache_dir is None:
+        cache_dir = _DEFAULT_CACHE_DIR
+
+    pt_path = Path(cache_dir) / f"{name}.pt"
+    if not pt_path.exists():
+        raise FileNotFoundError(
+            f"Dataset '{name}' not found at {pt_path}. "
+            f"Run: python datasets/prepare_datasets.py --dataset {name}"
+        )
+
+    data = torch.load(pt_path, weights_only=False)
+    n_anom = ((data.y >> 1) & 1).sum().item()
+    print(
+        f"Loaded {name}: {data.num_nodes:,} nodes, "
+        f"{data.edge_index.size(1):,} edges, {n_anom:,} anomalies"
+    )
+    return data, "node"
+
+
 def extract_anomaly_labels(data) -> torch.Tensor:
     """Extract structural anomaly labels from a PyGOD dataset.
 

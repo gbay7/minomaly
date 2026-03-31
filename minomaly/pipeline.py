@@ -19,7 +19,7 @@ from minomaly.callbacks.composite import CallbackList
 from minomaly.config.schema import MinomalyConfig
 from minomaly.data.convert import batch_pyg_data
 from minomaly.data.graph import GraphData
-from minomaly.data.loaders import extract_anomaly_labels, load_pygod_dataset, pyg_data_to_nx
+from minomaly.data.loaders import extract_anomaly_labels, load_organic_dataset, load_pygod_dataset, pyg_data_to_nx
 from minomaly.evaluation.metrics import get_stat_results
 from minomaly.registry import EMBEDDERS, ENCODERS, OUTLIERS, SAMPLERS, SCORING, SEARCH
 from minomaly.search.beam import Beam
@@ -74,7 +74,15 @@ class MinomalyPipeline:
         8. Deduplicate and export patterns.
         9. Compute and return metrics.
         """
-        set_deterministic(self.config.seed)
+        # Seed RNGs but do NOT enable torch.use_deterministic_algorithms —
+        # it forces CPU fallbacks for scatter/index ops in GNN message
+        # passing, making detection 100x slower.
+        import random as _rnd
+        _rnd.seed(self.config.seed)
+        np.random.seed(self.config.seed)
+        torch.manual_seed(self.config.seed)
+        if torch.cuda.is_available():
+            torch.cuda.manual_seed_all(self.config.seed)
         cfg = self.config
 
         # Timestamp for output directories
@@ -95,6 +103,7 @@ class MinomalyPipeline:
         cache_key = (
             f"{cfg.dataset.name}_{sc.n_neighborhoods}_{sc.min_neighborhood_size}"
             f"_{sc.max_neighborhood_size}_{sc.node_anchored}_{cfg.batch_size}"
+            f"_dim{cfg.model.input_dim}_{cfg.model.method_type}"
         )
         emb_cache = CACHE_DIR / "embeddings" / f"{cache_key}.p"
         start_cache = CACHE_DIR / "starting_nodes" / f"{cache_key}_starting_nodes.p"
@@ -112,7 +121,7 @@ class MinomalyPipeline:
             anom_embs = [e.to(self.device) for e in anom_embs]
         else:
             tree_sampler = SAMPLERS.build(
-                "tree",
+                "tree_fast",
                 n_neighborhoods=sc.n_neighborhoods,
                 min_size=sc.min_neighborhood_size,
                 max_size=sc.max_neighborhood_size,
@@ -122,7 +131,7 @@ class MinomalyPipeline:
             )
 
             radial_sampler = SAMPLERS.build(
-                "radial",
+                "radial_fast",
                 radius=sc.radial_radius,
                 subsample_size=cfg.search.max_steps,
                 nodes=[[i for i, a in enumerate(anom) if a] for anom in anomalies],
@@ -130,6 +139,15 @@ class MinomalyPipeline:
             anom_result = radial_sampler.sample(
                 graphs, node_anchored=sc.node_anchored, add_self_loop=sc.add_self_loop,
             )
+
+            # Slice features to match model's input_dim
+            input_dim = cfg.model.input_dim
+            for n in tree_result.neighborhoods:
+                if n.x.shape[1] > input_dim:
+                    n.x = n.x[:, :input_dim]
+            for n in anom_result.neighborhoods:
+                if n.x.shape[1] > input_dim:
+                    n.x = n.x[:, :input_dim]
 
             # ── 4. Embed neighborhoods ────────────────────────────────
             embs = self._embed_neighborhoods(
@@ -237,6 +255,10 @@ class MinomalyPipeline:
                     sample_random_cands=cfg.search.sample_random_cands,
                     add_verified_neighs=cfg.search.add_verified_neighs,
                     min_neigh_repeat=cfg.search.min_neigh_repeat,
+                    input_dim=cfg.model.input_dim,
+                    freq_cache=getattr(self, "_freq_cache", None),
+                    **({"anomalous_nodes": anomalous_nodes_flat}
+                       if cfg.search.search_strategy == "diagnostic" else {}),
                 )
 
                 self.callbacks.on_search_start(batch, cfg.search)
@@ -262,6 +284,33 @@ class MinomalyPipeline:
                 batch_time = timedelta(seconds=time.time() - batch_start)
                 total_time += batch_time
 
+                # Per-batch logging (matches original decoder.py)
+                batch_stats = get_stat_results(anomalous_nodes_flat, verified, all_nodes)
+                batch_log = {
+                    "stats": {
+                        "stat_results": batch_stats,
+                        "predicted_anomalies_len": len(agent_verified),
+                        "batch_number": batch_num,
+                        "batch_time": str(batch_time),
+                        "total_time": str(total_time),
+                        "cumulative_verified": len(verified),
+                        "copied_pending": len(count_copied),
+                    },
+                    "anomalies": [
+                        {
+                            "anchor": b.anchor(),
+                            "neigh": list(b.neigh),
+                            "score": b.score,
+                            "freq": b.freq,
+                            "weight": b.weight,
+                            "original": b.original,
+                            "is_true": b.anchor() in set(anomalous_nodes_flat),
+                        }
+                        for b in agent_verified
+                    ],
+                }
+                save_json(batch_log, plots_dir / f"batch_{batch_num}_anomalies.json")
+
                 self.callbacks.on_search_batch_end(
                     batch_number=batch_num,
                     batch_verified=list(agent_verified),
@@ -277,7 +326,35 @@ class MinomalyPipeline:
             "stat_results": stat_results,
             "verified_count": len(verified),
             "starting_nodes_count": len(starting_nodes),
+            "true_anomalies": anomalous_nodes_flat,
+            "true_anomalies_len": len(anomalous_nodes_flat),
+            "search_params": {
+                "search_strategy": cfg.search.search_strategy,
+                "max_freq": cfg.search.max_freq,
+                "max_steps": cfg.search.max_steps,
+                "min_steps": cfg.search.min_steps,
+                "max_unchanged": cfg.search.max_unchanged,
+                "alpha": cfg.search.alpha,
+                "n_beams": cfg.search.n_beams,
+                "max_cands": cfg.search.max_cands,
+                "add_verified_neighs": cfg.search.add_verified_neighs,
+                "min_neigh_repeat": cfg.search.min_neigh_repeat,
+                "nodes_batch_size": cfg.search.nodes_batch_size,
+            },
             "total_time": str(total_time),
+            "gpu_memory": torch.cuda.max_memory_allocated() / (1024**3) if torch.cuda.is_available() else 0,
+            "all_verified_beams": [
+                {
+                    "anchor": b.anchor(),
+                    "neigh": list(b.neigh),
+                    "score": b.score,
+                    "freq": b.freq,
+                    "weight": b.weight,
+                    "original": b.original,
+                    "is_true": b.anchor() in set(anomalous_nodes_flat),
+                }
+                for b in verified
+            ],
         }
 
         # Save results
@@ -296,19 +373,25 @@ class MinomalyPipeline:
     def _load_dataset(self):
         """Load dataset and convert to GraphData."""
         cfg = self.config.dataset
+        _ORGANIC = {"elliptic", "mgtab"}
+
         if cfg.name.startswith("inj_"):
             data, _ = load_pygod_dataset(cfg.name, cache_dir=cfg.cache_dir)
-            anomaly_labels = extract_anomaly_labels(data)
-            nx_graph = pyg_data_to_nx(data)
-            graph = GraphData.from_nx(nx_graph, device=self.device)
-            graphs = [graph]
-            anomalies = [anomaly_labels.tolist()]
-            all_nodes = list(range(graph.num_nodes))
-            anomalous_nodes = [
-                [i for i, a in enumerate(anomaly_labels.tolist()) if a]
-            ]
-            return data, graphs, anomalies, all_nodes, anomalous_nodes
-        raise ValueError(f"Unknown dataset: {cfg.name}")
+        elif cfg.name in _ORGANIC:
+            data, _ = load_organic_dataset(cfg.name, cache_dir=cfg.cache_dir)
+        else:
+            raise ValueError(f"Unknown dataset: {cfg.name}")
+
+        anomaly_labels = extract_anomaly_labels(data)
+        nx_graph = pyg_data_to_nx(data)
+        graph = GraphData.from_nx(nx_graph, device=self.device)
+        graphs = [graph]
+        anomalies = [anomaly_labels.tolist()]
+        all_nodes = list(range(graph.num_nodes))
+        anomalous_nodes = [
+            [i for i, a in enumerate(anomaly_labels.tolist()) if a]
+        ]
+        return data, graphs, anomalies, all_nodes, anomalous_nodes
 
     def _load_or_train_model(self):
         """Load pre-trained model or train from scratch."""
@@ -422,6 +505,9 @@ class MinomalyPipeline:
         real_anchors, neighborhoods, max_steps, embs_np,
     ) -> tuple[set[int], np.ndarray]:
         """Detect starting nodes using configured outlier detectors."""
+        import time as _t
+
+        print(f"[detect] Building detectors... freq_thresh={freq_thresh:.6f}")
         model_det = OUTLIERS.build("model_based", freq_thresh=freq_thresh)
         iforest_det = OUTLIERS.build(
             "isolation_forest",
@@ -429,19 +515,31 @@ class MinomalyPipeline:
             max_neigh_len=max_steps,
         )
 
+        print(f"[detect] Running model-based detector...")
+        _t0 = _t.time()
         s1, e1 = model_det.detect(
             embs, model, real_anchors, neighborhoods,
         )
+        # Cross-phase frequency cache (Idea 3): reuse Phase 2 frequencies
+        self._freq_cache = getattr(model_det, "freq_cache", None)
+        if self._freq_cache is not None:
+            print(f"[detect] Cached {len(self._freq_cache)} neighborhood frequencies for Phase 3")
+        print(f"[detect] Model-based done in {_t.time()-_t0:.1f}s: {len(s1)} nodes, e1 shape={e1.shape}")
+
+        print(f"[detect] Running IsolationForest...")
+        _t0 = _t.time()
         s2, e2 = iforest_det.detect(
             embs, model, real_anchors, neighborhoods,
             embs_np=embs_np,
         )
+        print(f"[detect] IsolationForest done in {_t.time()-_t0:.1f}s: {len(s2)} nodes, e2 shape={e2.shape}")
 
         if self.config.outlier.combine == "union":
             starting = s1 | s2
         else:
             starting = s1 & s2
 
+        print(f"[detect] Combining: {len(starting)} total starting nodes")
         all_embs = np.concatenate([e1, e2]) if len(e1) > 0 and len(e2) > 0 else (
             e1 if len(e1) > 0 else e2
         )

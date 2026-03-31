@@ -48,11 +48,13 @@ class LoggingCallback(Callback):
         new_verified_count: int,
     ) -> None:
         n_beams = sum(len(bs) for bs in beam_sets) if beam_sets else 0
+        bar = "█" * step + "░" * max(0, 8 - step)
         print(
-            f"[{_ts()}] Step {step}: "
-            f"{n_beams} beam(s), "
-            f"{len(verified)} verified, "
-            f"+{new_verified_count} new"
+            f"  [{bar}] Step {step}: "
+            f"{n_beams} beams, "
+            f"{len(verified)} verified "
+            f"(+{new_verified_count})",
+            flush=True,
         )
 
     def on_search_batch_end(

@@ -50,9 +50,13 @@ class BeamSet:
         """
         if not self.beams:
             return self
-        # Detect if this is a full model with embed_and_project
+        # Detect if this is a full model with embed_and_project (hybrid)
+        # or a plain EmbeddingModel (order) where we use .emb_model
         if hasattr(emb_model_or_full, "embed_and_project"):
             emb_fn = emb_model_or_full.embed_and_project
+            model_device = next(emb_model_or_full.parameters()).device
+        elif hasattr(emb_model_or_full, "emb_model"):
+            emb_fn = emb_model_or_full.emb_model
             model_device = next(emb_model_or_full.parameters()).device
         else:
             emb_fn = emb_model_or_full
@@ -74,6 +78,7 @@ class BeamSet:
         scorer: ScoringFunction,
         alpha: float = 0.5,
         unchange_direction: bool = False,
+        freq_cache: Optional[torch.Tensor] = None,
     ) -> BeamSet:
         """Compute strength scores for all beams via batched GPU ops.
 
@@ -91,19 +96,36 @@ class BeamSet:
         freq_counts = torch.zeros(n_beams, device=device)
         total_n_embs = 0
 
+        # Track supergraph masks for freq_cache lower bounds
+        all_supergraph_masks = []
+
         for emb_batch in embs:
             batch_size = len(emb_batch)
             total_n_embs += batch_size
             emb_batch = emb_batch.to(device)
 
             # Pairwise violations/distances: (N, B)
-            # Delegates to model so Euclidean, Poincaré, etc. all work
             violations = model.batch_predict(emb_batch, beam_embs)
 
             # Classify each violation → subgraph prediction
             preds = model.clf_model(violations.unsqueeze(-1))  # (N, B, 2)
             supergraphs = torch.argmax(preds, dim=-1)  # (N, B)
             freq_counts += supergraphs.sum(dim=1).float()
+            all_supergraph_masks.append(supergraphs)
+
+        # Cross-phase frequency cache: use Phase 2 freqs as lower bounds
+        # If freq_cache[i] is the frequency of neighborhood i, and
+        # neighborhood i is a supergraph of beam j, then by anti-monotonicity
+        # Freq(beam_j) >= freq_cache[i]. The max across all supergraphs
+        # gives a lower bound.
+        if freq_cache is not None:
+            fc = freq_cache.to(device)
+            # Concatenate all supergraph masks: (N, K)
+            super_mask = torch.cat(all_supergraph_masks, dim=1)  # (N, K)
+            # Lower bound for each beam: max freq_cache among its supergraphs
+            # Set non-supergraph entries to 0 before taking max
+            masked_freqs = super_mask.float() * fc.unsqueeze(0)  # (N, K)
+            lower_bounds = masked_freqs.max(dim=1).values  # (N,)
 
         # Assign scores to beams
         for i, beam in enumerate(self.beams):

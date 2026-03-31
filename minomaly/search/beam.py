@@ -25,7 +25,7 @@ class Beam:
     __slots__ = (
         "node", "graph", "neigh", "frontier", "visited", "emb",
         "score", "freq", "weight", "unchange", "last_score", "original",
-        "_add_self_loop", "_node_anchored",
+        "_add_self_loop", "_node_anchored", "_input_dim",
     )
 
     def __init__(
@@ -40,11 +40,13 @@ class Beam:
         last_score: float = float("inf"),
         add_self_loop: bool = True,
         node_anchored: bool = True,
+        input_dim: int = 2,
     ) -> None:
         self.node = node
         self.graph = graph
         self._add_self_loop = add_self_loop
         self._node_anchored = node_anchored
+        self._input_dim = input_dim
 
         if neigh is not None:
             self.neigh = neigh + [node]
@@ -107,6 +109,7 @@ class Beam:
                 last_score=self.score if self.score is not None else self.last_score,
                 add_self_loop=self._add_self_loop,
                 node_anchored=self._node_anchored,
+                input_dim=self._input_dim,
             )
             for cand in frontier
         ]
@@ -114,14 +117,57 @@ class Beam:
     # ── Embedding ─────────────────────────────────────────────────────
 
     def get_pyg_data(self) -> "torch_geometric.data.Data":
-        """Build a PyG Data for this beam's subgraph."""
-        nodes_t = torch.tensor(self.neigh, dtype=torch.long, device=self.graph.device)
-        view = self.graph.subgraph(nodes_t)
-        return view.to_pyg(
-            anchor_global=self.anchor(),
-            node_anchored=self._node_anchored,
-            add_self_loop=self._add_self_loop,
-        )
+        """Build a PyG Data directly from CSR neighbor lookups.
+
+        Matches original DeepSNAP behavior: nodes are relabeled to 0..n-1
+        in SORTED order (not anchor-first), preserving the same anchor
+        position as the parent graph's node ordering.
+        """
+        from torch_geometric.data import Data
+        from torch_geometric.utils import coalesce
+
+        neigh_set = set(self.neigh)
+        anchor = self.anchor()
+
+        # Relabel following NX iteration order to match DSGraph behavior.
+        # The original code embeds beams via batch_nx_graphs(get_neigh())
+        # where get_neigh() returns graph.subgraph(neigh) with original IDs.
+        # DSGraph then relabels following NX's node iteration order.
+        # Cache the NX graph to avoid recreating it per beam.
+        if not hasattr(self.graph, '_nx_cache'):
+            self.graph._nx_cache = self.graph.to_nx()
+        nx_node_order = list(self.graph._nx_cache.subgraph(neigh_set).nodes())
+        mapping = {n: i for i, n in enumerate(nx_node_order)}
+        num_nodes = len(mapping)
+
+        # Build edges via CSR neighbor lookup (fast)
+        src, dst = [], []
+        for node in self.neigh:
+            m_node = mapping[node]
+            for nb in self.graph.neighbors(node).tolist():
+                if nb in neigh_set:
+                    src.append(m_node)
+                    dst.append(mapping[nb])
+
+        if self._add_self_loop:
+            src.append(0)
+            dst.append(0)
+
+        if src:
+            edge_index = torch.tensor([src, dst], dtype=torch.long)
+            edge_index = coalesce(edge_index, num_nodes=num_nodes)
+        else:
+            edge_index = torch.empty((2, 0), dtype=torch.long)
+
+        # Features: GLASS [anchor, inside] sliced to input_dim
+        anchor_pos = mapping[anchor]
+        x = torch.zeros(num_nodes, 2)
+        x[:, 1] = 1.0
+        if self._node_anchored:
+            x[anchor_pos, 0] = 1.0
+        x = x[:, :self._input_dim]
+
+        return Data(x=x, edge_index=edge_index, num_nodes=num_nodes)
 
     def embed(self, emb_model: torch.nn.Module) -> torch.Tensor:
         """Embed this beam's subgraph. Caches the result."""
@@ -193,23 +239,26 @@ class Beam:
     def copy(self, new_anchor: int) -> Beam:
         """Create a copy with *new_anchor* as the anchor.
 
-        Bug fix: creates fresh score state instead of sharing the original's.
+        Matches original SPMiner behavior:
+        - neigh = [new_anchor] + self.neigh[:-1] (drops last node, adds new anchor)
+        - Shares parent's emb/score/freq (not recomputed)
         """
         beam = Beam.__new__(Beam)
         beam.node = new_anchor
         beam.graph = self.graph
-        beam.neigh = [new_anchor] + [n for n in self.neigh if n != new_anchor]
-        beam.frontier = list(self.frontier)
-        beam.visited = set(self.visited)
-        beam.emb = None  # must be re-embedded
-        beam.score = None
-        beam.freq = None
+        beam.neigh = [new_anchor] + self.neigh[:-1]
+        beam.frontier = self.frontier
+        beam.visited = self.visited
+        beam.emb = self.emb
+        beam.score = self.score
+        beam.freq = self.freq
         beam.weight = self.weight
         beam.unchange = 0
         beam.last_score = float("inf")
         beam.original = False
         beam._add_self_loop = self._add_self_loop
         beam._node_anchored = self._node_anchored
+        beam._input_dim = self._input_dim
         return beam
 
     # ── Identity ──────────────────────────────────────────────────────

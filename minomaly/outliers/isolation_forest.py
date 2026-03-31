@@ -76,11 +76,11 @@ class IsolationForestDetector(OutlierDetector):
         tuple[set[int], np.ndarray]
             ``(starting_nodes, outlier_embeddings)``
         """
-        # Flatten all batch embeddings to a numpy array
-        all_embs_list: list[torch.Tensor] = [
-            emb for emb_batch in embs for emb in emb_batch
-        ]
-        embs_np = np.array([emb.cpu().numpy() for emb in all_embs_list])
+        # Use pre-computed embs_np if passed, otherwise flatten
+        if "embs_np" in kwargs and kwargs["embs_np"] is not None:
+            embs_np = kwargs["embs_np"]
+        else:
+            embs_np = torch.cat(embs, dim=0).cpu().numpy()
 
         real_anchors_np = np.array(real_anchors, dtype=int)
 
@@ -97,6 +97,7 @@ class IsolationForestDetector(OutlierDetector):
         )
 
         embs_filtered = embs_np[neigh_len_cond]
+        print(f"IsolationForest: {embs_filtered.shape[0]} neighborhoods after filtering (max_len={self.max_neigh_len})")
 
         if len(embs_filtered) == 0:
             logger.warning(
@@ -106,11 +107,13 @@ class IsolationForestDetector(OutlierDetector):
             return set(), np.empty((0,))
 
         # Fit and predict
+        print("IsolationForest: fitting...")
         clf = IsolationForest(
             contamination=self.contamination,
             random_state=self.random_state,
         )
         y_pred = clf.fit_predict(embs_filtered)
+        print(f"IsolationForest: done, {np.sum(y_pred == -1)} outliers")
 
         # Collect outlier embeddings
         outlier_embs = embs_filtered[y_pred == -1]

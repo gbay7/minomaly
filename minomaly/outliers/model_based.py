@@ -80,52 +80,37 @@ class ModelBasedDetector(OutlierDetector):
         """
         device = get_device()
 
-        # Flatten all batch embeddings into a single list
-        all_embs: list[torch.Tensor] = [
-            emb for emb_batch in embs for emb in emb_batch
-        ]
+        # Stack all embeddings into one tensor
+        all_embs_t = torch.cat(embs, dim=0).to(device)  # (N, D)
+        N = all_embs_t.shape[0]
 
-        y_pred: list[int] = []
+        # Compute frequency for ALL embeddings at once via batched chunks
+        # to avoid OOM on large N×N matrices
+        freq_counts = torch.zeros(N, device=device)
+        chunk_size = 64  # small chunks to avoid GPU memory pressure
 
-        for i in tqdm(
-            range(len(all_embs)), desc="Model-based outlier detection"
-        ):
-            emb = all_embs[i]
-
-            # Skip neighborhoods exceeding max size
-            if (
-                self.max_neigh_len is not None
-                and len(neighborhoods[i]) > self.max_neigh_len
-            ):
-                y_pred.append(2)
-                continue
-
-            freq = 0
-            n_embs = 0
+        for start in tqdm(range(0, N, chunk_size), desc="Model-based outlier detection"):
+            end = min(start + chunk_size, N)
+            query_chunk = all_embs_t[start:end]  # (C, D)
 
             for emb_batch in embs:
-                n_embs += len(emb_batch)
-                # Predict: for each embedding in the batch, check if it
-                # is a supergraph of the current embedding.
-                # model.predict((emb_batch, emb)) returns violation scores.
-                # model.clf_model classifies each score.
-                supergraphs = torch.argmax(
-                    model.clf_model(
-                        model.predict(
-                            (emb_batch.to(device), emb)
-                        ).unsqueeze(1)
-                    ),
-                    dim=1,
-                )
-                freq += torch.sum(supergraphs).item()
+                emb_batch = emb_batch.to(device)
+                # batch_predict: (C, B) pairwise violations
+                violations = model.batch_predict(emb_batch, query_chunk)
+                preds = model.clf_model(violations.unsqueeze(-1))  # (C, B, 2)
+                supergraphs = torch.argmax(preds, dim=-1)  # (C, B)
+                freq_counts[start:end] += supergraphs.sum(dim=1).float()
 
-            if freq / n_embs <= self.freq_thresh:
-                y_pred.append(-1)
-            else:
-                y_pred.append(0)
+        # Wait for GPU to finish all async operations
+        if device.type == "cuda":
+            torch.cuda.synchronize()
+
+        # Classify on GPU (no .item() loop)
+        freq_ratios = freq_counts / N
+        outlier_mask_t = freq_ratios <= self.freq_thresh  # bool tensor on GPU
+        y_pred_np = np.where(outlier_mask_t.cpu().numpy(), -1, 0)
 
         real_anchors_np = np.array(real_anchors, dtype=int)
-        y_pred_np = np.array(y_pred)
 
         # Collect starting nodes from outlier anchors
         starting_nodes: set[int] = set(
@@ -139,22 +124,20 @@ class ModelBasedDetector(OutlierDetector):
         # neighborhoods are relabeled (0..n), only the real_anchor
         # maps back to the original graph.
         for i in range(len(neighborhoods)):
-            if y_pred[i] == -1:
+            if y_pred_np[i] == -1:
                 starting_nodes.add(int(real_anchors[i]))
 
-        # Collect outlier embeddings
-        outlier_embs = np.array(
-            [
-                emb.cpu().numpy()
-                for i, emb in enumerate(all_embs)
-                if y_pred[i] == -1
-            ]
-        ) if any(y == -1 for y in y_pred) else np.empty((0,))
+        # Collect outlier embeddings (single GPU→CPU transfer)
+        outlier_mask = y_pred_np == -1
+        if outlier_mask.any():
+            outlier_embs = all_embs_t[torch.tensor(outlier_mask, dtype=torch.bool)].cpu().numpy()
+        else:
+            outlier_embs = np.empty((0,))
 
-        logger.info(
-            "Model-based detector: %d starting nodes from %d outlier neighborhoods",
-            len(starting_nodes),
-            int(np.sum(y_pred_np == -1)),
-        )
+        n_outliers = int(np.sum(y_pred_np == -1))
+        print(f"Model-based detector: {len(starting_nodes)} starting nodes from {n_outliers} outlier neighborhoods")
+
+        # Return freq_ratios for cross-phase caching (Idea 3 from ideas.md)
+        self.freq_cache = freq_ratios.cpu()  # (K,) tensor
 
         return starting_nodes, outlier_embs
