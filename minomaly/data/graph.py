@@ -202,25 +202,19 @@ class SubgraphView:
             old.item(): new for new, old in enumerate(nodes)
         }
 
-        # Filter and relabel edges
-        node_set = set(nodes.tolist())
+        # Filter and relabel edges using tensor ops (not Python loop).
+        # On dense graphs (1.8M edges), a Python loop is prohibitively slow.
         src, dst = parent.edge_index
-        mask = torch.tensor(
-            [(s.item() in node_set and d.item() in node_set)
-             for s, d in zip(src, dst)],
-            device=self.device,
-        )
-        if mask.any():
-            filtered = parent.edge_index[:, mask]
-            new_src = torch.tensor(
-                [self._global_to_local[s.item()] for s in filtered[0]],
-                dtype=torch.long, device=self.device,
-            )
-            new_dst = torch.tensor(
-                [self._global_to_local[d.item()] for d in filtered[1]],
-                dtype=torch.long, device=self.device,
-            )
-            self.edge_index = torch.stack([new_src, new_dst])
+        node_mask = torch.zeros(parent.num_nodes, dtype=torch.bool, device=self.device)
+        node_mask[nodes] = True
+        edge_mask = node_mask[src] & node_mask[dst]
+
+        if edge_mask.any():
+            filtered = parent.edge_index[:, edge_mask]
+            # Relabel: build a mapping tensor (global → local)
+            remap = torch.empty(parent.num_nodes, dtype=torch.long, device=self.device)
+            remap[nodes] = torch.arange(len(nodes), device=self.device)
+            self.edge_index = remap[filtered]
         else:
             self.edge_index = torch.empty((2, 0), dtype=torch.long, device=self.device)
 

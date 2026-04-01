@@ -69,6 +69,7 @@ class IncrementalSearchAgent:
         min_neigh_repeat: int = 2,
         input_dim: int = 2,
         freq_cache: Optional[torch.Tensor] = None,
+        **kwargs,
     ) -> None:
         self.model = model
         self.graphs = graphs

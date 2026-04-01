@@ -124,6 +124,7 @@ class TreeFastSampler(Sampler):
             data = _neigh_to_pyg(graph, neigh_nodes, node_anchored, add_self_loop)
             result.neighborhoods.append(data)
             result.real_anchors.append(neigh_nodes[0])
+            result.node_lists.append(neigh_nodes)
             if node_anchored:
                 result.anchors.append(0)
         return result

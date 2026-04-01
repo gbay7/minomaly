@@ -60,6 +60,7 @@ class StrengthSearchAgent:
         min_neigh_repeat: int = 2,
         input_dim: int = 2,
         freq_cache: Optional[torch.Tensor] = None,
+        **kwargs,
     ) -> None:
         self.input_dim = input_dim
         self.freq_cache = freq_cache  # (K,) per-neighborhood frequencies from Phase 2

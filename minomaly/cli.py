@@ -63,11 +63,11 @@ def parse_args(argv: list[str] | None = None) -> tuple[MinomalyConfig, list[str]
             override_dict[key] = val
         config = merge_cli_overrides(config, override_dict)
 
-    return config, args.overrides, args.train_only
+    return config, args.overrides, args.train_only, args.config
 
 
 def main(argv: list[str] | None = None) -> None:
-    config, _, train_only = parse_args(argv)
+    config, _, train_only, config_path = parse_args(argv)
 
     # Import here to avoid circular imports and speed up --help
     from minomaly.callbacks.logging_cb import LoggingCallback
@@ -81,7 +81,7 @@ def main(argv: list[str] | None = None) -> None:
         print(f"  Model saved to: {config.training.checkpoint_dir}/model.pt")
         return
 
-    pipeline = MinomalyPipeline(config)
+    pipeline = MinomalyPipeline(config, config_path=config_path)
     pipeline.add_callback(LoggingCallback())
 
     results = pipeline.run()

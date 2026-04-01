@@ -53,6 +53,7 @@ class SearchConfig:
     min_steps: int = 1
     max_steps: int = 7
     max_freq: float = 35.0
+    outlier_max_freq: Optional[float] = None  # separate threshold for starting node detection; defaults to max_freq
     min_strength: float = 0.0
     max_unchanged: int = 5
     n_beams: int = 1
@@ -66,6 +67,7 @@ class SearchConfig:
     add_verified_neighs: bool = False
     min_neigh_repeat: int = 2
     nodes_batch_size: int = 16
+    sample_size: int = 500  # reference sample size for sampled search
 
 
 @dataclass
@@ -118,6 +120,22 @@ class DatasetConfig:
 
 
 @dataclass
+class ContextConfig:
+    """Contextual anomaly detection configuration."""
+
+    enabled: bool = False
+    encoder: str = "skip_last_gnn"
+    n_layers: int = 4
+    hidden_dim: int = 64
+    conv_type: str = "SAGE"
+    skip: str = "learnable"
+    dropout: float = 0.0
+    n_clusters: int = 10
+    clustering: str = "kmeans"
+    beta: float = 0.5  # beta*structural + (1-beta)*contextual
+
+
+@dataclass
 class MinomalyConfig:
     """Top-level configuration aggregating all sub-configs."""
 
@@ -129,5 +147,6 @@ class MinomalyConfig:
     training: TrainingConfig = field(default_factory=TrainingConfig)
     visualization: VisualizationConfig = field(default_factory=VisualizationConfig)
     dataset: DatasetConfig = field(default_factory=DatasetConfig)
+    context: ContextConfig = field(default_factory=ContextConfig)
     seed: int = 42
     batch_size: int = 1000

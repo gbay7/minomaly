@@ -96,8 +96,10 @@ class Beam:
         if sample_ratio is not None:
             k = max(1, round(sample_ratio * len(frontier)))
             frontier = random.sample(frontier, min(k, len(frontier)))
-        if max_cands is not None and len(frontier) > max_cands:
-            frontier = random.sample(frontier, max_cands)
+        if max_cands is not None:
+            max_cands = int(max_cands)
+            if len(frontier) > max_cands:
+                frontier = random.sample(frontier, max_cands)
 
         parent_history = list(self.freq_history)
         candidates = [
@@ -129,21 +131,16 @@ class Beam:
         in SORTED order (not anchor-first), preserving the same anchor
         position as the parent graph's node ordering.
         """
-        from torch_geometric.data import Data as _Data
+        from torch_geometric.data import Data
         from torch_geometric.utils import coalesce
 
         neigh_set = set(self.neigh)
         anchor = self.anchor()
 
-        # Relabel following NX iteration order to match DSGraph behavior.
-        # The original code embeds beams via batch_nx_graphs(get_neigh())
-        # where get_neigh() returns graph.subgraph(neigh) with original IDs.
-        # DSGraph then relabels following NX's node iteration order.
-        # Cache the NX graph to avoid recreating it per beam.
-        if not hasattr(self.graph, '_nx_cache'):
-            self.graph._nx_cache = self.graph.to_nx()
-        nx_node_order = list(self.graph._nx_cache.subgraph(neigh_set).nodes())
-        mapping = {n: i for i, n in enumerate(nx_node_order)}
+        # Relabel: anchor → 0, rest → 1..n
+        # Fast CSR-based, no NX dependency.
+        mapping = {anchor: 0}
+        mapping.update({n: i + 1 for i, n in enumerate(neigh_set - {anchor})})
         num_nodes = len(mapping)
 
         # Build edges via CSR neighbor lookup (fast)

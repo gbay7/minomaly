@@ -6,6 +6,7 @@ dataset:
   task: struct-anomaly
 
 model:
+  method_type: hybrid
   conv_type: SAGE
   n_layers: 8
   hidden_dim: 64
@@ -33,10 +34,12 @@ search:
   alpha: 0.33
   scoring_function: freq
   verif_scoring_function: freq_verif
-  search_strategy: strength
+  search_strategy: sampled
   add_verified_neighs: false
   min_neigh_repeat: 2
   nodes_batch_size: 100
+  sample_size: 500
+  max_cands: 20
 
 outlier:
   methods:

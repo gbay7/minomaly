@@ -1,6 +1,7 @@
-# Cora detection: hybrid model + strength search (tuned, min_steps=7)
-# This is the config that achieved P=90.9%, R=85.7%, F1=88.2% with the order model.
-# Now uses hybrid model (current checkpoint).
+# Cora: hybrid + strength, TUNED v2
+# Wide outlier detection (outlier_max_freq=35) to catch all anomalies
+# Tight verification (max_freq=2) to only verify freq=0 patterns
+# max_steps=5 → size-5 sweet spot (all TP are size 5)
 device:
   device: auto
 
@@ -28,19 +29,19 @@ sampling:
   add_self_loop: true
 
 search:
-  min_steps: 7
-  max_steps: 7
-  max_freq: 35.0
+  min_steps: 1
+  max_steps: 5
+  max_freq: 2.0
+  outlier_max_freq: 35.0
   min_strength: 0.0
   max_unchanged: 5
   n_beams: 1
   alpha: 0.33
   scoring_function: freq
-  verif_scoring_function: freq_verif
   search_strategy: strength
   add_verified_neighs: false
   min_neigh_repeat: 2
-  nodes_batch_size: 100
+  nodes_batch_size: 16
 
 outlier:
   methods:

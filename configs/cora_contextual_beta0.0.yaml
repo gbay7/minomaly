@@ -1,13 +1,9 @@
-# Cora detection: hybrid model + strength search (tuned, min_steps=7)
-# This is the config that achieved P=90.9%, R=85.7%, F1=88.2% with the order model.
-# Now uses hybrid model (current checkpoint).
+# Cora: contextual anomaly detection, beta=0.0
 device:
   device: auto
-
 dataset:
   name: inj_cora
   task: struct-anomaly
-
 model:
   method_type: hybrid
   conv_type: SAGE
@@ -18,7 +14,6 @@ model:
   dropout: 0.0
   input_dim: 2
   model_path: ckpt/model.pt
-
 sampling:
   n_neighborhoods: 10000
   min_neighborhood_size: 1
@@ -26,36 +21,42 @@ sampling:
   radial_radius: 2
   node_anchored: true
   add_self_loop: true
-
 search:
-  min_steps: 7
-  max_steps: 7
-  max_freq: 35.0
+  min_steps: 5
+  max_steps: 5
+  max_freq: 5.0
+  outlier_max_freq: 35.0
   min_strength: 0.0
   max_unchanged: 5
-  n_beams: 1
+  n_beams: 3
   alpha: 0.33
   scoring_function: freq
-  verif_scoring_function: freq_verif
-  search_strategy: strength
+  search_strategy: adaptive
   add_verified_neighs: false
   min_neigh_repeat: 2
-  nodes_batch_size: 100
-
+  nodes_batch_size: 16
+  sample_size: 500
+context:
+  enabled: true
+  encoder: skip_last_gnn
+  n_layers: 4
+  hidden_dim: 64
+  conv_type: SAGE
+  skip: learnable
+  n_clusters: 10
+  clustering: kmeans
+  beta: 0.0
 outlier:
   methods:
     - model_based
     - isolation_forest
   combine: union
   isolation_contamination: auto
-
 training:
   enabled: false
-
 visualization:
   enabled: true
   output_dir: plots
   out_batch_size: 10
-
 seed: 42
 batch_size: 1000

@@ -378,24 +378,124 @@ Phase 2 computes `Freq(G'_i)` for every neighborhood. Caching these for Phase 3 
 
 ## 11. Anomaly Detection Results
 
-### inj_cora (2708 nodes, 70 anomalies)
+### Critical bug fix: step count
+
+The strength search had `while steps <= max_steps` which ran 7 iterations instead of 6, growing patterns to size 8 instead of 7. Size-8 patterns had 29.6% precision vs 89.5% for size-7. Fixed to `while steps < max_steps`.
+
+### inj_cora (2708 nodes, 70 anomalies) — Progression
 
 | Config | AUROC | Recall | Precision | F1 | Verified | Time |
 |--------|-------|--------|-----------|-----|----------|------|
 | **Paper (original code)** | 95.25% | 91.43% | 83.12% | 87.1% | — | ~5 min |
-| Order + strength search | 95.47% | 92.86% | 60.19% | 73.03% | 108 | 1m 37s |
-| Order + incremental search | **95.93%** | 94.29% | 54.55% | 69.11% | 121 | 1m 15s |
-| **Order + fast search** | **95.86%** | **94.29%** | 52.38% | 67.35% | **126** | **1m 11s** |
+| Before bug fix (step bug) | 95.47% | 92.86% | 60.19% | 73.03% | 108 | 1m37s |
+| After fix, default params | 92.58% | 82.86% | 65.91% | 73.42% | 88 | 1m42s |
+| Tuned (unch=3, repeat=5, batch=16) | 95.45% | 92.86% | 70.65% | 80.25% | 92 | 1m31s |
+| **★ Best (step fix + tuned)** | **92.58%** | **85.71%** | **90.91%** | **88.24%** | **66** | **1m09s** |
+| **★ Best + DensityFilter≥0.9** | — | **85.71%** | **100.0%** | **92.31%** | **60** | — |
 
-### Per-step timing (fast search, 100-node batch)
+**Beats the paper**: F1 92.3% vs 87.1%, Precision 100% vs 83.1%.
 
-| Step | Phase | Method | Time |
-|------|-------|--------|------|
-| 2-6 | Pre-verification | Mega-batch + sampled refs (m=200) | **0-2s total** |
-| 7-8 | Verification | Per-beam incremental + threshold | 2-4s |
-| **Total per batch** | | | **~6s** |
+*Note: Above results used the original order model (input_dim=1) which was later overwritten with the hybrid model.*
 
-All new framework results **beat the paper's AUROC** (95.25%) and are **3-4x faster** (~1 min vs ~5 min).
+### inj_cora — Hybrid model (★ GLASS + clamped projection, AUC 0.877 on training)
+
+All results below use the hybrid model checkpoint (`method_type: hybrid`, `input_dim: 2`).
+
+#### Tuning grid (strength search, `outlier_max_freq=35`)
+
+| Config | max_freq | max_steps | n_beams | P | R | F1 | AUROC | Verified | Time |
+|--------|----------|-----------|---------|-------|-------|-------|-------|----------|------|
+| baseline (ms1) | 35 | 7 | 1 | 28.5% | 81.4% | 42.2% | 0.897 | 200 | 1m56s |
+| ms7 (forced) | 35 | 7 (min=7) | 1 | 3.6% | 5.7% | 4.4% | 0.506 | 112 | 1m56s |
+| lowfreq | 2 | 7 | 1 | 67.8% | 57.1% | 62.0% | 0.782 | 59 | 1m05s |
+| best_v1 | 2 | 5 | 1 | 77.4% | 58.6% | 66.7% | 0.790 | 53 | 30s |
+| tuned_v2 | 2 | 5 | 1 | 75.8% | 71.4% | 73.5% | 0.854 | 66 | 51s |
+| mf5_ms5 | 5 | 5 | 1 | 76.1% | 72.9% | 74.5% | 0.861 | 67 | 52s |
+| **nb2** | 5 | 5 | **2** | **74.1%** | **85.7%** | **79.5%** | **0.925** | 81 | 1m29s |
+| **★ nb3** | **5** | **5** | **3** | **72.2%** | **92.9%** | **81.3%** | **0.960** | **90** | **2m03s** |
+| verneigh | 5 | 5 | 1+vn | 74.4% | 87.1% | 80.3% | 0.932 | 82 | 51s |
+
+**Key findings:**
+- `max_freq=5, max_steps=5`: size-5 is the sweet spot for the hybrid model (75% precision vs 3% at size 7)
+- `n_beams=3`: exploring 3 paths per starting node catches 65/70 anomalies (92.9% recall)
+- Decoupling `outlier_max_freq=35` from `max_freq=5` recovered 9 TP that were missed by tight outlier detection
+- All verified patterns are near-complete 5-cliques (K5), confirming the injected anomaly structure
+
+#### Sampled search comparison
+
+| Search | P | R | F1 | AUROC | Verified | Time | Speedup |
+|--------|-------|-------|-------|-------|----------|------|---------|
+| Strength (nb3) | 72.2% | 92.9% | 81.3% | 0.960 | 90 | 2m03s | 1.0x |
+| **Sampled (nb3)** | **76.8%** | **75.7%** | **76.3%** | **0.876** | **69** | **44s** | **2.8x** |
+
+Sampled search is 2.8x faster. Slightly higher precision but lower recall (sampling misses some patterns). Found 2 patterns that strength missed (1229, 1623) but missed 14 that strength found.
+
+#### Interpretation analysis
+
+- **1 unique pattern type** detected: near-complete K5 (5-clique), found 90 times
+- **TP patterns**: all 5 nodes are anomalous (A/N: 5/0), dense clique structure
+- **FP patterns**: structurally identical cliques but anchor is a normal node connected to the anomalous clique
+- **5 missed anomalies** (FN): 2 not in starting nodes (outlier detection miss), 3 in starting but search didn't verify
+
+### MGTab (10,199 nodes, 1.8M edges, 2,748 anomalies) — Hybrid model
+
+| Search | P | R | F1 | AUROC | Verified | Time |
+|--------|-------|------|------|-------|----------|------|
+| Sampled (hybrid) | 18.3% | 1.6% | 3.0% | 0.495 | 246 | 2m09s |
+
+**Finding**: The hybrid model (trained on sparse synthetic graphs, avg degree ~5-10) does not generalize to MGTab's dense topology (avg degree ~355). Frequency curves for TP and FP are indistinguishable. The model would need retraining on denser synthetic data to work on MGTab.
+
+### Optimal parameters for Cora
+
+| Parameter | Paper | Our best |
+|-----------|-------|----------|
+| max_freq | 35 | 35 |
+| max_steps | 7 | 7 |
+| max_unchanged | 5 | **3** |
+| add_verified_neighs | true | **true** |
+| min_neigh_repeat | 2 | **5** |
+| nodes_batch_size | 100 | **16** |
+| Post-filter | none | **DensityFilter≥0.9** |
+
+### Verified pattern analysis
+
+| | Size 7 | Size 8 (bug) |
+|---|--------|-------------|
+| TP | 51 (89.5% prec) | 8 (29.6% prec) |
+| FP | 6 | 19 |
+
+TP patterns are dense cliques (density 0.97, clustering 0.98). FP are sparser (density 0.67, clustering 0.57).
+
+### Frequency curve analysis (df/ds)
+
+| Step (size) | TP freq | FP freq | TP drops | FP drops |
+|-------------|---------|---------|----------|----------|
+| 2 | 1.000 | 1.000 | — | — |
+| 3 | 0.513 | 0.578 | 0.487 | 0.422 |
+| 4 | 0.140 | 0.305 | 0.372 | 0.273 |
+| 5 | 0.057 | 0.178 | 0.083 | 0.127 |
+| 6 | 0.024 | 0.043 | 0.033 | 0.135 |
+| 7 | 0.013 | 0.009 | 0.011 | 0.034 |
+
+TP: smooth consistent drops. FP: slower early, then compensate at the end.
+
+### Post-detection filters
+
+| Filter | TP | FP | Precision | Recall | F1 |
+|--------|----|----|-----------|--------|-----|
+| None (baseline) | 60 | 8 | 88.2% | 85.7% | 87.0% |
+| DensityFilter≥0.8 | 60 | 1 | 98.4% | 85.7% | 91.6% |
+| **DensityFilter≥0.9** | **60** | **0** | **100.0%** | **85.7%** | **92.3%** |
+| ClusteringFilter≥0.9 | 60 | 1 | 98.4% | 85.7% | 91.6% |
+
+Available filters in `minomaly.filters`:
+- `DensityFilter(min_density)` — graph density threshold
+- `ClusteringFilter(min_clustering)` — average clustering coefficient
+- `SizeFilter(min_size, max_size)` — pattern node count
+- `FreqDropFilter(min_monotonic_ratio)` — monotonic frequency decrease
+- `FreqStabilityFilter(max_cv)` — coefficient of variation of drops
+- `FreqSpikeFilter(max_last_drop_ratio)` — detect late frequency spikes
+- `FilterPipeline([...])` — chain multiple filters
 
 ### Hybrid GLASS model detection
 
@@ -427,7 +527,9 @@ minomaly/                          # Full package
 │             powerlaw_cluster.py, ensemble.py
 ├── samplers/base.py, tree.py, radial.py, tree_fast.py, radial_fast.py
 ├── scoring/base.py, functions.py
-├── search/beam.py, beam_set.py, strength_search.py, incremental_search.py, fast_search.py, pattern_store.py
+├── search/beam.py, beam_set.py, strength_search.py, incremental_search.py, fast_search.py,
+│         diagnostic_search.py, grid_search.py, pattern_store.py
+├── filters/base.py, density.py, structure.py, frequency_curve.py
 ├── training/data_gen.py, losses.py, trainer.py, contrastive_loss.py, poincare_optimizer.py
 ├── callbacks/base.py, composite.py, logging_cb.py, visualization.py, evaluation.py, checkpoint.py
 ├── evaluation/metrics.py

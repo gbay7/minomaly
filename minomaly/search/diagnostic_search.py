@@ -48,6 +48,7 @@ class DiagnosticSearchAgent:
         input_dim=2, freq_cache=None,
         output_dir="plots/diagnostic",
         anomalous_nodes=None,
+        **kwargs,
     ) -> None:
         self.model = model
         self.graphs = graphs

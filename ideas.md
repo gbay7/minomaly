@@ -31,7 +31,7 @@ The structural OES cannot incorporate attributes directly because the order embe
 After sampling k neighborhoods and building the structural OES:
 
 1. Compute a context embedding `psi(G'_i)` for each neighborhood using a GNN that takes **real node attributes** as input. This GNN doesn't need order-embedding properties — it produces representations where subgraphs with similar structure + similar attribute patterns are close.
-2. Cluster `{psi(G'_1), ..., psi(G'_k)}` into C context clusters (k-means, DBSCAN, etc.). Each cluster = a discovered context (a class of subgraphs sharing structural template + attribute generation pattern).
+2. Cluster `{psi(G'_1), ..., psi(G'_k)}` into C context clusters (k-means, DBSCAN, etc.) or using this https://arxiv.org/pdf/2006.16904. Each cluster = a discovered context (a class of subgraphs sharing structural template + attribute generation pattern).
 3. Store cluster assignments: each `G'_i` gets a context label `ctx(G'_i) ∈ {1, ..., C}`.
 
 The clustering naturally handles invariance: communities with labels (1,2,3) and (5,6,7) get similar `psi` embeddings because GNN message passing captures relative attribute relationships (e.g., average attribute difference between neighbors), not absolute values.

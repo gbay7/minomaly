@@ -114,6 +114,7 @@ class RadialFastSampler(Sampler):
                 data = _neigh_to_pyg(nx_graph, neigh, node, node_anchored, add_self_loop)
                 result.neighborhoods.append(data)
                 result.real_anchors.append(node)
+                result.node_lists.append(neigh)
                 if node_anchored:
                     result.anchors.append(0)
 

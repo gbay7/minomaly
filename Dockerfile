@@ -32,6 +32,7 @@ COPY configs/ /app/configs/
 RUN mkdir -p /app/ckpt /app/plots /app/results
 
 ENV PYTHONPATH=/app
+ENV PYTHONUNBUFFERED=1
 ENV MPLBACKEND=Agg
 ENV CUBLAS_WORKSPACE_CONFIG=:4096:8
 ENV PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True

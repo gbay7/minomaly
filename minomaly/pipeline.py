@@ -45,8 +45,9 @@ class MinomalyPipeline:
         results = pipeline.run()
     """
 
-    def __init__(self, config: MinomalyConfig) -> None:
+    def __init__(self, config: MinomalyConfig, config_path: str | None = None) -> None:
         self.config = config
+        self.config_path = config_path
         self.callbacks = CallbackList([])
         self.device = resolve_device(config.device.device)
 
@@ -85,9 +86,13 @@ class MinomalyPipeline:
             torch.cuda.manual_seed_all(self.config.seed)
         cfg = self.config
 
-        # Timestamp for output directories
+        # Experiment output directory: {config_name}_{timestamp}
         timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
-        plots_dir = Path(cfg.visualization.output_dir) / timestamp
+        if self.config_path:
+            experiment_name = Path(self.config_path).stem
+        else:
+            experiment_name = cfg.dataset.name
+        plots_dir = Path(cfg.visualization.output_dir) / f"{experiment_name}_{timestamp}"
         plots_dir.mkdir(parents=True, exist_ok=True)
         (plots_dir / "cluster" / "tracked_nodes").mkdir(parents=True, exist_ok=True)
 
@@ -100,13 +105,15 @@ class MinomalyPipeline:
 
         # ── 3. Sample neighborhoods (cached) ──────────────────────────
         sc = cfg.sampling
-        cache_key = (
+        emb_key = (
             f"{cfg.dataset.name}_{sc.n_neighborhoods}_{sc.min_neighborhood_size}"
             f"_{sc.max_neighborhood_size}_{sc.node_anchored}_{cfg.batch_size}"
             f"_dim{cfg.model.input_dim}_{cfg.model.method_type}"
         )
-        emb_cache = CACHE_DIR / "embeddings" / f"{cache_key}.p"
-        start_cache = CACHE_DIR / "starting_nodes" / f"{cache_key}_starting_nodes.p"
+        outlier_freq = cfg.search.outlier_max_freq if cfg.search.outlier_max_freq is not None else cfg.search.max_freq
+        start_key = f"{emb_key}_ofreq{outlier_freq}"
+        emb_cache = CACHE_DIR / "embeddings" / f"{emb_key}.p"
+        start_cache = CACHE_DIR / "starting_nodes" / f"{start_key}_starting_nodes.p"
 
         if emb_cache.exists():
             print(f"Loading cached sampling + embeddings from {emb_cache}")
@@ -164,11 +171,13 @@ class MinomalyPipeline:
                 "neighborhoods": tree_result.neighborhoods,
                 "anchors": tree_result.anchors,
                 "real_anchors": tree_result.real_anchors,
+                "node_lists": tree_result.node_lists,
             }
             anom_result_data = {
                 "neighborhoods": anom_result.neighborhoods,
                 "anchors": anom_result.anchors,
                 "real_anchors": anom_result.real_anchors,
+                "node_lists": anom_result.node_lists,
             }
             emb_cache.parent.mkdir(parents=True, exist_ok=True)
             print(f"Saving sampling + embeddings cache to {emb_cache}")
@@ -181,6 +190,10 @@ class MinomalyPipeline:
                 }, f)
 
         # ── 5. Detect starting nodes (cached) ────────────────────────
+        # Outlier detection uses a separate (wider) threshold to cast a wide net.
+        # Verification uses max_freq (tighter) to only verify truly anomalous patterns.
+        outlier_freq = cfg.search.outlier_max_freq if cfg.search.outlier_max_freq is not None else cfg.search.max_freq
+        outlier_freq_norm = outlier_freq / num_nodes
         max_freq_norm = cfg.search.max_freq / num_nodes
         embs_np = torch.cat(embs, dim=0).cpu().numpy()
 
@@ -192,7 +205,7 @@ class MinomalyPipeline:
             outlier_embs_np = cached_start["outlier_embs_np"]
         else:
             starting_nodes, outlier_embs_np = self._detect_starting_nodes(
-                embs, model, max_freq_norm,
+                embs, model, outlier_freq_norm,
                 tree_result_data["real_anchors"],
                 tree_result_data["neighborhoods"],
                 cfg.search.max_steps, embs_np,
@@ -209,6 +222,54 @@ class MinomalyPipeline:
             starting_nodes=starting_nodes,
             method_counts={"total": len(starting_nodes)},
         )
+
+        # ── 5b. Contextual embedding (optional) ─────────────────────
+        context_scorer = None
+        if cfg.context.enabled:
+            node_lists = tree_result_data.get("node_lists", [])
+            if not node_lists:
+                print("[context] WARNING: node_lists not in cache. "
+                      "Delete cache and re-run to enable contextual detection.")
+            else:
+                from minomaly.context.embedder import ContextEmbedder
+                from minomaly.context.clustering import ContextClustering
+                from minomaly.context.scorer import ContextualScorer
+
+                print("[context] Computing contextual embeddings...")
+                ctx_embedder = ContextEmbedder(
+                    input_dim=data.x.shape[1],
+                    hidden_dim=cfg.context.hidden_dim,
+                    encoder_name=cfg.context.encoder,
+                    n_layers=cfg.context.n_layers,
+                    conv_type=cfg.context.conv_type,
+                    skip=cfg.context.skip,
+                    dropout=cfg.context.dropout,
+                ).to(self.device)
+
+                ctx_embs = ctx_embedder.embed_neighborhoods(
+                    tree_result_data["neighborhoods"],
+                    node_lists,
+                    data.x,
+                    device=self.device,
+                )
+                print(f"[context] Context embeddings: {ctx_embs.shape}")
+
+                print(f"[context] Clustering into {cfg.context.n_clusters} contexts...")
+                clustering = ContextClustering(cfg.context.n_clusters, cfg.context.clustering)
+                ctx_labels, ctx_centers = clustering.fit(ctx_embs)
+
+                # Precompute threshold for contextual scorer
+                from minomaly.search.adaptive_search import _precompute_threshold
+                ctx_threshold = _precompute_threshold(model.clf_model, self.device)
+
+                context_scorer = ContextualScorer(
+                    structural_embs=torch.cat(embs, dim=0),
+                    context_labels=ctx_labels,
+                    n_clusters=cfg.context.n_clusters,
+                    beta=cfg.context.beta,
+                    threshold=ctx_threshold,
+                )
+                print(f"[context] Contextual scorer ready (beta={cfg.context.beta})")
 
         # ── 6. Beam search ────────────────────────────────────────────
         scorer = SCORING.build(cfg.search.scoring_function)
@@ -257,6 +318,8 @@ class MinomalyPipeline:
                     min_neigh_repeat=cfg.search.min_neigh_repeat,
                     input_dim=cfg.model.input_dim,
                     freq_cache=getattr(self, "_freq_cache", None),
+                    sample_size=cfg.search.sample_size,
+                    context_scorer=context_scorer,
                     **({"anomalous_nodes": anomalous_nodes_flat}
                        if cfg.search.search_strategy == "diagnostic" else {}),
                 )
@@ -343,6 +406,17 @@ class MinomalyPipeline:
 
         # Save results
         save_json(results, plots_dir / "anomalies.json")
+
+        # Auto-analysis: generate diagnostic plots
+        from minomaly.analysis.experiment import run_analysis
+        run_analysis(results, plots_dir, anomalous_nodes_flat)
+
+        # Interpretation: visualize detected anomalous structures
+        from minomaly.analysis.interpretation import interpret_patterns
+        interpret_patterns(
+            list(verified), graphs[0], set(anomalous_nodes_flat),
+            plots_dir / "interpretation",
+        )
 
         self.callbacks.on_search_end(
             all_verified=verified,
@@ -456,9 +530,8 @@ class MinomalyPipeline:
         model_path = cfg.model.model_path
         if os.path.exists(model_path):
             print(f"Loading model from {model_path}")
-            model.load_state_dict(
-                torch.load(model_path, map_location=self.device, weights_only=True)
-            )
+            state_dict = torch.load(model_path, map_location=self.device, weights_only=True)
+            model.load_state_dict(state_dict, strict=False)
         else:
             raise FileNotFoundError(
                 f"Model checkpoint not found at {model_path}. "

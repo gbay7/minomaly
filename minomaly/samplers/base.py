@@ -24,6 +24,7 @@ class SamplingResult:
     neighborhoods: list[Data] = field(default_factory=list)
     anchors: list[int] = field(default_factory=list)
     real_anchors: list[int] = field(default_factory=list)
+    node_lists: list[list[int]] = field(default_factory=list)  # original node IDs per neighborhood (for contextual embedding)
 
 
 class Sampler(ABC):

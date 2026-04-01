@@ -91,6 +91,7 @@ class FastSearchAgent:
         # Fast search specific
         sample_size: int = 200,  # Stage 1 reference sample size
         top_k_stage1: int = 3,   # Candidates to fully score in Stage 2
+        **kwargs,
     ) -> None:
         self.model = model
         self.graphs = graphs

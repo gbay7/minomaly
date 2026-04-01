@@ -1,6 +1,4 @@
-# Cora detection: hybrid model + strength search (tuned, min_steps=7)
-# This is the config that achieved P=90.9%, R=85.7%, F1=88.2% with the order model.
-# Now uses hybrid model (current checkpoint).
+# Cora: hybrid + sampled search, matching best strength config (nb3, mf5, ms5)
 device:
   device: auto
 
@@ -28,19 +26,21 @@ sampling:
   add_self_loop: true
 
 search:
-  min_steps: 7
-  max_steps: 7
-  max_freq: 35.0
+  min_steps: 1
+  max_steps: 5
+  max_freq: 5.0
+  outlier_max_freq: 35.0
   min_strength: 0.0
   max_unchanged: 5
-  n_beams: 1
+  n_beams: 3
   alpha: 0.33
   scoring_function: freq
-  verif_scoring_function: freq_verif
-  search_strategy: strength
+  search_strategy: sampled
   add_verified_neighs: false
   min_neigh_repeat: 2
-  nodes_batch_size: 100
+  nodes_batch_size: 16
+  sample_size: 500
+  max_cands: 20
 
 outlier:
   methods:
