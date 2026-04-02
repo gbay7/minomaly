@@ -133,25 +133,37 @@ def load_organic_dataset(
     return data, "node"
 
 
-def extract_anomaly_labels(data) -> torch.Tensor:
-    """Extract structural anomaly labels from a PyGOD dataset.
+def extract_anomaly_labels(data, task: str = "struct-anomaly") -> torch.Tensor:
+    """Extract anomaly labels from a PyGOD dataset.
 
-    PyGOD encodes anomaly types via bit-flags in ``data.y``.
-    Structural anomalies are indicated by bit 1: ``(y >> 1) & 1``.
+    PyGOD encodes anomaly types via bit-flags in ``data.y``:
+    - bit 0: contextual anomaly
+    - bit 1: structural anomaly
 
     Parameters
     ----------
     data:
-        A PyG-style data object with a ``.y`` attribute containing the
-        encoded labels.
+        A PyG-style data object with a ``.y`` attribute.
+    task:
+        Which anomalies to extract:
+        - ``"struct-anomaly"``: structural only (bit 1)
+        - ``"context-anomaly"``: contextual only (bit 0)
+        - ``"all-anomaly"``: any anomaly (y > 0)
 
     Returns
     -------
     torch.Tensor
-        A binary tensor of shape ``(num_nodes,)`` where ``1`` indicates a
-        structural anomaly.
+        A binary tensor of shape ``(num_nodes,)`` where ``1`` indicates
+        an anomaly of the requested type.
     """
-    return (data.y >> 1) & 1
+    if task == "struct-anomaly":
+        return (data.y >> 1) & 1
+    elif task == "context-anomaly":
+        return data.y & 1
+    elif task == "all-anomaly":
+        return (data.y > 0).long()
+    else:
+        raise ValueError(f"Unknown task: {task}. Use 'struct-anomaly', 'context-anomaly', or 'all-anomaly'.")
 
 
 def pyg_data_to_nx(data) -> nx.Graph:

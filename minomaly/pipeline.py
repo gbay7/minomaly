@@ -235,7 +235,7 @@ class MinomalyPipeline:
                 from minomaly.context.clustering import ContextClustering
                 from minomaly.context.scorer import ContextualScorer
 
-                print("[context] Computing contextual embeddings...")
+                print("[context] Building context embedder...")
                 ctx_embedder = ContextEmbedder(
                     input_dim=data.x.shape[1],
                     hidden_dim=cfg.context.hidden_dim,
@@ -246,6 +246,31 @@ class MinomalyPipeline:
                     dropout=cfg.context.dropout,
                 ).to(self.device)
 
+                # Rebuild neighborhoods with original features for training
+                print("[context] Rebuilding neighborhoods with original features...")
+                ctx_data = []
+                for j in range(len(node_lists)):
+                    ctx_data.append(ctx_embedder._rebuild_with_features(
+                        tree_result_data["neighborhoods"][j],
+                        node_lists[j],
+                        data.x,
+                    ))
+
+                # Contrastive training on the dataset's neighborhoods
+                if cfg.context.training == "contrastive":
+                    from minomaly.context.trainer import ContextTrainer
+                    print(f"[context] Contrastive training ({cfg.context.n_epochs} epochs)...")
+                    trainer = ContextTrainer(
+                        ctx_embedder,
+                        lr=cfg.context.lr,
+                        temperature=cfg.context.temperature,
+                        n_epochs=cfg.context.n_epochs,
+                        batch_size=128,
+                    )
+                    trainer.train(ctx_data, device=self.device)
+
+                # Embed neighborhoods
+                print("[context] Computing contextual embeddings...")
                 ctx_embs = ctx_embedder.embed_neighborhoods(
                     tree_result_data["neighborhoods"],
                     node_lists,
@@ -440,7 +465,7 @@ class MinomalyPipeline:
         else:
             raise ValueError(f"Unknown dataset: {cfg.name}")
 
-        anomaly_labels = extract_anomaly_labels(data)
+        anomaly_labels = extract_anomaly_labels(data, task=cfg.task)
         nx_graph = pyg_data_to_nx(data)
         graph = GraphData.from_nx(nx_graph, device=self.device)
         graphs = [graph]

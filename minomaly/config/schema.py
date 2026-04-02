@@ -133,6 +133,10 @@ class ContextConfig:
     n_clusters: int = 10
     clustering: str = "kmeans"
     beta: float = 0.5  # beta*structural + (1-beta)*contextual
+    training: str = "contrastive"  # "none" or "contrastive"
+    n_epochs: int = 50
+    lr: float = 1e-3
+    temperature: float = 0.5
 
 
 @dataclass

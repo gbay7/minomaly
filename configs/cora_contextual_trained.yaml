@@ -1,0 +1,75 @@
+# Cora: contextual AD with contrastive-trained encoder, all anomalies
+device:
+  device: auto
+
+dataset:
+  name: inj_cora
+  task: all-anomaly  # detect BOTH structural and contextual anomalies (138 total)
+
+model:
+  method_type: hybrid
+  conv_type: SAGE
+  skip: learnable
+  n_layers: 8
+  hidden_dim: 64
+  margin: 0.1
+  dropout: 0.0
+  input_dim: 2
+  model_path: ckpt/model.pt
+
+sampling:
+  n_neighborhoods: 10000
+  min_neighborhood_size: 1
+  max_neighborhood_size: 30
+  radial_radius: 2
+  node_anchored: true
+  add_self_loop: true
+
+search:
+  min_steps: 5
+  max_steps: 5
+  max_freq: 5.0
+  outlier_max_freq: 35.0
+  min_strength: 0.0
+  max_unchanged: 5
+  n_beams: 3
+  alpha: 0.33
+  scoring_function: freq
+  search_strategy: adaptive
+  add_verified_neighs: false
+  min_neigh_repeat: 2
+  nodes_batch_size: 16
+  sample_size: 500
+
+context:
+  enabled: true
+  encoder: skip_last_gnn
+  n_layers: 4
+  hidden_dim: 64
+  conv_type: SAGE
+  skip: learnable
+  n_clusters: 10
+  clustering: kmeans
+  beta: 0.5
+  training: contrastive
+  n_epochs: 50
+  lr: 0.001
+  temperature: 0.5
+
+outlier:
+  methods:
+    - model_based
+    - isolation_forest
+  combine: union
+  isolation_contamination: auto
+
+training:
+  enabled: false
+
+visualization:
+  enabled: true
+  output_dir: plots
+  out_batch_size: 10
+
+seed: 42
+batch_size: 1000
