@@ -1,0 +1,218 @@
+\begin{tikzpicture}[
+    scale=1,
+    node distance=1.5cm and 2cm,
+    box/.style={rectangle, font=\bfseries, draw=materialBlueDark, rounded corners=3pt, minimum width=2.5cm, minimum height=1.2cm, fill=materialBlueLight, align=center},
+    inputbox/.style={rectangle, font=\bfseries, draw=materialGreen!70!black, minimum width=2.5cm, minimum height=1.2cm, fill=materialGreenLight, align=center},
+    outputbox/.style={rectangle, font=\bfseries, draw=materialRedLight!70!materialRed, minimum width=2.5cm, minimum height=1.2cm, fill=materialRedLight, align=center},
+    arrow/.style={->, >=stealth, draw=materialGrey, thick},
+    doublearrow/.style={Implies-Implies, double equal sign distance, line width=1pt, draw=materialGrey},
+    onedoublearrow/.style={-Implies, double equal sign distance, line width=1pt, draw=materialGrey},
+    graphnode/.style={circle, draw=materialBlueDark, fill=materialBlueLight, minimum size=0.1cm, inner sep=0.5pt},
+    anomgraphnode/.style={circle, draw=materialRed!70!black, fill=materialRedLight, minimum size=0.1cm, inner sep=0.5pt},
+    extragraphnode/.style={circle, draw=materialGrey!70!black, fill=materialGreyLight, minimum size=0.1cm, inner sep=0.5pt},
+    embnode/.style={circle, draw=materialOrangeDark, fill=materialOrangeLight, minimum size=0.25cm, inner sep=0pt},
+    embnodelow/.style={circle, draw=materialOrangeDark, fill=materialOrange, minimum size=0.3cm, inner sep=0pt},
+    anomnode/.style={circle, fill=materialRed, minimum size=0.2cm, inner sep=0pt},
+    anomemb/.style={circle, fill=materialRed, minimum size=0.3cm, inner sep=0pt},
+    normalnode/.style={circle, fill=gray!30, minimum size=0.2cm, inner sep=0pt},
+    phase/.style={rectangle, font=\bfseries, draw=none, fill=materialGreyLight, inner sep=4pt, rounded corners=10pt},
+    phase-label/.style={fill=materialBlue!40, text=black, font=\bfseries, inner sep=5pt, rounded corners=3pt},
+]
+
+% Define the two main sections with more separation
+\node[phase-label] (phase1) at (-5,0) {1. Order Embedding Space Construction};
+\node[phase-label] (phase2) at (6,0) {2. Anomalous Structures Search};
+
+% Section 1: Order Embedding Space Construction
+\begin{scope}[local bounding box=section1]
+    % Input graph - moved left
+    \node[inputbox] (input) at (-5,-2) {Input Graph $G = (V,E)$};
+    
+    % Example of graph - increased spacing
+    \node[right=1.2cm of input] (graph) {
+        \begin{tikzpicture}[scale=0.6]
+            \node[anomgraphnode] (g1) at (0,0) {$v_1$};
+            \node[graphnode] (g2) at (1,0.7) {$v_2$};
+            \node[graphnode] (g3) at (1.8,0) {$v_3$};
+            \node[anomgraphnode] (g4) at (0.9,-0.8) {$v_4$};
+            \node[anomgraphnode] (g5) at (-0.8,-0.6) {$v_5$};
+            \node[graphnode] (g6) at (1,2) {$v_6$};
+            
+            \draw[thick, materialGrey] (g1) -- (g2);
+            \draw[thick, materialGrey] (g2) -- (g3);
+            \draw[thick, materialGrey] (g4) -- (g1);
+            \draw[thick, materialGrey] (g1) -- (g5);
+            \draw[thick, materialGrey] (g4) -- (g5);
+            \draw[thick, materialGrey] (g2) -- (g6);
+        \end{tikzpicture}
+    };
+    
+    % Random subgraph sampling - increased vertical spacing
+    \node[box, below=2cm of input] (sample) {Sample Random\\Subgraphs $RG$};
+    
+    % Subgraph examples - increased horizontal spacing
+    \node[right=1.2cm of sample] (subgraphs) {
+        \begin{tikzpicture}[scale=0.5]
+            % Subgraph 1
+            \begin{scope}[shift={(-1.5,0)}]
+                \node[graphnode] (s1) at (0,0) {$v_1$};
+                \node[graphnode] (s2) at (1,0.7) {$v_2$};
+                \node[anomgraphnode] (s5) at (-0.8,-0.6) {$v_5$};
+                
+                \draw[thick, materialGrey] (s1) -- (s2);
+                \draw[thick, materialGrey] (s1) -- (s5);
+            \end{scope}
+            
+            % Subgraph 2
+            \begin{scope}[shift={(1.8,0)}]
+                \node[graphnode] (s2) at (0,0) {$v_2$};
+                \node[graphnode] (s3) at (1,0) {$v_3$};
+                \draw[thick, materialGrey] (s2) -- (s3);
+            \end{scope}
+
+            \begin{scope}[shift={(0.5,-2)}]
+                \node[anomgraphnode] (s1) at (0,0) {$v_1$};
+                \node[anomgraphnode] (s4) at (1,0.7) {$v_4$};
+                \node[anomgraphnode] (s5) at (-0.9,0.8) {$v_5$};
+                
+                \draw[thick, materialGrey] (s1) -- (s4);
+                \draw[thick, materialGrey] (s4) -- (s5);
+                \draw[thick, materialGrey] (s1) -- (s5);
+            \end{scope}
+        \end{tikzpicture}
+    };
+    
+    % GNN Processing - increased vertical spacing
+    \node[box, below=2cm of sample] (gnn) {GNN-based\\Order Embedding\\(OES)};
+    
+    % Embeddings visualization
+    \node[right=1.2cm of gnn] (embeddings) {
+        \begin{tikzpicture}[scale=0.7]
+            \draw[->, materialGrey] (-1.2,-1.2) -- (1.5,-1.2) node[right] {$x_1$};
+            \draw[->, materialGrey] (-1.2,-1.2) -- (-1.2,1.5) node[above] {$x_2$};
+            
+            \node[embnode] (e1) at (-0.8,0.05) {};
+            \node[embnode] (e2) at (0.3,0.6) {};
+            \node[embnode] (e3) at (-0.2,-0.5) {};
+            \node[embnode] (e4) at (0.8,-0.4) {};
+            \node[embnode] (e5) at (0.9,1.1) {};
+            \node[embnode] (e6) at (-0.9,-0.7) {};
+        \end{tikzpicture}
+    };
+    
+    % Arrows connecting elements
+    \draw[arrow] (input) -- (sample);
+    \draw[arrow] (sample) -- (gnn);
+    \draw[doublearrow] ([xshift=0.5cm]input.east) -- (graph.west);
+    \draw[doublearrow] ([xshift=0.2cm]sample.east) -- (subgraphs.west);
+    \draw[doublearrow] ([xshift=0.5cm]gnn.east) -- (embeddings.west);
+\end{scope}
+
+% Section 2: Anomalous Structures Search - moved further right
+\begin{scope}[local bounding box=section2]
+    % Starting nodes extraction
+    \node[box] (starting) at (6,-2) {Extract Starting\\Nodes from OES};
+    
+    % OES with outliers - increased horizontal spacing
+    \node[right=1.2cm of starting] (oes_outliers) {
+        \begin{tikzpicture}[scale=0.7]
+            \draw[->, materialGrey] (-1.2,-1.2) -- (1.5,-1.2) node[right] {$x_1$};
+            \draw[->, materialGrey] (-1.2,-1.2) -- (-1.2,1.5) node[above] {$x_2$};
+            
+            \node[embnode] (e1) at (-0.8,0.05) {};
+            \node[embnode] (e2) at (0.3,0.6) {};
+            \node[embnode] (e3) at (-0.2,-0.5) {};
+            \node[embnode] (e4) at (0.8,-0.4) {};
+            \node[embnode] (e5) at (0.9,1.1) {};
+            \node[embnode] (e6) at (-0.9,-0.7) {};
+            
+            \draw[materialRed, dashed, very thick] (e5) circle (0.3);
+            \draw[materialRed, dashed, very thick] (e1) circle (0.3);
+        \end{tikzpicture}
+    };
+    
+    % Greedy search - increased vertical spacing
+    \node[box, below=2cm of starting] (greedy) {Greedy Search for\\Infrequent Structures};
+    
+    % Monotonic path in OES - increased horizontal spacing
+    \node[right=1.2cm of greedy] (mono_path) {
+        \begin{tikzpicture}[scale=0.7]
+            \draw[->, materialGrey] (-1.2,-1.2) -- (1.5,-1.2) node[right] {$x_1$};
+            \draw[->, materialGrey] (-1.2,-1.2) -- (-1.2,1.5) node[above] {$x_2$};
+            
+            \node[anomnode] (p1) at (-0.8,0.05) {};
+            \node[anomnode] (p2) at (-0.4,0.5) {};
+            \node[anomnode] (p3) at (0.1,0.7) {};
+            
+            \draw[->, materialRed, thick] (p1) -- (p2);
+            \draw[->, materialRed, thick] (p2) -- (p3);
+
+            \node[below right] at (p3) {$Freq_G \downarrow$};
+        \end{tikzpicture}
+    };
+    
+    % Search process - increased vertical spacing and scaled down
+    \node[below=2.5cm of greedy] (search) {
+        \begin{tikzpicture}[scale=0.55]
+            % Initial graph
+            \begin{scope}[shift={(-2.5,0)}]
+                \node[anomnode] (a1) at (0,0) {$v_5$};
+                \node[normalnode] (a2) at (1,0.7) {$v_4$};
+                \node[normalnode] (a3) at (1,-0.7) {$v_1$};
+                
+                \draw[thick, materialGrey] (a1) -- (a2);
+                \draw[thick, materialGrey] (a1) -- (a3);
+                \node[below] at (0,-1.3) {Step 1};
+            \end{scope}
+            
+            % Growing graph
+            \begin{scope}[shift={(0,0)}]
+                \node[anomnode] (b1) at (0,0) {$v_5$};
+                \node[anomnode] (b2) at (1,0.7) {$v_4$};
+                \node[normalnode] (b3) at (1,-0.7) {$v_1$};
+                \node[normalnode] (b4) at (2,0.7) {$v_2$};
+                
+                \draw[thick, materialGrey] (b1) -- (b2);
+                \draw[thick, materialGrey] (b1) -- (b3);
+                \draw[thick, materialGrey] (b2) -- (b4);
+                \node[below] at (0.5,-1.3) {Step 2};
+            \end{scope}
+            
+            % Final anomalous structure
+            \begin{scope}[shift={(2.5,0)}]
+                \node[anomnode] (c1) at (0,0) {$v_5$};
+                \node[anomnode] (c2) at (1,0.7) {$v_4$};
+                \node[anomnode] (c3) at (1,-0.7) {$v_1$};
+                \node[normalnode] (c4) at (2,0.7) {$v_2$};
+                
+                \draw[thick, materialGrey] (c1) -- (c2);
+                \draw[thick, materialGrey] (c1) -- (c3);
+                \draw[thick, materialGrey] (c2) -- (c4);
+                \draw[thick, materialGrey] (c3) -- (c2);
+                \node[below] at (0.5,-1.3) {Step 3};
+            \end{scope}
+        \end{tikzpicture}
+    };
+    
+    % Output - increased vertical spacing
+    \node[outputbox, right=0.3cm of search] (output) {Anomalous Structures\\and Nodes};
+    
+    % Arrows connecting elements
+    \draw[arrow] (starting.south) -- (greedy.north);
+    \draw[arrow] (greedy.south) -- (search.north);
+    \draw[doublearrow] ([xshift=0.5cm]starting.east) -- (oes_outliers.west);
+    \draw[doublearrow] ([xshift=0.5cm]greedy.east) -- (mono_path.west);
+    \draw[arrow] (oes_outliers.south) to[out=-20,in=90] (mono_path.north);
+\end{scope}
+
+% Connect the phases with an arrow - properly positioned with double arrow
+\draw[onedoublearrow, very thick] ([xshift=0.5cm,yshift=0cm]section1.east) -- ([xshift=-1cm,yshift=0cm]section2.west)
+    node[midway, above] {};
+
+% Background rectangles for the two phases
+\begin{pgfonlayer}{background}
+    \node[phase, fit=(section1) (phase1)] {};
+    \node[phase, fit=(section2) (phase2)] {};
+\end{pgfonlayer}
+
+\end{tikzpicture}

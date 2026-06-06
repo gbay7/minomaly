@@ -1,0 +1,32 @@
+\begin{tikzpicture}
+  \draw
+    (3.322:1.795) node[fill={rgb,140:red,255;green,0;blue,0}, minimum size=4mm, circle, draw] (11302){11302}
+    (41.824:3.677) node[fill={rgb,140:red,255;green,0;blue,0}, minimum size=2mm, circle, draw, text=white] (62984){62984}
+    (102.341:2.534) node[fill={rgb,140:red,255;green,0;blue,0}, minimum size=2mm, circle, draw, text=white] (10826){10826}
+    (154.802:2.534) node[fill={rgb,140:red,255;green,0;blue,0}, minimum size=2mm, circle, draw, text=white] (76311){76311}
+    (215.319:3.677) node[fill={rgb,140:red,255;green,0;blue,0}, minimum size=2mm, circle, draw, text=white] (88858){88858}
+    (253.821:1.795) node[fill={rgb,140:red,255;green,0;blue,0}, minimum size=2mm, circle, draw, text=white] (84988){84988}
+    (308.571:2.891) node[fill={rgb,140:red,255;green,0;blue,0}, minimum size=2mm, circle, draw, text=white] (50781){50781};
+  \begin{scope}[-]
+    \draw (11302) to (10826);
+    \draw (11302) to (76311);
+    \draw (11302) to (62984);
+    \draw (11302) to (50781);
+    \draw (11302) to (84988);
+    \draw (11302) to (88858);
+    \draw (62984) to (10826);
+    \draw (62984) to (50781);
+    \draw (62984) to (84988);
+    \draw (62984) to (76311);
+    \draw (10826) to (84988);
+    \draw (10826) to (76311);
+    \draw (10826) to (50781);
+    \draw (10826) to (88858);
+    \draw (76311) to (50781);
+    \draw (76311) to (88858);
+    \draw (76311) to (84988);
+    \draw (88858) to (84988);
+    \draw (88858) to (50781);
+    \draw (84988) to (50781);
+  \end{scope}
+\end{tikzpicture}

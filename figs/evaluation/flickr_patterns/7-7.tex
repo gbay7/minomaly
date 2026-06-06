@@ -1,0 +1,24 @@
+\begin{tikzpicture}
+  \draw
+    (308.525:2.437) node[fill=green!70!black, minimum size=2mm, circle, draw, text=white] (2528){2528}
+    (58.033:3.536) node[fill=green!70!black, minimum size=2mm, circle, draw, text=white] (45124){45124}
+    (120.974:3.261) node[fill=green!70!black, minimum size=2mm, circle, draw, text=white] (16677){16677}
+    (221.530:3.186) node[fill=green!70!black, minimum size=2mm, circle, draw, text=white] (86960){86960}
+    (25.289:1.520) node[fill=green!70!black, minimum size=2mm, circle, draw, text=white] (12759){12759}
+    (158.705:0.753) node[fill=green!70!black, minimum size=2mm, circle, draw, text=white] (12760){12760}
+    (270.002:2.700) node[fill=green!70!black, minimum size=2mm, circle, draw, text=white] (38654){38654};
+  \begin{scope}[-]
+    \draw (2528) to (12759);
+    \draw (2528) to (12760);
+    \draw (2528) to (38654);
+    \draw (2528) to (86960);
+    \draw (45124) to (12759);
+    \draw (45124) to (12760);
+    \draw (16677) to (12759);
+    \draw (16677) to (12760);
+    \draw (86960) to (12760);
+    \draw (12759) to (12760);
+    \draw (12759) to (38654);
+    \draw (12760) to (38654);
+  \end{scope}
+\end{tikzpicture}

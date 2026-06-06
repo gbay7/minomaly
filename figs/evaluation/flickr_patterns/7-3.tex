@@ -1,0 +1,29 @@
+\begin{tikzpicture}
+  \draw
+    (330.732:1.066) node[fill={rgb,140:red,255;green,0;blue,0}, minimum size=2mm, circle, draw, text=white] (32068){32068}
+    (39.126:1.618) node[fill={rgb,140:red,255;green,0;blue,0}, minimum size=2mm, circle, draw, text=white] (54725){54725}
+    (244.784:1.066) node[fill={rgb,140:red,255;green,0;blue,0}, minimum size=2mm, circle, draw, text=white] (22920){22920}
+    (129.769:1.904) node[fill={rgb,140:red,255;green,0;blue,0}, minimum size=2mm, circle, draw, text=white] (22058){22058}
+    (176.390:1.618) node[fill={rgb,140:red,255;green,0;blue,0}, minimum size=2mm, circle, draw, text=white] (48299){48299}
+    (287.758:3.150) node[fill=green!70!black, minimum size=2mm, circle, draw, text=white] (42937){42937}
+    (85.747:1.904) node[fill={rgb,140:red,255;green,0;blue,0}, minimum size=2mm, circle, draw, text=white] (27802){27802};
+  \begin{scope}[-]
+    \draw (32068) to (22058);
+    \draw (32068) to (27802);
+    \draw (32068) to (42937);
+    \draw (32068) to (54725);
+    \draw (32068) to (48299);
+    \draw (32068) to (22920);
+    \draw (54725) to (22058);
+    \draw (54725) to (22920);
+    \draw (54725) to (27802);
+    \draw (54725) to (48299);
+    \draw (22920) to (22058);
+    \draw (22920) to (42937);
+    \draw (22920) to (48299);
+    \draw (22920) to (27802);
+    \draw (22058) to (27802);
+    \draw (22058) to (48299);
+    \draw (48299) to (27802);
+  \end{scope}
+\end{tikzpicture}

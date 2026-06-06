@@ -1,0 +1,90 @@
+\begin{tikzpicture}
+\begin{axis}[
+    ybar, % Bar chart
+    bar width=8pt, % Width of each bar
+    width=10cm, % Width of the entire plot
+    % height=10cm, % Height of the entire plot
+    enlargelimits=0.25, % Space around the plot
+    legend style={
+        font=\small,
+        at={(0.5,1.15)}, % Position further above the plot
+        anchor=south,    % Anchor from bottom of legend
+        legend columns=4  % Split into 2 rows by setting number of columns
+    },
+    legend image code/.code={
+        \draw [#1] (0cm,-0.1cm) rectangle (0.3cm,0.1cm);
+    },
+    ymode=log,
+    ylabel={Execution time (seconds)},
+    symbolic x coords={Cora, Amazon, Flickr},
+    xtick=data,
+    % x tick label style={rotate=45, anchor=east}, % Rotate x labels for readability
+    ymin=0,
+    ymax=3000, % Maximum y-axis value
+    ymajorgrids=true,
+    grid style=dashed,
+    legend cell align=left
+]
+
+\addplot[fill=blue!50, draw=black, thick] coordinates {
+    (Cora,293.0)
+    (Amazon,2770.0)
+    (Flickr,2521.0)
+};
+
+\addplot[fill=green!50, draw=black, thick] coordinates {
+    (Cora,5.0)
+    (Amazon,59.7)
+    (Flickr,19.74)
+};
+
+\addplot[
+    fill=red!50, draw=black, thick
+] coordinates {
+    (Cora,8.1)
+    (Amazon,123.2)
+    (Flickr,0) % OOM
+};
+
+\addplot[
+    fill=orange!50, draw=black, thick
+] coordinates {
+    (Cora,6.4)
+    (Amazon,102.7)
+    (Flickr,0) % OOM
+};
+
+\addplot[
+    fill=yellow!50, draw=black, thick
+] coordinates {
+    (Cora,7.9)
+    (Amazon,109.8)
+    (Flickr,0) % OOM
+};
+
+\addplot[
+    fill=purple!50, draw=black, thick
+] coordinates {
+    (Cora,8.0)
+    (Amazon,105.9)
+    (Flickr,0) % OOM
+};
+
+
+\addplot[
+    fill=brown!50, draw=black, thick
+] coordinates {
+    (Cora,16.2)
+    (Amazon,235.6)
+    (Flickr,0) % OOM
+};
+
+\node[font=\footnotesize, red] at (axis cs:Flickr,0) [xshift=5pt,yshift=-10pt] {\textbf{OOM}};
+    
+% Add "OOM" labels for Inj. Flickr where execution failed
+% \foreach \method in {Cora, Amazon, Flickr} {
+%     \node[font=\tiny, rotate=90, gray, anchor=south] at (axis cs:\method,0) {OOM};
+% }
+
+\end{axis}
+\end{tikzpicture}

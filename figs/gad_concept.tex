@@ -1,0 +1,159 @@
+\begin{tikzpicture}[
+    normal_account/.style={circle, draw=black, fill=green!20, minimum size=0.5cm},
+    gray_account/.style={circle, draw=black!40, fill=green!10, minimum size=0.5cm, opacity=0.5},
+    suspicious_account/.style={circle, draw=red, thick, fill=red!10, minimum size=0.6cm},
+    normal_transaction/.style={->, thick, black!70, >=stealth},
+    gray_transaction/.style={->, thick, black!40, >=stealth, opacity=0.5},
+    suspicious_transaction/.style={->, red!70, thick, >=stealth},
+    suspicious_gray_transaction/.style={->, red!40, thick, >=stealth, opacity=0.5},
+    internal_transaction/.style={-, red, thick, dashed, >=stealth},
+    algorithm/.style={rectangle, rounded corners=3mm, draw=blue!60, fill=blue!5, 
+                     minimum width=2.5cm, minimum height=2.5cm, align=center,
+                     drop shadow},
+    data_flow/.style={->, thick, blue!70, dashed, >=stealth},
+    detection/.style={->, ultra thick, red!80, >=stealth},
+    highlight/.style={draw=red, thick, dashed, rounded corners=2mm},
+    pattern_dots/.style={circle, fill=black!70, inner sep=0.7pt}
+]
+
+% Define a background layer for highlighting
+\pgfdeclarelayer{background}
+\pgfsetlayers{background,main}
+
+% Financial Network
+\begin{scope}[local bounding box=network, shift={(-6,0)}]
+    % Banks/Financial institutions with correctly oriented bank icons
+    \node[inner sep=0] (bank1) at (-4,2) {\input{figs/bankicon}};
+    \node[font=\scriptsize, above=0.1cm] at (bank1.north) {Bank 1};
+    
+    \node[inner sep=0] (bank2) at (0,2) {\input{figs/bankicon}};
+    \node[font=\scriptsize, above=0.1cm] at (bank2.north) {Bank 2};
+    
+    \node[inner sep=0, opacity=0.5] (bank3) at (4,2) {\input{figs/bankicon}};
+    \node[font=\scriptsize, above=0.1cm, opacity=0.5] at (bank3.north) {Bank $n$};
+    
+    % Normal accounts with smaller labels
+    \node[normal_account, label={[font=\scriptsize]below:A1}] (a1) at (-5,0) {};
+    \node[normal_account, label={[font=\scriptsize]below:A2}] (a2) at (-3.7,0) {};
+    \node[normal_account, label={[font=\scriptsize]below:A3}] (a3) at (-1,0) {};
+    \node[normal_account, label={[font=\scriptsize]below:A4}] (a4) at (1,0) {};
+    \node[gray_account, label={[font=\scriptsize, opacity=0.5]below:}] (a5) at (3.7,0) {};
+    \node[gray_account, label={[font=\scriptsize, opacity=0.5]below:}] (a6) at (5,0) {};
+    
+    % Suspicious accounts moved higher up in the diagram
+    \node[suspicious_account, label=below:S1] (s1) at (-1,-2) {};
+    \node[suspicious_account, label=below:S2] (s2) at (1,-2) {};
+    \node[suspicious_account, label=left:S3] (s3) at (-2,-3) {};
+    \node[suspicious_account, label=right:S4] (s4) at (2,-3) {};
+    \node[suspicious_account, label=below:S5] (s5) at (0.6,-3.8) {};
+    
+    % Normal transactions
+    \draw[normal_transaction] (a1) -- (bank1);
+    \draw[normal_transaction] (bank1) -- (a2);
+    \draw[normal_transaction] (a3) -- (bank2);
+    \draw[normal_transaction] (bank2) -- (a4);
+    \draw[gray_transaction] (a5) -- (bank3);
+    \draw[gray_transaction] (bank3) -- (a6);
+    \draw[normal_transaction] (bank1) -- (bank2);
+    \draw[gray_transaction] (bank2) -- (bank3);
+    
+    % Add pattern dots to show frequent patterns
+    \node[pattern_dots] at ($(bank2)!0.25!(bank3) + (0,0.3)$) {};
+    \node[pattern_dots] at ($(bank2)!0.5!(bank3) + (0,0.3)$) {};
+    \node[pattern_dots] at ($(bank2)!0.75!(bank3) + (0,0.3)$) {};
+    
+    % % For A1 to Bank1
+    % \node[pattern_dots] at ($(a1)!0.25!(bank1) + (-0.2,0.2)$) {};
+    % \node[pattern_dots] at ($(a1)!0.5!(bank1) + (-0.2,0.2)$) {};
+    % \node[pattern_dots] at ($(a1)!0.75!(bank1) + (-0.2,0.2)$) {};
+    
+    % % For Bank2 to A4
+    % \node[pattern_dots] at ($(bank2)!0.25!(a4) + (0.2,-0.2)$) {};
+    % \node[pattern_dots] at ($(bank2)!0.5!(a4) + (0.2,-0.2)$) {};
+    % \node[pattern_dots] at ($(bank2)!0.75!(a4) + (0.2,-0.2)$) {};
+
+    % Suspicious accounts' transactions with banks
+    \draw[suspicious_transaction] (s1) -- (bank1);
+    \draw[suspicious_transaction] (bank2) -- (s2);
+    \draw[suspicious_transaction] (s3) -- (bank1);
+    \draw[suspicious_gray_transaction] (bank3) -- (s4);
+    \draw[suspicious_transaction] (s5) -- (bank2);
+    
+    % Suspicious internal transactions (forming a clique)
+    \draw[internal_transaction] (s1) to[bend left=20] (s2);
+    \draw[internal_transaction] (s2) to[bend left=20] (s4);
+    \draw[internal_transaction] (s4) to[bend left=20] (s5);
+    \draw[internal_transaction] (s5) to[bend left=20] (s3);
+    \draw[internal_transaction] (s3) to[bend left=20] (s1);
+    \draw[internal_transaction] (s1) to[bend left=40] (s5);
+    \draw[internal_transaction] (s2) to[bend left=40] (s3);
+    \draw[internal_transaction] (s4) to[bend left=50] (s1);
+    \draw[internal_transaction] (s2) to[bend left=40] (s5);
+    \draw[internal_transaction] (s3) to[bend left=20] (s4);
+    
+\end{scope}
+
+% Graph Anomaly Detection Algorithm - positioned to the right of the network
+\node[algorithm] (algorithm) at (2,0) {
+    \textbf{Node}\\
+    \textbf{Anomaly}\\
+    \textbf{Detection}
+};
+
+% Data flow from network to algorithm
+\draw[data_flow] (network.east |- 0,1) to[bend right=10] (algorithm.west |- 0,0.5);
+\draw[data_flow] (network.east |- 0,-1) to[bend left=10] (algorithm.west |- 0,-0.5);
+
+% Detection results - use simple absolute positioning
+\node[align=center] (result_label) at (5,0) {};
+
+% Connect algorithm to results
+\draw[detection] (algorithm.east) -- (result_label);
+
+% Suspicious accounts arranged vertically
+\node[suspicious_account, label=right:S1] (rs1) at (5.5,2) {};
+\node[suspicious_account, label=right:S2] (rs2) at (5.5,1) {};
+\node[suspicious_account, label=right:S3] (rs3) at (5.5,0) {};
+\node[suspicious_account, label=right:S4] (rs4) at (5.5,-1) {};
+\node[suspicious_account, label=right:S5] (rs5) at (5.5,-2) {};
+
+% Highlight the suspicious accounts in the network
+\begin{pgfonlayer}{background}
+    \node[highlight, fit=(s1) (s2) (s3) (s4) (s5), inner sep=5pt] {};
+    \node[draw=red!70, fill=white, align=center, font=\scriptsize, rounded corners=1mm] 
+        at ($(s3) + (-1.5,-0.6)$) {Suspicious\\Clique};
+\end{pgfonlayer}
+
+% Legend - repositioned to the bottom
+\matrix [
+    draw,
+    fill=white,
+    below right=0.2cm and -5.1cm of network.south,
+    matrix of nodes,
+    nodes={font=\scriptsize},
+    column 1/.style={nodes={scale=0.6, transform shape, anchor=center}},
+    column 3/.style={nodes={scale=0.6, transform shape, anchor=center}},
+    column 5/.style={nodes={scale=0.6, transform shape, anchor=center}},
+    column 7/.style={nodes={scale=0.6, transform shape, anchor=center}},
+    column 9/.style={nodes={scale=0.6, transform shape, anchor=center}},
+    column 11/.style={nodes={scale=0.6, transform shape, anchor=center}},
+    column 13/.style={nodes={scale=0.6, transform shape, anchor=center}},
+    column 15/.style={nodes={scale=0.6, transform shape, anchor=center}},
+    even column/.style={align=left, text width=1.2cm},
+    column sep=0.05cm,
+    inner sep=0.1cm,
+    rounded corners
+] {
+    \node[scale=0.7] {\input{figs/bankicon}}; & Financial Institution &
+    \node[normal_account] {}; & Normal Account &
+    \node[suspicious_account] {}; & Suspicious Account &
+    \draw[normal_transaction] (-0.15,0) -- (0.15,0); & Normal Tx &
+    \draw[suspicious_transaction] (-0.15,0) -- (0.15,0); & Suspicious Tx &
+    \draw[internal_transaction] (-0.15,0) -- (0.15,0); & Money Flow 
+    % &
+    % \draw[data_flow] (-0.15,0) -- (0.15,0); & Data Flow &
+    % \node[pattern_dots] {}; \node[pattern_dots] at (0.1,0) {}; \node[pattern_dots] at (0.2,0) {}; & Frequent Pattern 
+    \\
+};
+
+\end{tikzpicture}

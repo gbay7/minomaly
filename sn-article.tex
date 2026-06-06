@@ -1,0 +1,1127 @@
+%Version 3 December 2023
+% See section 11 of the User Manual for version history
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                                 %%
+%% Please do not use \input{...} to include other tex files.       %%
+%% Submit your LaTeX manuscript as one .tex document.              %%
+%%                                                                 %%
+%% All additional figures and files should be attached             %%
+%% separately and not embedded in the \TeX\ document itself.       %%
+%%                                                                 %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%\documentclass[referee,sn-basic]{sn-jnl}% referee option is meant for double line spacing
+
+%%=======================================================%%
+%% to print line numbers in the margin use lineno option %%
+%%=======================================================%%
+
+%%\documentclass[lineno,sn-basic]{sn-jnl}% Basic Springer Nature Reference Style/Chemistry Reference Style
+
+%%======================================================%%
+%% to compile with pdflatex/xelatex use pdflatex option %%
+%%======================================================%%
+
+%%\documentclass[pdflatex,sn-basic]{sn-jnl}% Basic Springer Nature Reference Style/Chemistry Reference Style
+
+
+%%Note: the following reference styles support Namedate and Numbered referencing. By default the style follows the most common style. To switch between the options you can add or remove Numbered in the optional parenthesis. 
+%%The option is available for: sn-basic.bst, sn-vancouver.bst, sn-chicago.bst%  
+ 
+%%\documentclass[pdflatex,sn-nature]{sn-jnl}% Style for submissions to Nature Portfolio journals
+%%\documentclass[pdflatex,sn-basic]{sn-jnl}% Basic Springer Nature Reference Style/Chemistry Reference Style
+\documentclass[pdflatex,sn-mathphys-num]{sn-jnl}% Math and Physical Sciences Numbered Reference Style 
+%%\documentclass[pdflatex,sn-mathphys-ay]{sn-jnl}% Math and Physical Sciences Author Year Reference Style
+%%\documentclass[pdflatex,sn-aps]{sn-jnl}% American Physical Society (APS) Reference Style
+%%\documentclass[pdflatex,sn-vancouver,Numbered]{sn-jnl}% Vancouver Reference Style
+%%\documentclass[pdflatex,sn-apa]{sn-jnl}% APA Reference Style 
+%%\documentclass[pdflatex,sn-chicago]{sn-jnl}% Chicago-based Humanities Reference Style
+
+%%%% Standard Packages
+%%<additional latex packages if required can be included here>
+
+
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+\usepackage{stmaryrd}
+
+\usepackage{booktabs}
+\usepackage{subcaption}
+\usepackage{wrapfig}
+
+\usepackage{float}
+\usepackage{setspace}
+\usepackage{makecell}
+
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{tikzscale}
+
+\usepackage{graphicx}%
+\usepackage{multirow}%
+\usepackage{amsmath,amssymb,amsfonts}%
+\usepackage{amsthm}%
+\usepackage{mathrsfs}%
+\usepackage[title]{appendix}%
+\usepackage{xcolor}%
+\usepackage{textcomp}%
+\usepackage{manyfoot}%
+% \usepackage{booktabs}%
+% \usepackage{algorithm}%
+% \usepackage{algorithmicx}%
+% \usepackage{algpseudocode}%
+\usepackage{listings}%
+%%%%
+
+%%%%%=============================================================================%%%%
+%%%%  Remarks: This template is provided to aid authors with the preparation
+%%%%  of original research articles intended for submission to journals published 
+%%%%  by Springer Nature. The guidance has been prepared in partnership with 
+%%%%  production teams to conform to Springer Nature technical requirements. 
+%%%%  Editorial and presentation requirements differ among journal portfolios and 
+%%%%  research disciplines. You may find sections in this template are irrelevant 
+%%%%  to your work and are empowered to omit any such section if allowed by the 
+%%%%  journal you intend to submit to. The submission guidelines and policies 
+%%%%  of the journal take precedence. A detailed User Manual is available in the 
+%%%%  template package for technical guidance.
+%%%%%=============================================================================%%%%
+
+%% as per the requirement new theorem styles can be included as shown below
+\theoremstyle{thmstyleone}%
+\newtheorem{theorem}{Theorem}%  meant for continuous numbers
+%%\newtheorem{theorem}{Theorem}[section]% meant for sectionwise numbers
+%% optional argument [theorem] produces theorem numbering sequence instead of independent numbers for Proposition
+\newtheorem{proposition}[theorem]{Proposition}% 
+%%\newtheorem{proposition}{Proposition}% to get separate numbers for theorem and proposition etc.
+
+\theoremstyle{thmstyletwo}%
+\newtheorem{example}{Example}%
+\newtheorem{remark}{Remark}%
+
+\theoremstyle{thmstylethree}%
+\newtheorem{definition}{Definition}%
+
+\raggedbottom
+%%\unnumbered% uncomment this for unnumbered level heads
+
+\usetikzlibrary{positioning, arrows}
+\newcommand\subsetsim{\mathrel{\substack{
+  \textstyle\subset\\[-0.2ex]\textstyle\sim}}}
+
+
+
+\usepackage{lineno} 
+
+\begin{document} %\linenumbers
+
+
+\title[Article Title]{Article Title}
+
+%%=============================================================%%
+%% GivenName	-> \fnm{Joergen W.}
+%% Particle	-> \spfx{van der} -> surname prefix
+%% FamilyName	-> \sur{Ploeg}
+%% Suffix	-> \sfx{IV}
+%% \author*[1,2]{\fnm{Joergen W.} \spfx{van der} \sur{Ploeg} 
+%%  \sfx{IV}}\email{iauthor@gmail.com}
+%%=============================================================%%
+
+\author*[1,2]{\fnm{First} \sur{Author}}\email{iauthor@gmail.com}
+
+\author[2,3]{\fnm{Second} \sur{Author}}\email{iiauthor@gmail.com}
+\equalcont{These authors contributed equally to this work.}
+
+\author[1,2]{\fnm{Third} \sur{Author}}\email{iiiauthor@gmail.com}
+\equalcont{These authors contributed equally to this work.}
+
+\affil*[1]{\orgdiv{Department}, \orgname{Organization}, \orgaddress{\street{Street}, \city{City}, \postcode{100190}, \state{State}, \country{Country}}}
+
+\affil[2]{\orgdiv{Department}, \orgname{Organization}, \orgaddress{\street{Street}, \city{City}, \postcode{10587}, \state{State}, \country{Country}}}
+
+\affil[3]{\orgdiv{Department}, \orgname{Organization}, \orgaddress{\street{Street}, \city{City}, \postcode{610101}, \state{State}, \country{Country}}}
+
+%%==================================%%
+%% Sample for unstructured abstract %%
+%%==================================%%
+
+\abstract{Detecting structural anomalies in graphs is crucial to uncover unexpected patterns and mitigate risks in fields such as cybersecurity, social network analysis, and biological research. Existing methods, which often rely on machine learning approaches, struggle to balance detection effectiveness, scalability, and explainability.
+In this paper, we introduce Minomaly, an unsupervised framework that combines subgraph mining with Graph Neural Networks (GNNs) to detect rare node neighborhoods indicative of structural anomalies. By embedding subgraphs into an Order Embedding Space (OES), Minomaly efficiently estimates subgraph frequencies and employs a greedy search algorithm to expand infrequent structures. This approach enables the detection of anomalies in a way that is both explainable and computationally efficient. Experiments on well-established benchmark datasets demonstrate that Minomaly consistently outperforms the state-of-the-art methods in detection quality and scalability, handling large graphs without memory overhead issues.\\ Our code will be available at \href{https://github.com/gbay7/minomaly}{https://github.com/gbay7/minomaly}.}
+
+%%================================%%
+%% Sample for structured abstract %%
+%%================================%%
+
+% \abstract{\textbf{Purpose:} The abstract serves both as a general introduction to the topic and as a brief, non-technical summary of the main results and their implications. The abstract must not include subheadings (unless expressly permitted in the journal's Instructions to Authors), equations or citations. As a guide the abstract should not exceed 200 words. Most journals do not set a hard limit however authors are advised to check the author instructions for the journal they are submitting to.
+% 
+% \textbf{Methods:} The abstract serves both as a general introduction to the topic and as a brief, non-technical summary of the main results and their implications. The abstract must not include subheadings (unless expressly permitted in the journal's Instructions to Authors), equations or citations. As a guide the abstract should not exceed 200 words. Most journals do not set a hard limit however authors are advised to check the author instructions for the journal they are submitting to.
+% 
+% \textbf{Results:} The abstract serves both as a general introduction to the topic and as a brief, non-technical summary of the main results and their implications. The abstract must not include subheadings (unless expressly permitted in the journal's Instructions to Authors), equations or citations. As a guide the abstract should not exceed 200 words. Most journals do not set a hard limit however authors are advised to check the author instructions for the journal they are submitting to.
+% 
+% \textbf{Conclusion:} The abstract serves both as a general introduction to the topic and as a brief, non-technical summary of the main results and their implications. The abstract must not include subheadings (unless expressly permitted in the journal's Instructions to Authors), equations or citations. As a guide the abstract should not exceed 200 words. Most journals do not set a hard limit however authors are advised to check the author instructions for the journal they are submitting to.}
+
+\keywords{Graph Anomaly Detection, Unsupervised Learning, GNNs, Order Embedding}
+
+%%\pacs[JEL Classification]{D8, H51}
+
+%%\pacs[MSC Classification]{35A01, 65L10, 65L12, 65L20, 65L70}
+
+\maketitle
+
+
+
+\section{Introduction}
+Graph Anomaly Detection (GAD) plays a crucial role in uncovering hidden insights and mitigating risks in various domains. For example, in cybersecurity, detecting anomalous network traffic patterns can help identify potential intrusions or malicious activities. In social network analysis, identifying anomalous behaviors can assist in detecting fake accounts, spam, or unusual communication patterns. Similarly, in biological networks, anomaly detection can highlight proteins or genes with unusual interactions, shedding light on disease mechanisms or novel biological processes \cite{akoglu2015graph,Ma_2023,Ruff_2021}.
+%\begin{wrapfigure}{r}{0.4\textwidth}
+%    \centering
+%    \resizebox{\linewidth}{!}{\input{figs/gad_concept}}
+%    \caption{\footnotesize Illustration of node anomaly detection.}
+%    \label{fig:gad_concept}
+%\end{wrapfigure}
+
+Unsupervised node anomaly detection has gained significant research attention in recent years due to its wide applicability. In graph data, nodes are interconnected to form patterns. Nodes with attribute vectors that deviate considerably from the global attribute norm are often considered global anomalies. While node attributes provide valuable information, the edges between nodes offer additional insights. If a node belongs to an unusual connection pattern or neighborhood, all nodes within this structure are collectively anomalous and called structural anomalies. When node attributes are considered within this abnormal structure, these anomalies are referred to as contextual anomalies \cite{NEURIPS2022-acc1ec4a,Ma_2023}. Our primary focus, however, is on \textbf{structural anomalies}. While existing methods have advanced in detecting these anomalies, they often lack generality and interpretability. BOND \cite{NEURIPS2022-acc1ec4a} consider structural anomalies as densely connected nodes. However, in some real-world geometric graphs, dense connections are common, making this assumption inadequate. Other methods rely on specific motif distributions \cite{bandyopadhyay2020outlier,xu2022contrastive,yuan2024higherorder}, which limits their applicability to diverse real-world contexts such as fraud detection. Existing unsupervised deep learning techniques often lack solid explanations for their results, limiting their interpretability. Traditionally, frequent pattern outlier detection methods provided interpretable results but were computationally expensive due to the need to enumerate patterns and match similar ones \cite{bressan2021faster,he2004frequent,yan2002gspan}. This computational burden arises because the problem reduces to the subgraph isomorphism problem, which is NP-complete. In these methods, frequency serves as a measure of abnormality because rare structures are more likely to be anomalous.
+
+To address these limitations, we propose \textbf{Minomaly}, an unsupervised, interpretable, and scalable framework for structural anomaly detection in graphs. Our approach proceeds in two distinct steps: \textbf{(a) \textit{Order Embedding Space (OES) construction}}  --- Minomaly combines subgraph mining with GNN-based order embeddings to encode graph neighborhoods efficiently. This step allows for accurate frequency estimation of subgraphs; \textbf{(b) \textit{Anomalous structures search}}  --- Using the geometrical properties of the OES, Minomaly employs a novel greedy search algorithm to identify rare and unusual node structures, allowing interpretable anomaly detection;
+% \textcolor{blue}{
+% Experiments on benchmark datasets validate the effectiveness of Minomaly, demonstrating its superior performance compared to existing methods in both detection accuracy and scalability.
+% }
+Our contributions can be summarized as follows:
+\begin{itemize}
+    \item A new formalization of structural anomaly detection in graphs using subgraph mining. A proof of the correctness of the counting measure used to enumerate anomalous subgraphs, based on the anti-monotonicity property, is provided. Additionally, a generalized definition of structural node anomaly detection is proposed to support anomaly detection across multiple contexts.
+    \item A novel application of order embeddings to graph anomaly detection. Minomaly leverages GNN order embeddings to efficiently encode graph structures.
+    \item A new optimization technique in anomalous structures search by exploiting the geometrical properties of the OES which significantly reduces the number of nodes that need to be verified during the search for anomalous structures.
+    \item A novel, computationally efficient greedy search algorithm for identifying and interpreting unusual structures in graphs, enabling explainable GAD.
+    \item An in-depth experimental study on widely used benchmark datasets to validate Minomaly's performance. 
+    % Our results demonstrate superior detection accuracy and scalability compared to state-of-the-art methods.
+\end{itemize}
+
+The rest of this paper is organized as follows:  
+{Section~\ref{sec:relatedworks}} introduces the  related works. {Section~\ref{sec:problem}} formalizes the problem of anomaly detection in graphs and provides a proof of the use of subgraph mining for structural anomaly detection.  
+{Section~\ref{sec:proposal}} presents the Minomaly framework in detail.  
+{Section~\ref{sec:eval}} discusses our experimental results and compares them with existing approaches. Finally, {Section~\ref{sec:conclusion}} concludes the paper and outlines future research directions.
+
+\section{Related Work}
+\label{sec:relatedworks}
+
+Non-deep learning approaches to node anomaly detection often utilize matrix decomposition techniques, such as Radar \cite{li2017radar} and ANOMALOUS \cite{peng2018anomalous}, clustering methods like SCAN \cite{xu2007scan}, and pattern mining approaches like PANG \cite{potin2023pattern}. Recently, deep learning methods leveraging the representation power of GNNs have been proposed. For instance, DOMINANT \cite{ding2019deep} uses a GCN encoder and two decoders for structural and attribute reconstruction, while AnomalyDAE \cite{fan2020anomalydae} employs two separate autoencoders (AEs) and combines their reconstruction losses for anomaly scoring. DONE \cite{bandyopadhyay2020outlier} introduces structural and attribute AEs with MLP-based encoders and decoders to reconstruct adjacency and node attribute matrices, and AdONE \cite{bandyopadhyay2020outlier} extends DONE with adversarial learning. CONAD \cite{xu2022contrastive} uses contrastive learning based on human prior knowledge of structural and contextual anomalies. However, none of these deep learning methods have been evaluated on large graphs or focused on metrics other than AUC in their studies.
+
+Focusing directly on node-level graph anomaly detection using deep learning presents challenges. Reconstruction methods \cite{ding2019deep,fan2020anomalydae,xu2022contrastive,yuan2024higherorder} aim to learn the global behavior of node information and intentionally miss rare patterns to produce high reconstruction errors for these patterns. However, this approach may fail \cite{Ruff_2021} because the balance between learning normal and abnormal patterns is neither well-controlled nor interpretable. To address this, we utilize deep learning specifically for subgraph matching, which deals with generalized, class-balanced ground truth, as in NeuroMatch \cite{rex2020neural}.
+
+A few graph outlier detection methods have relied on pattern mining approaches \cite{potin2023pattern,yuan2024higherorder}, but they still face the same computational issues. The NeuroMatch method for subgraph matching, inspired by \cite{vendrov2016orderembeddings}, provides an approximate frequency count of graph neighborhoods using GNN. SPMiner for frequent subgraph mining \cite{ying2024representation} relies on NeuroMatch for order embedding. Although SPMiner was successful in identifying most small frequent motifs, it lacked accuracy in predicting graph-level frequency. To address the limitations of existing GAD approaches, we leverage subgraph mining and GNN-based order embeddings to detect and interpret rare node neighborhoods in graphs.
+
+%In order to address  limitations of GAD existing approaches, we propose to combining subgraph mining with GNN-based order embeddings to detect and interpret rare node neighborhoods in graphs.
+
+\section{Problem Definition}
+\label{sec:problem}
+A static directed graph $G = (V, E)$ consists of a fixed set of nodes $V$, and edges $E \subseteq V \times V$ which represent the connections between nodes.
+The order of $G$ is its number of vertices $|V|$, and its size is its number of edges $|E|$.
+
+\paragraph{Induced Subgraph}
+Let $S \subseteq V$. The induced subgraph $G[S]$ in $G$ by $S$ is the graph $G[S] = (S, E_S)$, where $E_S = \{(u, v) \in E \mid u, v \in S\}$, the set of edges from $G$ that connect two nodes in $S$. We write $G' \subseteq G$ if $G'$ is subgraph of $G$, and $\mathcal{G}(G)$ the set of subgraphs of $G$.
+
+\paragraph{Anchor Node}
+Let $u \in V$. The \textbf{anchor node} is a special node from which the subgraph is defined. The \textbf{structure graph} or \textbf{neighborhood graph} of the node $u$ is the connected subgraph induced by the set of nodes that are reachable from $u$, including $u$ itself. This subgraph serves as the basis for graph embedding and comparison in subgraph matching.
+
+\paragraph{Isomorphism}
+Let $G[S], G[T] \in \mathcal{G}(G)$. We say $G[S]$ and $G[T]$ are isomorphic, denoted $G[S] \cong G[T]$, if and only if:
+\[\footnotesize
+\begin{cases}
+    \exists f: S \to T, \; f \text{ is bijective}, \\
+    \forall u_1, u_2 \in S: (u_1, u_2) \in E_S \iff (f(u_1), f(u_2)) \in E_T.
+\end{cases}
+\]
+
+\paragraph{Order Embedding Function}
+An \textbf{order embedding} function for graphs, denoted as $\phi:\mathcal{G}(G) \to \mathbb{R}^d$, is an injective function that maps a subgraph of $G$ into a $d$-dimensional embedding space such that for two subgraphs $G_1, G_2 \in \mathcal{G}(G)$:
+\[
+G_1 \subsetsim G_2 \iff \phi(G_1) \preceq \phi(G_2), \quad 
+\text{\footnotesize such that $G_1 \subsetsim G_2$  means $\exists G_{iso} \subseteq G_2 : G_{iso} \cong G_1$}
+\]
+Here, the partial order $\preceq$ on the embedding space is defined component-wise, meaning $\phi(G_1) \preceq \phi(G_2)$ if and only if $\phi_i(G_1) \leq \phi_i(G_2), \forall i \in \llbracket 1, d \rrbracket$ such that $\phi = (\phi_1, \phi_2, \dots, \phi_d)$. The partial order $\subsetsim$ on $\mathcal{G}(G)$ denotes subgraph isomorphism.
+
+\paragraph{Structural Anomaly}
+Let $u \in V$. The node $u$ is a \textbf{structural anomaly} of $G$ if and only if $u$ belongs to an unexpected structure graph of $u$.
+\begin{itemize}
+ \item We define unexpected graph $G'$ in $G$, as rare subgraph in term of graph frequency $freq_G: \mathcal{G}(G) \to \mathbb{N} $ that quantifies the existence of its similar (isomorphic) subgraphs in $G$
+ \[
+  freq_G(G') < T_F \quad \text{with} \quad T_F > 0
+ \]
+ \item All nodes of the graph $G'$ are structural anomalies.
+\end{itemize}
+
+\paragraph{Anti-monotonicity counting property}
+$freq_G$ is anti-monotonic, if for all $G_1, G_2$ subgraphs of $G$. \[G_1 \subseteq G_2 \implies freq_G(G_2) \le freq_G(G_1)\]
+
+This implies that the frequency of a graph is never greater than the frequency of any of its subgraphs. Consequently, if a graph is infrequent, all graphs containing it are also infrequent. The correctness of the counting measure is typically evaluated through the anti-monotonicity property \cite{calders2008anti}. 
+
+\paragraph{Frequency Measure}
+For any $G' \in \mathcal{G}(G)$, we define:
+\[ \footnotesize
+\begin{cases}
+    UP_G(G') &= \{G_{up} \subseteq G \mid \exists G_{iso} \subseteq G_{up}: G_{iso} \cong G'\} \\ &= \{G_{up} \subseteq G \mid \phi(G') \preceq \phi(G_{up})\}, \\
+    Freq_G(G') &= |UP_G(G')|.
+\end{cases}
+\]
+
+Our approach relies on an estimation of the frequency measure \( Freq_G \), defined as the number of graphs that contain a matching of \( G' \). In the following, we prove the anti-monotonicity of $Freq_G$:
+
+\begin{proof}
+Let $G_1, G_2 \in \mathcal{G}(G)$ such that $G_1=(S_1, E_1)$, $G_2=(S_2, E_2)$ and $G_1 \subseteq G_2$.  
+\begin{itemize}
+    \item If $G_{up} \in UP_G(G_2)$, then $\exists G_{iso} \subseteq G_{up}$ such that $G_{iso} \cong G_2$. 
+    \item Since $G_1 \subseteq G_2$, $\exists G_{iso}' \subseteq G_{iso} \subseteq G_{up}$ such that $G_{iso}' \cong G_1$ (by restricting $f$ to $S_1 \subseteq S_2$). 
+    \item Thus, $G_{up} \in UP_G(G_1)$, and we have $UP_G(G_2) \subseteq UP_G(G_1)$. 
+\end{itemize}
+Taking cardinalities: $|UP_G(G_2)| \leq |UP_G(G_1)|$ i.e. $Freq_G(G_2) \leq Freq_G(G_1)$, therefore, $Freq_G$ is anti-monotonic.
+\end{proof}
+
+
+%In this framework, the anchor node $u$ plays a central role in defining and embedding subgraphs, as the neighborhood graph $G[N(u)]$ is embedded and compared using the order embedding $\phi$. This allows for effective subgraph matching by comparing the embeddings of neighborhood graphs centered at anchor nodes.
+
+% \vspace*{-15pt}
+\section{Proposed Method: Minomaly}
+\label{sec:proposal}
+
+In this section, we present \textbf{Minomaly}, an approach that uses a GNN for the detection of Structural Anomalies in graphs. Minomaly employs the \text{NeuroMatch} method \cite{rex2020neural} inspired by \cite{vendrov2016orderembeddings} to embed graph structures into an Order Embedding Space (OES). This embedding provides an approximate frequency count of small structural neighborhood graphs of nodes.
+
+We introduce a greedy search method to expand infrequent neighboring graphs using OES. Graph patterns that meet a certain frequency threshold are identified as structural anomalies. The resulting graph represents the structural anomalies, demonstrating the interpretability of the method. Also, it applies a heuristic search to select potential node anchors from  the embedded space that produce anomalous patterns, rather than verifying the normality of all nodes in the graph.
+
+%In comparison to existing non-interpretable deep learning methods, Minomaly demonstrates superior performance across all measures of the binary classification, particularly in terms of the area under ROC (AUC), Average Precision (AP), Recall, and Precision.
+% \vspace*{-15pt}
+\subsection{Order Embedding}
+% \vspace*{-5pt}
+The primary function of the Order Embedding is to identify whether a given graph is a subgraph of another, and to quantify its frequency in the whole graph. For this purpose, as illustrated in Figure~\ref{fig:encoder_process}, it breaks down the graph $G$ into random subgraphs $RG=\{G'_1, G'_2, \dots, G'_k\}$ of different sizes from \texttt{min\_neigh\_size} to \texttt{max\_neigh\_size}, $k$ must be sufficiently large. These subgraphs are then processed through a GNN to generate their respective order embeddings in order to construct the Order Embedding Space (OES) that is used for counting subgraph occurrences. We have used the same architecture that is used for SPMiner Encoder \cite{ying2024representation} and synthetic data for training it. 
+\vspace*{-13pt}
+\begin{figure}[H]
+    \centering
+    % \hspace*{0.3cm}
+    \resizebox{0.73\linewidth}{!}{\input{figs/encoder/tex_rand_graph}}
+    \caption{\footnotesize Order Embedding Space construction process}
+    \label{fig:encoder_process}
+\end{figure}
+
+This approach of subgraph matching is considered advantageous for these reasons:
+\textbf{(a) \textit{Generalizability}} --- NeuroMatch shows the generalization test performance of subgraph matching across real-world datasets, by training only on a synthetic dataset. On the other hand, the model only handles subgraph matching without considering features;
+\textbf{(b) \textit{OES geometric properties}} --- Using the partial order properties of the embeddings, the frequency of a subgraph $G'$ can be quantified by counting the upper-right embeddings of $RG$ graphs. Additionally, the anti-monotonicity property can be verified by how the space is organized according to graph size and order.
+% \vspace*{-20pt}
+\paragraph{Network Architecture}
+The network employs GNN with a multi-layer perceptron (MLP) for binary classification (\( G_1 \subseteq G_2 \)). It takes two graphs, \( G_1 \) and \( G_2 \), as inputs. The model processes the graph structure through 8 layers of GraphSAGE-based graph convolutions with learnable skip connections \cite{hamilton2018inductive}. A post-processing layer with linear transformations and Leaky ReLU activations produces the embeddings \( \phi(G_1) \) and \( \phi(G_2) \). These embeddings are concatenated and passed through an MLP to generate the output.
+
+
+\paragraph{Training goal}
+The goal is to train the network to learn an order
+embedding function $\phi$ that respects to its definition.
+
+\paragraph{Train data}
+To train the model, a set of positive and negative training instances are generated. For positive examples, we sample random subgraphs \( G^+_1 \) and \( G^+_2 \) from the graph \( G \) such that \( G^+_1 \subseteq G^+_2 \). For negative examples, we add enough random nodes or edges to a subgraph \( G^-_1 \) to generate $G^-_2$, or we can use any other valid random generation.
+
+\paragraph{Loss function}
+The learning penalty proposed by \cite{ying2024representation} is adopted and defined as
+\begin{equation}
+E(G_1, G_2) = \|\max(0, \phi(G_1) - \phi(G_2))\|^2
+\end{equation}
+The total hinge loss is then given by:
+\begin{equation}
+\sum_{(G^+_1, G^+_2) \in \text{Positives}} E(G^+_1, G^+_2) + \sum_{\left(G^-_1, G^-_2\right) \in \text{Negatives}} \max \left(0, \alpha - E\left(G^-_1, G^-_2\right)\right)
+\end{equation}
+where \(\alpha\) is the margin hyperparameter which controls the separation between penalties of positive and negative examples.
+
+Consequently, for positive pairs \( G^+_1 \subseteq G^+_2 \), the embeddings are trained to satisfy \( \phi(G^+_1) \preceq \phi(G^+_2) \), as the penalty \( E(G^+_1, G^+_2) \) will be zero with proper learning and large in order to be minimized during training. For negative pairs \( G^-_1 \) and \( G^-_2 \), the violation \( E(G^-_1, G^-_2) \) is trained to be at least \( \alpha \), ensuring separation from positive pairs and minimizing the overall loss.
+
+\begin{wrapfigure}[10]{r}{0.33\textwidth}
+    \centering
+    \vspace{-3pt}
+    \resizebox{\linewidth}{!}{\input{figs/decoder/tex_oes_count}}
+    \caption{\footnotesize Geometric visualization of the count prediction procedure in the OES}
+    \label{fig:count_pred}
+\end{wrapfigure}
+
+\paragraph{Count prediction $Freq_G$}
+To determine the frequency of a subgraph \( G' \), $Freq_G(G')$, we count the number of the random embedded subgraph \( G'_i \) from $RG=\{G'_1, G'_2, \dots, G'_k\}$ in the space, where \( \phi(G') \preceq \phi(G_i') \) as predicted by the network's output layer.
+\textbf{\[Freq_G(G')=\frac{|\{G'_i \in RG \mid \phi(G') \preceq \phi(G'_i)\}|}{k}\]}
+The $\phi(G'_i)$s are also the upper-rights points of $\phi(G')$ in the geometric space OES (see Figure \ref{fig:count_pred}).
+
+\paragraph{Anti-monotonicity preservation}
+As shown in Figure \ref{fig:embs_neighs_size}, the model organizes the space based on subgraph size (number of edges) and order (number of nodes), since larger graphs cannot be subgraphs of smaller ones. This indicates that $Freq_G$ is anti-monotonic, which supports its correctness.
+\vspace*{-15pt}
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.65\textwidth}
+        \includegraphics[width=\textwidth]{figs/pca_emb_c.pdf}
+        \caption{\footnotesize PCA-based visualization}
+        \label{fig:pca_embs}
+    \end{subfigure}
+    \begin{subfigure}{0.3\textwidth}
+        \includegraphics[width=\textwidth]{figs/heatmap.pdf}
+        \caption{\footnotesize Heatmap}
+        \label{fig:heatmap}
+    \end{subfigure}
+    \caption{\footnotesize (a) PCA visualization of order embeddings for random neighborhoods of 1–30 nodes from the Cora dataset. PCA preserves straight lines, indicating subgraph containment of a point lies within a quadrilateral region \cite{ying2024representation}. (b) The Heatmap shows average embedding norms by graph size and order, highlighting structure-embedding relationships. Lighter shades for smaller graphs, darker for larger ones by size or order.}
+    \label{fig:embs_neighs_size}
+\end{figure}
+% \vspace*{-60pt}
+\vspace*{-30pt}
+\subsection{Anomalous Structures}
+\label{sec:anomaly_search}
+Given the learned $\phi$, the goal of the search procedure is to identify rare node-anchored structures in the given graph. As in Figure~\ref{fig:decoder_process}, Minomaly generates anomalous small neighborhoods by iteratively adding nodes from potentially anomalous \textbf{starting nodes}, which can be: \textbf{(a) \textit{OES infrequent embedded subgraphs}} --- The infrequent neighborhoods $G'_i$ from $RG=\{G'_1, G'_2, \dots, G'_k\}$ can be checked using the count prediction function $Freq_G(G'_i) < T_F$. The resulting anchors of these subgraphs are considered anomalous; \textbf{(b) \textit{OES frontier}} --- Taking advantage of the geometric properties of OES, isolated and boundary points are more likely not to have upper-right points, which can be approximately detected by an outlier detection method like Isolation Forest \cite{liu2008isolation}; \textbf{(c) \textit{Node anomalies detected by other methods}} --- Used to find anomalous structures when detectors lack explanations or have low precision.
+
+%The learned order embedding by the decoder provides a well-behaved space, making the search process efficient and effective. This is because of the preserved anti-monotonicity property. Thus, each time a node is added to the pattern, $Freq_G$ either decreases from a high value or remains stable due to the fact that very small patterns start from high frequency in normal situations because they are included in big motifs like single nodes patterns. In the other side, the frequency decreases randomly from high value in general but decreases smoothly for anomalous structures.
+
+% \vspace*{-25pt}
+\begin{figure}[H]
+    \centering
+    \resizebox{0.7\linewidth}{!}{
+    \begin{tikzpicture}[node distance=0.5cm, auto]
+        % Nodes
+        \node (fig1) {\begin{minipage}{0.5\textwidth}
+            \centering
+            \resizebox{\linewidth}{!}{\input{figs/decoder/tex_oes_rand}}
+            \subcaption{OES construction}
+            \label{fig:encoded_oes}
+        \end{minipage}};
+        
+        \node (fig2) [right=of fig1] {\begin{minipage}{0.5\textwidth}
+            \centering
+            \resizebox{\linewidth}{!}{\input{figs/decoder/tex_oes_rand_outliers}}
+            \subcaption{Starting nodes}
+            \label{fig:starting_nodes}
+        \end{minipage}};
+        
+        \node (fig3) [below=of fig2] {\begin{minipage}{0.5\textwidth}
+            \centering
+            \resizebox{\linewidth}{!}{\input{figs/decoder/tex_oes_search}}
+            \subcaption{Monotonic path}
+            \label{fig:monotonic_path}
+        \end{minipage}};
+
+        \node (fig4) [left=of fig3] {\begin{minipage}{0.5\textwidth}
+            \centering
+            \resizebox{\linewidth}{!}{\input{figs/decoder/tex_graphs}}
+            \subcaption{Anomaly structure search}
+            \label{fig:anomaly_growth}
+        \end{minipage}};
+        
+        % Arrows
+        \draw[->] (fig1) -- (fig2) node[midway, above] {\scriptsize Extract};
+        \draw[->] (fig2) -- (fig3) node[midway, right] {\scriptsize Search};
+        \draw[implies-implies,double equal sign distance, line width=1pt] (fig4) -- (fig3) node[midway, below] {};
+    \end{tikzpicture}
+    }
+    \caption{\footnotesize OES construction and anomalous structure search procedures}
+    \label{fig:decoder_process}
+\end{figure}
+\vspace*{-30pt}
+% \vspace*{-30pt}
+\begin{algorithm}[H]
+\caption{Greedy Search for Anomalous Structures}
+\label{algo:algo}
+\scriptsize
+\begin{algorithmic}[1]
+\REQUIRE Graph $G$, starting node $u$, threshold $T_F$, \texttt{max\_steps}, \texttt{max\_no\_change}
+\ENSURE Anomalous structure $G'$, Anomaly score \texttt{score}
+
+\STATE Initialize $G' \leftarrow \{u\}$, \texttt{steps} $\leftarrow 0$, \texttt{no\_change\_steps} $\leftarrow 0$, \texttt{score} $\leftarrow 0$
+
+\WHILE{\texttt{steps} $<$ \texttt{max\_steps}}
+    \STATE \texttt{steps} $\leftarrow$ \texttt{steps} + 1
+    \STATE Initialize $best\_freq \leftarrow \infty$, $G'' \leftarrow G'$
+    \STATE Sample a subset of \texttt{max\_cands} candidate nodes from the neighborhood frontier of $G'$
+    \FOR{each sampled node $v$}
+        \STATE $G_{\text{temp}} \leftarrow G' \cup \{v\}$
+        \IF{$Freq_G(G_{\text{temp}}) < best\_freq$}
+            \STATE $best\_freq \leftarrow Freq_G(G_{\text{temp}})$
+            \STATE $G'' \leftarrow G_{\text{temp}}$
+        \ENDIF
+    \ENDFOR
+    \STATE $G' \leftarrow G''$
+    \IF{$Freq_G(G') < T_F$} 
+        \STATE Mark $G'$ and all its nodes as anomalies
+        \STATE \textbf{break} 
+    \ENDIF
+    \STATE \texttt{no\_change\_steps} $\leftarrow$ \texttt{no\_change\_steps} + 1 if $Freq_G(G')$ unchanged else 0
+    \IF{\texttt{no\_change\_steps} $\geq$ \texttt{max\_no\_change}} 
+        \STATE \textbf{break} 
+    \ENDIF
+\ENDWHILE
+\STATE \texttt{score} $\leftarrow 1 - Freq_G(G')$
+\RETURN $G', \texttt{score}$
+\end{algorithmic}
+\end{algorithm}
+
+\vspace*{-30pt}
+
+\subsubsection{Algorithm}
+The method adopts a greedy search (Algorithm \ref{algo:algo}) for anomalous structures $G'$, beginning from a starting node $u$ and growing by iteratively selecting a candidate node $u'$ from the current neighborhood frontier to obtain the most infrequent structure at each step. This process continues until one of the following conditions is met: $Freq_G(G') < T_F$, the maximum subgraph order (\texttt{max\_steps}) is reached, or no significant change is observed (\texttt{max\_no\_change}). If the first condition is satisfied, the final small structure and all its nodes are identified as anomalies based on the final frequency, with the anomaly score defined as $1 - Freq_G(G')$.
+
+This can be viewed as a monotonic walk in the search space of OES due to the preserved anti-monotonicity property. If the resulting neighborhood $G'$ of $u$ is grown by the ordered sequence of subgraphs $G^{(1)}_u \subseteq G^{(2)}_u \subseteq \dots \subseteq G^{(l)}_u$ such that $l \in \llbracket 1, \texttt{max\_steps} \rrbracket$ and $G' = G^{(l)}_u$, a monotonic path of embedding search $\phi(G^{(1)}_u) \preceq \phi(G^{(2)}_u) \preceq \dots \preceq \phi(G^{(l)}_u)$ is observed, because $Freq_G$ is anti-monotonic: \[Freq_G(G^{(l)}_u) \le \dots \le Freq_G(G^{(2)}_u) \le Freq_G(G^{(1)}_u)\]
+
+\section{Experimental Evaluation}
+\label{sec:eval}
+% \subsection{Experimental Settings and Datasets}
+To evaluate Minomaly, we use the datasets listed in Table \ref{tab:datasets}, which are provided by \cite{NEURIPS2022-acc1ec4a,JMLR:v25:23-0963} and adopted in \cite{chen2020generative,ding2019deep,fan2020anomalydae,gu2024three,yuan2024higherorder}. %We follow the evaluation protocol described in \cite{ding2019deep}. %These synthetic outliers are combined with real datasets. We rely on these injections due to the scarcity of datasets that explicitly distinguish between structural and contextual outliers.
+
+\begin{wraptable}[7]{r}{6.2cm}
+\centering
+\vspace*{-20pt}
+\caption{Statistics of datasets}
+\label{tab:datasets}
+\scriptsize
+\begin{tabular}{lccccccc}
+\toprule
+Dataset       & Nodes  & Edges   & Avg. Degree & Anomalies \\
+\midrule
+Cora     & 2,708  & 11,060  & 4.1         & 70 (5.1\%)    \\
+Amazon   & 13,752 & 515,042 & 37.2        & 350 (5.0\%)    \\
+Flickr   & 89,250 & 933,804 & 10.5        & 2,240 (4.9\%)    \\
+\bottomrule
+\end{tabular}
+\end{wraptable}
+
+We conducted our experiments following the protocol in \cite{NEURIPS2022-acc1ec4a}, using a Linux machine with Python 3.12.2, CUDA 12, and an NVIDIA RTX A2000 GPU (12 GB). Minomaly was implemented using PyTorch 2.4, Torch Geometric 2.6, and DeepSNAP, while the benchmarked methods were implemented using \cite{JMLR:v25:23-0963}.
+
+The Minomaly's OES, pretrained on synthetic graphs, achieves \(95\%\) accuracy in determining whether one graph is a subgraph of another with linear time complexity \cite{ying2024representation}. It was also used for processing all the benchmarked datasets.% GUIDE \cite{yuan2024higherorder}, which shares Minomaly's core approach of counting, uses a CPU-intensive graph motif counting algorithm for structural features but is excluded from the benchmark due to memory limitations.
+
+We compared Minomaly to existing deep learning GAD methods: GCNAE \cite{kipf2016variational,NEURIPS2022-acc1ec4a}, DOMINANT, DONE, AdONE, AnomalyDAE, and CONAD across binary classification metrics, including area under ROC (AUC), Average Precision (AP), Recall, and Precision.
+
+Minomaly’s hyperparameters, presented in Table \ref{tab:minomaly_hyperparameters}, are interpretable and manually tuned to improve results. This allows refinement after each run by filtering user-relative positives, expanding search spaces, or reducing computational resources, without random hyperparameter search. We set the hyperparameters shown in Table \ref{tab:minomaly_hyperparameters} for each dataset, fixing the OES dimension to $d = 64$, \texttt{min\_neigh\_size} to $1$, and \texttt{max\_neigh\_size} to $30$. Additionally, we used $8$ threads for the search phase. The results corresponding to each hyperparameter configuration (C\textsubscript{1}, A\textsubscript{1}, F\textsubscript{1}, F\textsubscript{2}, F\textsubscript{3}) are detailed in Table \ref{tab:minomaly_results}.
+
+\vspace*{-30pt}
+% \begin{table}[H]
+% \centering
+% \caption{Minomaly hyperparameters}
+% \label{tab:minomaly_hyperparameters}
+% \scriptsize
+% \begin{tabular}{|c|l|r|r|r|c|r|r|r|r|r|r|}
+% \hline
+% \textbf{Run} & \textbf{Dataset} & \boldmath$RG$ \textbf{size} & \boldmath$T_F$ & \texttt{max\_steps} & \texttt{max\_no\_change} & \texttt{max\_cands} & \texttt{batch\_size} \\ \hline
+% C\textsubscript{1}   & Cora   & 10,000  & $\frac{35}{2708}=0.013$    & 7  & 5  & All & 1000 \\ \hline
+% A\textsubscript{1}   & Amazon & 50,000   & $\frac{150}{13752}=0.011$  & 11 & 3  & 20 & 10,000 \\ \hline
+% F\textsubscript{1}   & Flickr & 150,000  & $\frac{1000}{89250}=0.011$ & 7  & 3  & 10 & 10,000 \\ \hline
+% F\textsubscript{2}   & Flickr & 200,000  & $\frac{1000}{89250}=0.011$ & 7  & 3  & 10 & 12,500 \\ \hline
+% F\textsubscript{3}   & Flickr & 250,000  & $\frac{1000}{89250}=0.011$ & 7  & 3  & 10 & 12,500 \\ \hline
+% \end{tabular}
+% \end{table}
+% \vspace*{-30pt}
+% \subsection{Overall Results}
+\vspace*{-30pt}
+\paragraph{Impact of using starting nodes}
+As shown in Table~\ref{tab:minomaly_results}, at least 70\% of the starting nodes extracted by methods (a) and (b) desctribed in ~\ref{sec:anomaly_search}, are true positives. By employing these methods, Using these methods, we process at most 50\% of the nodes in Cora and Amazon and 30\% in Flickr, the largest dataset. This approach achieves high recall by including all nodes in anomalous neighborhoods and high precision by avoiding unnecessary searches in areas prone to false positives, thus reducing computation time and improving performance.  
+\paragraph{Dataset characteristics and hyperparameters}
+Amazon and Flickr have high node degrees, particularly Amazon, yet selecting \texttt{max\_cands} of 20 and 10 nodes, respectively, from the frontier was sufficient for strong results. However, high node degrees also contributed to longer search times for Amazon. Additionally, increasing the size of $RG$ of Flickr (F\textsubscript{1}, F\textsubscript{2}, F\textsubscript{3}) improves detection quality  but increases embedding time.
+
+% \vspace*{-30pt}
+% \begin{table}[H]
+% \centering
+% \caption{Minomaly Results}
+% \label{tab:minomaly_results}
+% \scriptsize
+% \begin{tabular}{|c|c|c|r|r|r|r|r|r|r|}
+% \hline
+% \textbf{Run} & \textbf{Starting nodes} & \textbf{Positive nodes} & \textbf{AUC} & \textbf{AP} & \textbf{Recall} & \textbf{Precision} & \textbf{Search} & \textbf{OES build} \\ \hline
+% C\textsubscript{1}   & $\frac{1120}{2708}=41.4\%$  & $\frac{67}{70}=95.7\%$  & 95.25\%  & 74.62\%  & 91.43\%  & 83.12\%  & 293 s   & 22 s \\ \hline
+% A\textsubscript{1}   & $\frac{6977}{13752}=50.7\%$ & $\frac{300}{350}=85.7\%$ & 95.40\%  & 57.66\%  & 92.86\%  & 55.65\%  & 2770 s  & 118 s \\ \hline
+% F\textsubscript{1}   & $\frac{15988}{89250}=17.9\%$ & $\frac{1535}{2240}=68.5\%$ & 90.52\%  & 77.73\%  & 81.21\%  & 94.34\%  & 2521 s  & 542 s \\ \hline
+% F\textsubscript{2}   & $\frac{20057}{89250}=22.5\%$ & $\frac{1736}{2240}=77.5\%$ & 93.56\%  & 85.28\%  & 87.19\%  & 94.99\%  & 4098 s  & 1021 s \\ \hline
+% F\textsubscript{3}   & $\frac{24074}{89250}=27.0\%$ & $\frac{1898}{2240}=84.7\%$ & 94.06\%  & 85.82\%  & 88.21\%  & 93.73\%  & 5690 s  & 1335 s \\ \hline
+% \end{tabular}
+% \end{table}
+
+\vspace*{-30pt}
+\paragraph{Performance and interpretation}
+Minomaly achieved high scores across all datasets and metrics (see Table~\ref{tab:minomaly_results}) and successfully interpreted all mined anomalous patterns (see Figure~\ref{fig:interpret_results}). By interpreting the false positives on Amazon, we justify the low precision by the presence of patterns labeled as normal that are similar to the true positive patterns.
+
+% \vspace*{-30pt}
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.2\textwidth}
+        \resizebox{\linewidth}{!}{\input{figs/evaluation/tracked_1235_graph}}
+        \caption{True positive}
+        \label{fig:true_positive}
+    \end{subfigure}
+    \hfill
+    % \begin{subfigure}{0.3\textwidth}
+    %     \resizebox{\linewidth}{!}{\input{figs/evaluation/tracked_2705_graph}}
+    %     \caption{False positive}
+    % \end{subfigure}
+    \begin{subfigure}{0.3\textwidth}
+        \resizebox{\linewidth}{!}{\input{figs/evaluation/tracked_freq}}
+        \caption{Frequency changes}
+        \label{fig:frequency_track}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.2\textwidth}
+        \resizebox{\linewidth}{!}{\input{figs/evaluation/tracked_30_graph}}
+        \caption{True negative}
+        \label{fig:false_positive}
+    \end{subfigure}
+    \caption{\small Minomaly results on the Amazon dataset. It illustrates two examples: an anomalous structure (red) and a normal one (green), along with their frequency change curves.}
+    \label{fig:interpret_results}
+\end{figure}
+
+\vspace*{-20pt}
+\paragraph{Comparison to other methods}
+From Fig.~\ref{fig:pr_curve}, we observe low Precision@k %at low recalls 
+across all methods, corresponding to low-frequency detected anomalies for Minomaly. This is attributed to the existence of some unlabeled structures that are rarer than the labeled ones, as shown by interpretations. DONE achieves high Precision@k on Cora due to its restrictive anomaly definition but fails to maintain precision on other datasets, unlike our frequency-based method. Overall, Minomaly outperforms reconstruction-loss methods, which fail to capture anomalous patterns across different contexts, as mentioned in Section~\ref{sec:relatedworks}. It achieves this across all metrics and scales efficiently, avoiding memory issues on large datasets like Flickr (see Table \ref{tab:bench_results}).
+
+% Minomaly outperforms other methods in terms of AUC, F1, and AP scores (see Table~\ref{tab:bench_results} and Figure \ref{fig:pr_curve}). This shows that using frequency as a measure of abnormality has proven to be more effective in identifying true anomalies, surpassing reconstruction-loss methods in handling rare patterns. One can also see that Minomaly is scalable, as it avoids out-of-memory errors on large datasets like Flickr (see Table~\ref{tab:bench_results}).
+
+\vspace*{-17pt}
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.32\textwidth}
+        \resizebox{\linewidth}{!}{\input{figs/evaluation/cora_pr_curve.pgf}}
+        \caption{Cora}
+    \end{subfigure}
+    \begin{subfigure}{0.32\textwidth}
+        \resizebox{\linewidth}{!}{\input{figs/evaluation/amazon_pr_curve.pgf}}
+        \caption{Amazon}
+    \end{subfigure}
+    \begin{subfigure}{0.32\textwidth}
+        \resizebox{\linewidth}{!}{\input{figs/evaluation/flickr_pr_curve.pgf}}
+        \caption{Flickr}
+    \end{subfigure}
+    \caption{\small Precision-Recall curves for different models.}
+    \label{fig:pr_curve}
+\end{figure}
+% \begin{figure}[H]
+%     \centering
+%     \begin{subfigure}{0.4\textwidth}
+%         \includegraphics[width=\textwidth]{assets/analyze_start-cora.png}
+%         \caption{Cora}
+%     \end{subfigure}
+% %     \hspace{0.1\textwidth}
+%     \begin{subfigure}{0.4\textwidth}
+%         \includegraphics[width=\textwidth]{assets/analyze_start-amazon.png}
+%         \caption{Amazon}
+%     \end{subfigure}
+%     \caption{This figure illustrates the true injected anomalous neighborhoods of Cora, Amazon and Flickr.}
+%     \label{fig:analyze_start}
+% \end{figure}
+\vspace*{-47pt}
+% \begin{table}[H]
+% \centering
+% \caption{Comparison of AUC and F1 Scores of different methods}
+% \label{tab:bench_results}
+% \tiny
+% \begin{tabular}{|l|cc|cc|cc|cc|}
+% \hline
+%  & \multicolumn{2}{c|}{Cora} & \multicolumn{2}{c|}{Amazon} & \multicolumn{2}{c|}{Flickr} & \multicolumn{2}{c|}{Avg. Rank} \\ \cline{2-9}
+% Model & AUC & F1 & AUC & F1 & AUC & F1 & AUC & F1 \\ \hline
+% Minomaly & \makecell{95.3 $\pm$ 0.0 \\ \tiny Rank: 2.0} & \makecell{\textbf{87.1} $\pm$ 0.0 \\ \tiny Rank: 1.0} & \makecell{\textbf{95.4} $\pm$ 0.0 \\ \tiny Rank: 1.0} & \makecell{\textbf{69.6} $\pm$ 0.0 \\ \tiny Rank: 1.0} & \makecell{\textbf{90.5} $\pm$ 0.0 \\ \tiny Rank: 1.0} & \makecell{\textbf{87.3} $\pm$ 0.0 \\ \tiny Rank: 1.0} & \textbf{1.3} & \textbf{1.0} \\ \hline 
+% GCNAE & \makecell{52.5 $\pm$ 0.0 \\ \tiny Rank: 7.0} & \makecell{5.3 $\pm$ 0.0 \\ \tiny Rank: 7.0} & \makecell{49.0 $\pm$ 0.0 \\ \tiny Rank: 7.0} & \makecell{3.7 $\pm$ 0.0 \\ \tiny Rank: 7.0} & \makecell{49.9 $\pm$ 0.1 \\ \tiny Rank: 2.0} & \makecell{4.4 $\pm$ 0.1 \\ \tiny Rank: 2.0} & 5.3 & 5.3 \\ \hline 
+% DOMINANT & \makecell{92.1 $\pm$ 9.3 \\ \tiny Rank: 3.0} & \makecell{32.3 $\pm$ 10.6 \\ \tiny Rank: 3.0} & \makecell{91.4 $\pm$ 0.1 \\ \tiny Rank: 2.0} & \makecell{21.6 $\pm$ 0.2 \\ \tiny Rank: 3.0} & \multicolumn{2}{c|}{Out of GPU Memory} & 2.5 & 3.0 \\ \hline 
+% DONE & \makecell{90.1 $\pm$ 5.9 \\ \tiny Rank: 5.0} & \makecell{20.2 $\pm$ 11.0 \\ \tiny Rank: 5.0} & \makecell{87.3 $\pm$ 4.0 \\ \tiny Rank: 5.0} & \makecell{17.8 $\pm$ 6.8 \\ \tiny Rank: 5.0} & \multicolumn{2}{c|}{Out of GPU Memory} & 5.0 & 5.0 \\ \hline 
+% AdONE & \makecell{91.1 $\pm$ 5.0 \\ \tiny Rank: 4.0} & \makecell{25.7 $\pm$ 11.1 \\ \tiny Rank: 4.0} & \makecell{85.5 $\pm$ 5.6 \\ \tiny Rank: 6.0} & \makecell{13.2 $\pm$ 7.2 \\ \tiny Rank: 6.0} & \multicolumn{2}{c|}{Out of GPU Memory} & 5.0 & 5.0 \\ \hline 
+% AnomalyDAE & \makecell{81.7 $\pm$ 11.8 \\ \tiny Rank: 6.0} & \makecell{16.7 $\pm$ 14.1 \\ \tiny Rank: 6.0} & \makecell{89.7 $\pm$ 5.8 \\ \tiny Rank: 4.0} & \makecell{21.7 $\pm$ 3.4 \\ \tiny Rank: 2.0} & \multicolumn{2}{c|}{Out of GPU Memory} & 4.0 & 4.0 \\ \hline 
+% CONAD & \makecell{\textbf{95.4} $\pm$ 1.2 \\ \tiny Rank: 1.0} & \makecell{36.3 $\pm$ 3.9 \\ \tiny Rank: 2.0} & \makecell{91.3 $\pm$ 0.1 \\ \tiny Rank: 3.0} & \makecell{21.5 $\pm$ 0.2 \\ \tiny Rank: 4.0} & \multicolumn{2}{c|}{Out of GPU Memory} & 2.0 & 3.0 \\ \hline 
+% \end{tabular}
+% \end{table}
+
+% \subsection{Discussion}
+% We address some key observations regarding the proposed approach, focusing on its methodology, results, and comparative performance:
+% \textbf{i) \textit{Impact of using starting nodes}} ---
+% The starting nodes are extracted in two ways: by selecting anchors of infrequent $G'_i \in RG$ and by using Isolation Forest to extract the frontier of $RG$. As shown in Table~\ref{tab:minomaly_results}, at least 70\% of these nodes are true positives. Using these methods, we process at most 50\% of the nodes in Cora and Amazon and 30\% in Flickr, the largest dataset. This approach achieves high recall by including all nodes in anomalous neighborhoods and high precision by avoiding unnecessary searches in areas prone to false positives, thus reducing computation time and improving accuracy.  
+% \textbf{ii) \textit{Dataset characteristics and hyperparameters}} --- 
+% Amazon and Flickr have high node degrees, particularly Amazon, yet selecting \texttt{max\_cands} of 20 and 10 nodes, respectively, from the frontier was sufficient for strong results. However, high node degrees also contributed to longer search times for Amazon. Additionally, increasing the size of $RG$ of Flickr improves detection quality  but increases embedding time.  
+% \textbf{iii) \textit{Performance and interpretation}} ---
+% Minomaly achieved high scores across all datasets and metrics and successfully interpreted all mined anomalous patterns (see Figure~\ref{fig:interpret_results}). By interpreting the false positives on Amazon, we justify the low precision by the presence of patterns labeled as normal that are similar to the true positive patterns.  
+% \textbf{iv) \textit{Comparison to other methods}} ---
+% Minomaly demonstrated scalability and superior performance for detecting structural anomalies, outperforming other methods in AUC, F1 and AP scores and avoiding out-of-memory errors on large datasets like Flickr (see Table~\ref{tab:bench_results} and Figure \ref{fig:pr_curve}). While it was not the fastest method, Minomaly can be implemented in distributed systems for both OES construction and the anomalous structures search.
+\vspace*{-25pt}
+\section{Conclusion}
+\label{sec:conclusion}
+We presented \textbf{Minomaly}, an unsupervised framework for detecting node structural anomalies in static graphs through subgraph mining and Graph Neural Networks. Minomaly effectively identifies rare node substructures by leveraging an Order Embedding Space, ensuring both effectiveness and interpretability. Our experiments show that Minomaly outperforms current state-of-the-art methods, maintaining scalability on large datasets. Future work will explore incorporating node attributes and extending Minomaly for graph-level anomaly detection.
+
+
+
+
+
+
+
+
+
+
+% \section{Introduction}\label{sec1}
+
+% The Introduction section, of referenced text \verb+\cite{bib1}+ expands on the background of the work (some overlap with the Abstract is acceptable). The introduction should not include subheadings.
+
+% Springer Nature does not impose a strict layout as standard however authors are advised to check the individual requirements for the journal they are planning to submit to as there may be journal-level preferences. When preparing your text please also be aware that some stylistic choices are not supported in full text XML (publication version), including coloured font. These will not be replicated in the typeset article if it is accepted. 
+
+% \section{Results}\label{sec2}
+
+% Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text.
+
+% \section{This is an example for first level head---section head}\label{sec3}
+
+% \subsection{This is an example for second level head---subsection head}\label{subsec2}
+
+% \subsubsection{This is an example for third level head---subsubsection head}\label{subsubsec2}
+
+% Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. 
+
+% \section{Equations}\label{sec4}
+
+% Equations in \LaTeX\ can either be inline or on-a-line by itself (``display equations''). For
+% inline equations use the \verb+$...$+ commands. E.g.: The equation
+% $H\psi = E \psi$ is written via the command \verb+$H \psi = E \psi$+.
+
+% For display equations (with auto generated equation numbers)
+% one can use the equation or align environments:
+% \begin{equation}
+% \|\tilde{X}(k)\|^2 \leq\frac{\sum\limits_{i=1}^{p}\left\|\tilde{Y}_i(k)\right\|^2+\sum\limits_{j=1}^{q}\left\|\tilde{Z}_j(k)\right\|^2 }{p+q}.\label{eq1}
+% \end{equation}
+% where,
+% \begin{align}
+% D_\mu &=  \partial_\mu - ig \frac{\lambda^a}{2} A^a_\mu \nonumber \\
+% F^a_{\mu\nu} &= \partial_\mu A^a_\nu - \partial_\nu A^a_\mu + g f^{abc} A^b_\mu A^a_\nu \label{eq2}
+% \end{align}
+% Notice the use of \verb+\nonumber+ in the align environment at the end
+% of each line, except the last, so as not to produce equation numbers on
+% lines where no equation numbers are required. The \verb+\label{}+ command
+% should only be used at the last line of an align environment where
+% \verb+\nonumber+ is not used.
+% \begin{equation}
+% Y_\infty = \left( \frac{m}{\textrm{GeV}} \right)^{-3}
+%     \left[ 1 + \frac{3 \ln(m/\textrm{GeV})}{15}
+%     + \frac{\ln(c_2/5)}{15} \right]
+% \end{equation}
+% The class file also supports the use of \verb+\mathbb{}+, \verb+\mathscr{}+ and
+% \verb+\mathcal{}+ commands. As such \verb+\mathbb{R}+, \verb+\mathscr{R}+
+% and \verb+\mathcal{R}+ produces $\mathbb{R}$, $\mathscr{R}$ and $\mathcal{R}$
+% respectively (refer Subsubsection~\ref{subsubsec2}).
+
+% \section{Tables}\label{sec5}
+
+% Tables can be inserted via the normal table and tabular environment. To put
+% footnotes inside tables you should use \verb+\footnotetext[]{...}+ tag.
+% The footnote appears just below the table itself (refer Tables~\ref{tab1} and \ref{tab2}). 
+% For the corresponding footnotemark use \verb+\footnotemark[...]+
+
+% \begin{table}[h]
+% \caption{Caption text}\label{tab1}%
+% \begin{tabular}{@{}llll@{}}
+% \toprule
+% Column 1 & Column 2  & Column 3 & Column 4\\
+% \midrule
+% row 1    & data 1   & data 2  & data 3  \\
+% row 2    & data 4   & data 5\footnotemark[1]  & data 6  \\
+% row 3    & data 7   & data 8  & data 9\footnotemark[2]  \\
+% \botrule
+% \end{tabular}
+% \footnotetext{Source: This is an example of table footnote. This is an example of table footnote.}
+% \footnotetext[1]{Example for a first table footnote. This is an example of table footnote.}
+% \footnotetext[2]{Example for a second table footnote. This is an example of table footnote.}
+% \end{table}
+
+% \noindent
+% The input format for the above table is as follows:
+
+% %%=============================================%%
+% %% For presentation purpose, we have included  %%
+% %% \bigskip command. Please ignore this.       %%
+% %%=============================================%%
+% \bigskip
+% \begin{verbatim}
+% \begin{table}[<placement-specifier>]
+% \caption{<table-caption>}\label{<table-label>}%
+% \begin{tabular}{@{}llll@{}}
+% \toprule
+% Column 1 & Column 2 & Column 3 & Column 4\\
+% \midrule
+% row 1 & data 1 & data 2	 & data 3 \\
+% row 2 & data 4 & data 5\footnotemark[1] & data 6 \\
+% row 3 & data 7 & data 8	 & data 9\footnotemark[2]\\
+% \botrule
+% \end{tabular}
+% \footnotetext{Source: This is an example of table footnote. 
+% This is an example of table footnote.}
+% \footnotetext[1]{Example for a first table footnote.
+% This is an example of table footnote.}
+% \footnotetext[2]{Example for a second table footnote. 
+% This is an example of table footnote.}
+% \end{table}
+% \end{verbatim}
+% \bigskip
+% %%=============================================%%
+% %% For presentation purpose, we have included  %%
+% %% \bigskip command. Please ignore this.       %%
+% %%=============================================%%
+
+% \begin{table}[h]
+% \caption{Example of a lengthy table which is set to full textwidth}\label{tab2}
+% \begin{tabular*}{\textwidth}{@{\extracolsep\fill}lcccccc}
+% \toprule%
+% & \multicolumn{3}{@{}c@{}}{Element 1\footnotemark[1]} & \multicolumn{3}{@{}c@{}}{Element 2\footnotemark[2]} \\\cmidrule{2-4}\cmidrule{5-7}%
+% Project & Energy & $\sigma_{calc}$ & $\sigma_{expt}$ & Energy & $\sigma_{calc}$ & $\sigma_{expt}$ \\
+% \midrule
+% Element 3  & 990 A & 1168 & $1547\pm12$ & 780 A & 1166 & $1239\pm100$\\
+% Element 4  & 500 A & 961  & $922\pm10$  & 900 A & 1268 & $1092\pm40$\\
+% \botrule
+% \end{tabular*}
+% \footnotetext{Note: This is an example of table footnote. This is an example of table footnote this is an example of table footnote this is an example of~table footnote this is an example of table footnote.}
+% \footnotetext[1]{Example for a first table footnote.}
+% \footnotetext[2]{Example for a second table footnote.}
+% \end{table}
+
+% In case of double column layout, tables which do not fit in single column width should be set to full text width. For this, you need to use \verb+\begin{table*}+ \verb+...+ \verb+\end{table*}+ instead of \verb+\begin{table}+ \verb+...+ \verb+\end{table}+ environment. Lengthy tables which do not fit in textwidth should be set as rotated table. For this, you need to use \verb+\begin{sidewaystable}+ \verb+...+ \verb+\end{sidewaystable}+ instead of \verb+\begin{table*}+ \verb+...+ \verb+\end{table*}+ environment. This environment puts tables rotated to single column width. For tables rotated to double column width, use \verb+\begin{sidewaystable*}+ \verb+...+ \verb+\end{sidewaystable*}+.
+
+% \begin{sidewaystable}
+% \caption{Tables which are too long to fit, should be written using the ``sidewaystable'' environment as shown here}\label{tab3}
+% \begin{tabular*}{\textheight}{@{\extracolsep\fill}lcccccc}
+% \toprule%
+% & \multicolumn{3}{@{}c@{}}{Element 1\footnotemark[1]}& \multicolumn{3}{@{}c@{}}{Element\footnotemark[2]} \\\cmidrule{2-4}\cmidrule{5-7}%
+% Projectile & Energy	& $\sigma_{calc}$ & $\sigma_{expt}$ & Energy & $\sigma_{calc}$ & $\sigma_{expt}$ \\
+% \midrule
+% Element 3 & 990 A & 1168 & $1547\pm12$ & 780 A & 1166 & $1239\pm100$ \\
+% Element 4 & 500 A & 961  & $922\pm10$  & 900 A & 1268 & $1092\pm40$ \\
+% Element 5 & 990 A & 1168 & $1547\pm12$ & 780 A & 1166 & $1239\pm100$ \\
+% Element 6 & 500 A & 961  & $922\pm10$  & 900 A & 1268 & $1092\pm40$ \\
+% \botrule
+% \end{tabular*}
+% \footnotetext{Note: This is an example of table footnote this is an example of table footnote this is an example of table footnote this is an example of~table footnote this is an example of table footnote.}
+% \footnotetext[1]{This is an example of table footnote.}
+% \end{sidewaystable}
+
+% \section{Figures}\label{sec6}
+
+% As per the \LaTeX\ standards you need to use eps images for \LaTeX\ compilation and \verb+pdf/jpg/png+ images for \verb+PDFLaTeX+ compilation. This is one of the major difference between \LaTeX\ and \verb+PDFLaTeX+. Each image should be from a single input .eps/vector image file. Avoid using subfigures. The command for inserting images for \LaTeX\ and \verb+PDFLaTeX+ can be generalized. The package used to insert images in \verb+LaTeX/PDFLaTeX+ is the graphicx package. Figures can be inserted via the normal figure environment as shown in the below example:
+
+% %%=============================================%%
+% %% For presentation purpose, we have included  %%
+% %% \bigskip command. Please ignore this.       %%
+% %%=============================================%%
+% \bigskip
+% \begin{verbatim}
+% \begin{figure}[<placement-specifier>]
+% \centering
+% \includegraphics{<eps-file>}
+% \caption{<figure-caption>}\label{<figure-label>}
+% \end{figure}
+% \end{verbatim}
+% \bigskip
+% %%=============================================%%
+% %% For presentation purpose, we have included  %%
+% %% \bigskip command. Please ignore this.       %%
+% %%=============================================%%
+
+% \begin{figure}[h]
+% \centering
+% \includegraphics[width=0.9\textwidth]{fig.eps}
+% \caption{This is a widefig. This is an example of long caption this is an example of long caption  this is an example of long caption this is an example of long caption}\label{fig1}
+% \end{figure}
+
+% In case of double column layout, the above format puts figure captions/images to single column width. To get spanned images, we need to provide \verb+\begin{figure*}+ \verb+...+ \verb+\end{figure*}+.
+
+% For sample purpose, we have included the width of images in the optional argument of \verb+\includegraphics+ tag. Please ignore this. 
+
+% \section{Algorithms, Program codes and Listings}\label{sec7}
+
+% Packages \verb+algorithm+, \verb+algorithmicx+ and \verb+algpseudocode+ are used for setting algorithms in \LaTeX\ using the format:
+
+% %%=============================================%%
+% %% For presentation purpose, we have included  %%
+% %% \bigskip command. Please ignore this.       %%
+% %%=============================================%%
+% \bigskip
+% \begin{verbatim}
+% \begin{algorithm}
+% \caption{<alg-caption>}\label{<alg-label>}
+% \begin{algorithmic}[1]
+% . . .
+% \end{algorithmic}
+% \end{algorithm}
+% \end{verbatim}
+% \bigskip
+% %%=============================================%%
+% %% For presentation purpose, we have included  %%
+% %% \bigskip command. Please ignore this.       %%
+% %%=============================================%%
+
+% You may refer above listed package documentations for more details before setting \verb+algorithm+ environment. For program codes, the ``verbatim'' package is required and the command to be used is \verb+\begin{verbatim}+ \verb+...+ \verb+\end{verbatim}+. 
+
+% Similarly, for \verb+listings+, use the \verb+listings+ package. \verb+\begin{lstlisting}+ \verb+...+ \verb+\end{lstlisting}+ is used to set environments similar to \verb+verbatim+ environment. Refer to the \verb+lstlisting+ package documentation for more details.
+
+% A fast exponentiation procedure:
+
+% \lstset{texcl=true,basicstyle=\small\sf,commentstyle=\small\rm,mathescape=true,escapeinside={(*}{*)}}
+% \begin{lstlisting}
+% begin
+%   for $i:=1$ to $10$ step $1$ do
+%       expt($2,i$);  
+%       newline() od                (*\textrm{Comments will be set flush to the right margin}*)
+% where
+% proc expt($x,n$) $\equiv$
+%   $z:=1$;
+%   do if $n=0$ then exit fi;
+%      do if odd($n$) then exit fi;                 
+%         comment: (*\textrm{This is a comment statement;}*)
+%         $n:=n/2$; $x:=x*x$ od;
+%      { $n>0$ };
+%      $n:=n-1$; $z:=z*x$ od;
+%   print($z$). 
+% end
+% \end{lstlisting}
+
+% \begin{algorithm}
+% \caption{Calculate $y = x^n$}\label{algo1}
+% \begin{algorithmic}[1]
+% \Require $n \geq 0 \vee x \neq 0$
+% \Ensure $y = x^n$ 
+% \State $y \Leftarrow 1$
+% \If{$n < 0$}\label{algln2}
+%         \State $X \Leftarrow 1 / x$
+%         \State $N \Leftarrow -n$
+% \Else
+%         \State $X \Leftarrow x$
+%         \State $N \Leftarrow n$
+% \EndIf
+% \While{$N \neq 0$}
+%         \If{$N$ is even}
+%             \State $X \Leftarrow X \times X$
+%             \State $N \Leftarrow N / 2$
+%         \Else[$N$ is odd]
+%             \State $y \Leftarrow y \times X$
+%             \State $N \Leftarrow N - 1$
+%         \EndIf
+% \EndWhile
+% \end{algorithmic}
+% \end{algorithm}
+
+% %%=============================================%%
+% %% For presentation purpose, we have included  %%
+% %% \bigskip command. Please ignore this.       %%
+% %%=============================================%%
+% \bigskip
+% \begin{minipage}{\hsize}%
+% \lstset{frame=single,framexleftmargin=-1pt,framexrightmargin=-17pt,framesep=12pt,linewidth=0.98\textwidth,language=pascal}% Set your language (you can change the language for each code-block optionally)
+% %%% Start your code-block
+% \begin{lstlisting}
+% for i:=maxint to 0 do
+% begin
+% { do nothing }
+% end;
+% Write('Case insensitive ');
+% Write('Pascal keywords.');
+% \end{lstlisting}
+% \end{minipage}
+
+% \section{Cross referencing}\label{sec8}
+
+% Environments such as figure, table, equation and align can have a label
+% declared via the \verb+\label{#label}+ command. For figures and table
+% environments use the \verb+\label{}+ command inside or just
+% below the \verb+\caption{}+ command. You can then use the
+% \verb+\ref{#label}+ command to cross-reference them. As an example, consider
+% the label declared for Figure~\ref{fig1} which is
+% \verb+\label{fig1}+. To cross-reference it, use the command 
+% \verb+Figure \ref{fig1}+, for which it comes up as
+% ``Figure~\ref{fig1}''. 
+
+% To reference line numbers in an algorithm, consider the label declared for the line number 2 of Algorithm~\ref{algo1} is \verb+\label{algln2}+. To cross-reference it, use the command \verb+\ref{algln2}+ for which it comes up as line~\ref{algln2} of Algorithm~\ref{algo1}.
+
+% \subsection{Details on reference citations}\label{subsec7}
+
+% Standard \LaTeX\ permits only numerical citations. To support both numerical and author-year citations this template uses \verb+natbib+ \LaTeX\ package. For style guidance please refer to the template user manual.
+
+% Here is an example for \verb+\cite{...}+: \verb+\cite{bib1}+. Another example for \verb+\citep{...}+: \verb+\citep{bib2}+. For author-year citation mode, \verb+\cite{...}+ prints Jones et al. (1990) and \verb+\citep{...}+ prints (Jones et al., 1990).
+
+% All cited bib entries are printed at the end of this article:
+% %\cite{bib3}, \cite{bib4}, \cite{bib5}, \cite{bib6}, \cite{bib7}, \cite{bib8}, \cite{bib9}, \cite{bib10}, \cite{bib11}, \cite{bib12} and \cite{bib13}.
+
+
+% \section{Examples for theorem like environments}\label{sec10}
+
+% For theorem like environments, we require \verb+amsthm+ package. There are three types of predefined theorem styles exists---\verb+thmstyleone+, \verb+thmstyletwo+ and \verb+thmstylethree+ 
+
+% %%=============================================%%
+% %% For presentation purpose, we have included  %%
+% %% \bigskip command. Please ignore this.       %%
+% %%=============================================%%
+% \bigskip
+% \begin{tabular}{|l|p{19pc}|}
+% \hline
+% \verb+thmstyleone+ & Numbered, theorem head in bold font and theorem text in italic style \\\hline
+% \verb+thmstyletwo+ & Numbered, theorem head in roman font and theorem text in italic style \\\hline
+% \verb+thmstylethree+ & Numbered, theorem head in bold font and theorem text in roman style \\\hline
+% \end{tabular}
+% \bigskip
+% %%=============================================%%
+% %% For presentation purpose, we have included  %%
+% %% \bigskip command. Please ignore this.       %%
+% %%=============================================%%
+
+% For mathematics journals, theorem styles can be included as shown in the following examples:
+
+% \begin{theorem}[Theorem subhead]\label{thm1}
+% Example theorem text. Example theorem text. Example theorem text. Example theorem text. Example theorem text. 
+% Example theorem text. Example theorem text. Example theorem text. Example theorem text. Example theorem text. 
+% Example theorem text. 
+% \end{theorem}
+
+% Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text.
+
+% \begin{proposition}
+% Example proposition text. Example proposition text. Example proposition text. Example proposition text. Example proposition text. 
+% Example proposition text. Example proposition text. Example proposition text. Example proposition text. Example proposition text. 
+% \end{proposition}
+
+% Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text.
+
+% \begin{example}
+% Phasellus adipiscing semper elit. Proin fermentum massa
+% ac quam. Sed diam turpis, molestie vitae, placerat a, molestie nec, leo. Maecenas lacinia. Nam ipsum ligula, eleifend
+% at, accumsan nec, suscipit a, ipsum. Morbi blandit ligula feugiat magna. Nunc eleifend consequat lorem. 
+% \end{example}
+
+% Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text.
+
+% \begin{remark}
+% Phasellus adipiscing semper elit. Proin fermentum massa
+% ac quam. Sed diam turpis, molestie vitae, placerat a, molestie nec, leo. Maecenas lacinia. Nam ipsum ligula, eleifend
+% at, accumsan nec, suscipit a, ipsum. Morbi blandit ligula feugiat magna. Nunc eleifend consequat lorem. 
+% \end{remark}
+
+% Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text.
+
+% \begin{definition}[Definition sub head]
+% Example definition text. Example definition text. Example definition text. Example definition text. Example definition text. Example definition text. Example definition text. Example definition text. 
+% \end{definition}
+
+% Additionally a predefined ``proof'' environment is available: \verb+\begin{proof}+ \verb+...+ \verb+\end{proof}+. This prints a ``Proof'' head in italic font style and the ``body text'' in roman font style with an open square at the end of each proof environment. 
+
+% \begin{proof}
+% Example for proof text. Example for proof text. Example for proof text. Example for proof text. Example for proof text. Example for proof text. Example for proof text. Example for proof text. Example for proof text. Example for proof text. 
+% \end{proof}
+
+% Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text. Sample body text.
+
+% \begin{proof}[Proof of Theorem~{\upshape\ref{thm1}}]
+% Example for proof text. Example for proof text. Example for proof text. Example for proof text. Example for proof text. Example for proof text. Example for proof text. Example for proof text. Example for proof text. Example for proof text. 
+% \end{proof}
+
+% \noindent
+% For a quote environment, use \verb+\begin{quote}...\end{quote}+
+% \begin{quote}
+% Quoted text example. Aliquam porttitor quam a lacus. Praesent vel arcu ut tortor cursus volutpat. In vitae pede quis diam bibendum placerat. Fusce elementum
+% convallis neque. Sed dolor orci, scelerisque ac, dapibus nec, ultricies ut, mi. Duis nec dui quis leo sagittis commodo.
+% \end{quote}
+
+% Sample body text. Sample body text. Sample body text. Sample body text. Sample body text (refer Figure~\ref{fig1}). Sample body text. Sample body text. Sample body text (refer Table~\ref{tab3}). 
+
+% \section{Methods}\label{sec11}
+
+% Topical subheadings are allowed. Authors must ensure that their Methods section includes adequate experimental and characterization data necessary for others in the field to reproduce their work. Authors are encouraged to include RIIDs where appropriate. 
+
+% \textbf{Ethical approval declarations} (only required where applicable) Any article reporting experiment/s carried out on (i)~live vertebrate (or higher invertebrates), (ii)~humans or (iii)~human samples must include an unambiguous statement within the methods section that meets the following requirements: 
+
+% \begin{enumerate}[1.]
+% \item Approval: a statement which confirms that all experimental protocols were approved by a named institutional and/or licensing committee. Please identify the approving body in the methods section
+
+% \item Accordance: a statement explicitly saying that the methods were carried out in accordance with the relevant guidelines and regulations
+
+% \item Informed consent (for experiments involving humans or human tissue samples): include a statement confirming that informed consent was obtained from all participants and/or their legal guardian/s
+% \end{enumerate}
+
+% If your manuscript includes potentially identifying patient/participant information, or if it describes human transplantation research, or if it reports results of a clinical trial then  additional information will be required. Please visit (\url{https://www.nature.com/nature-research/editorial-policies}) for Nature Portfolio journals, (\url{https://www.springer.com/gp/authors-editors/journal-author/journal-author-helpdesk/publishing-ethics/14214}) for Springer Nature journals, or (\url{https://www.biomedcentral.com/getpublished/editorial-policies\#ethics+and+consent}) for BMC.
+
+% \section{Discussion}\label{sec12}
+
+% Discussions should be brief and focused. In some disciplines use of Discussion or `Conclusion' is interchangeable. It is not mandatory to use both. Some journals prefer a section `Results and Discussion' followed by a section `Conclusion'. Please refer to Journal-level guidance for any specific requirements. 
+
+% \section{Conclusion}\label{sec13}
+
+% Conclusions may be used to restate your hypothesis or research question, restate your major findings, explain the relevance and the added value of your work, highlight any limitations of your study, describe future directions for research and recommendations. 
+
+% In some disciplines use of Discussion or 'Conclusion' is interchangeable. It is not mandatory to use both. Please refer to Journal-level guidance for any specific requirements. 
+
+% \backmatter
+
+% \bmhead{Supplementary information}
+
+% If your article has accompanying supplementary file/s please state so here. 
+
+% Authors reporting data from electrophoretic gels and blots should supply the full unprocessed scans for key as part of their Supplementary information. This may be requested by the editorial team/s if it is missing.
+
+% Please refer to Journal-level guidance for any specific requirements.
+
+% \bmhead{Acknowledgements}
+
+% Acknowledgements are not compulsory. Where included they should be brief. Grant or contribution numbers may be acknowledged.
+
+% Please refer to Journal-level guidance for any specific requirements.
+
+% \section*{Declarations}
+
+% Some journals require declarations to be submitted in a standardised format. Please check the Instructions for Authors of the journal to which you are submitting to see if you need to complete this section. If yes, your manuscript must contain the following sections under the heading `Declarations':
+
+% \begin{itemize}
+% \item Funding
+% \item Conflict of interest/Competing interests (check journal-specific guidelines for which heading to use)
+% \item Ethics approval and consent to participate
+% \item Consent for publication
+% \item Data availability 
+% \item Materials availability
+% \item Code availability 
+% \item Author contribution
+% \end{itemize}
+
+% \noindent
+% If any of the sections are not relevant to your manuscript, please include the heading and write `Not applicable' for that section. 
+
+% %%===================================================%%
+% %% For presentation purpose, we have included        %%
+% %% \bigskip command. Please ignore this.             %%
+% %%===================================================%%
+% \bigskip
+% \begin{flushleft}%
+% Editorial Policies for:
+
+% \bigskip\noindent
+% Springer journals and proceedings: \url{https://www.springer.com/gp/editorial-policies}
+
+% \bigskip\noindent
+% Nature Portfolio journals: \url{https://www.nature.com/nature-research/editorial-policies}
+
+% \bigskip\noindent
+% \textit{Scientific Reports}: \url{https://www.nature.com/srep/journal-policies/editorial-policies}
+
+% \bigskip\noindent
+% BMC journals: \url{https://www.biomedcentral.com/getpublished/editorial-policies}
+% \end{flushleft}
+
+% \begin{appendices}
+
+% \section{Section title of first appendix}\label{secA1}
+
+% An appendix contains supplementary information that is not an essential part of the text itself but which may be helpful in providing a more comprehensive understanding of the research problem or it is information that is too cumbersome to be included in the body of the paper.
+
+% %%=============================================%%
+% %% For submissions to Nature Portfolio Journals %%
+% %% please use the heading ``Extended Data''.   %%
+% %%=============================================%%
+
+% %%=============================================================%%
+% %% Sample for another appendix section			       %%
+% %%=============================================================%%
+
+% %% \section{Example of another appendix section}\label{secA2}%
+% %% Appendices may be used for helpful, supporting or essential material that would otherwise 
+% %% clutter, break up or be distracting to the text. Appendices can consist of sections, figures, 
+% %% tables and equations etc.
+
+% \end{appendices}
+
+%%===========================================================================================%%
+%% If you are submitting to one of the Nature Portfolio journals, using the eJP submission   %%
+%% system, please include the references within the manuscript file itself. You may do this  %%
+%% by copying the reference list from your .bbl file, paste it into the main manuscript .tex %%
+%% file, and delete the associated \verb+\bibliography+ commands.                            %%
+%%===========================================================================================%%
+
+\bibliography{refs}% common bib file
+%% if required, the content of .bbl file can be included here once bbl is generated
+%%\input sn-article.bbl
+
+
+\end{document}

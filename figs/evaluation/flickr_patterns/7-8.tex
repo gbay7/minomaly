@@ -1,0 +1,30 @@
+\begin{tikzpicture}
+  \draw
+    (306.020:1.985) node[fill=green!70!black, minimum size=2mm, circle, draw, text=white] (4997){4997}
+    (79.122:0.649) node[fill=green!70!black, minimum size=2mm, circle, draw, text=white] (4998){4998}
+    (79.123:3.055) node[fill=green!70!black, minimum size=2mm, circle, draw, text=white] (50539){50539}
+    (212.225:1.985) node[fill=green!70!black, minimum size=2mm, circle, draw, text=white] (18733){18733}
+    (259.123:2.109) node[fill=green!70!black, minimum size=2mm, circle, draw, text=white] (11958){11958}
+    (147.184:1.495) node[fill=green!70!black, minimum size=2mm, circle, draw, text=white] (220){220}
+    (11.061:1.495) node[fill=green!70!black, minimum size=2mm, circle, draw, text=white] (5918){5918};
+  \begin{scope}[-]
+    \draw (4997) to (220);
+    \draw (4997) to (4998);
+    \draw (4997) to (5918);
+    \draw (4997) to (11958);
+    \draw (4997) to (18733);
+    \draw (4998) to (220);
+    \draw (4998) to (5918);
+    \draw (4998) to (11958);
+    \draw (4998) to (18733);
+    \draw (4998) to (50539);
+    \draw (50539) to (220);
+    \draw (50539) to (5918);
+    \draw (18733) to (220);
+    \draw (18733) to (5918);
+    \draw (18733) to (11958);
+    \draw (11958) to (220);
+    \draw (11958) to (5918);
+    \draw (220) to (5918);
+  \end{scope}
+\end{tikzpicture}

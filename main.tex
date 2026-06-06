@@ -1,0 +1,1367 @@
+ 
+%Version 3 December 2023
+% See section 11 of the User Manual for version history
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                                 %%
+%% Please do not use \input{...} to include other tex files.       %%
+%% Submit your LaTeX manuscript as one .tex document.              %%
+%%                                                                 %%
+%% All additional figures and files should be attached             %%
+%% separately and not embedded in the \TeX\ document itself.       %%
+%%                                                                 %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%\documentclass[referee,sn-basic]{sn-jnl}% referee option is meant for double line spacing
+
+%%=======================================================%%
+%% to print line numbers in the margin use lineno option %%
+%%=======================================================%%
+
+%%\documentclass[lineno,sn-basic]{sn-jnl}% Basic Springer Nature Reference Style/Chemistry Reference Style
+
+%%======================================================%%
+%% to compile with pdflatex/xelatex use pdflatex option %%
+%%======================================================%%
+
+%%\documentclass[pdflatex,sn-basic]{sn-jnl}% Basic Springer Nature Reference Style/Chemistry Reference Style
+
+
+%%Note: the following reference styles support Namedate and Numbered referencing. By default the style follows the most common style. To switch between the options you can add or remove Numbered in the optional parenthesis.
+%%The option is available for: sn-basic.bst, sn-vancouver.bst, sn-chicago.bst%
+
+%%\documentclass[pdflatex,sn-nature]{sn-jnl}% Style for submissions to Nature Portfolio journals
+%%\documentclass[pdflatex,sn-basic]{sn-jnl}% Basic Springer Nature Reference Style/Chemistry Reference Style
+\documentclass[pdflatex,sn-mathphys-num]{sn-jnl}% Math and Physical Sciences Numbered Reference Style
+%%\documentclass[pdflatex,sn-mathphys-ay]{sn-jnl}% Math and Physical Sciences Author Year Reference Style
+%%\documentclass[pdflatex,sn-aps]{sn-jnl}% American Physical Society (APS) Reference Style
+%%\documentclass[pdflatex,sn-vancouver,Numbered]{sn-jnl}% Vancouver Reference Style
+%%\documentclass[pdflatex,sn-apa]{sn-jnl}% APA Reference Style
+%%\documentclass[pdflatex,sn-chicago]{sn-jnl}% Chicago-based Humanities Reference Style
+
+%%%% Standard Packages
+%%<additional latex packages if required can be included here>
+
+\usepackage{graphicx}%
+\usepackage{multirow}%
+\usepackage{amsmath,amssymb,amsfonts}%
+\usepackage{amsthm}%
+\usepackage{bm}
+\usepackage{mathrsfs}%
+\usepackage[title]{appendix}%
+\usepackage{xcolor}%
+\usepackage{textcomp}%
+\usepackage{manyfoot}%
+\usepackage{booktabs}%
+\usepackage{algorithm}%
+\usepackage{algorithmicx}%
+\usepackage[noend]{algpseudocode}%
+\usepackage{listings}%
+%%%%
+
+\usepackage{enumitem}
+\usepackage{lineno}
+
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{tikzscale}
+
+\renewenvironment{table}[1][]%
+{\tableorg[#1]%
+\tablebodyfont%
+\renewcommand\footnotetext[2][]{{\removelastskip\vskip0pt%
+\let\tablebodyfont\tablefootnotefont%
+\hskip0pt\if!##1!\else{\smash{$^{##1}$}}\fi##2\par}}%
+}{\endtableorg}
+
+\usepackage{float}
+\usepackage{multirow}
+\usepackage{subcaption}
+\usepackage{setspace}
+\usepackage{makecell}
+\usepackage{titlesec}
+\titleclass{\subsubsubsection}{straight}[\subsubsection]
+\newcounter{subsubsubsection}[subsubsection]
+\renewcommand\thesubsubsubsection{\thesubsubsection.\arabic{subsubsubsection}}
+\titleformat{\subsubsubsection}[runin]{\normalfont\normalsize\bfseries}{\thesubsubsubsection}{1em}{}
+\titlespacing*{\subsubsubsection}{0pt}{1.5ex plus .1ex}{0pt}
+
+\usepackage{stmaryrd}
+
+\usetikzlibrary{positioning,calc,matrix,shapes,arrows,arrows.meta,decorations.pathmorphing,decorations.pathreplacing,shapes.geometric,fit,backgrounds,shadows,shapes.multipart,patterns}
+
+% Material Design Colors
+\definecolor{materialBlue}{RGB}{33, 150, 243}       % #2196F3
+\definecolor{materialBlueLight}{RGB}{187, 222, 251} % #BBDEFB
+\definecolor{materialBlueDark}{RGB}{25, 118, 210}   % #1976D2
+\definecolor{materialOrange}{RGB}{255, 152, 0}      % #FF9800
+\definecolor{materialOrangeDark}{RGB}{245, 124, 0}  % #F57C00
+\definecolor{materialOrangeLight}{RGB}{255, 224, 178} % #FFE0B2
+\definecolor{materialRed}{RGB}{244, 67, 54}         % #F44336
+\definecolor{materialRedLight}{RGB}{255, 205, 210}  % #FFCDD2
+\definecolor{materialGrey}{RGB}{158, 158, 158}      % #9E9E9E
+\definecolor{materialGreyLight}{RGB}{245, 245, 245} % #F5F5F5
+\definecolor{materialGreen}{RGB}{76, 175, 80}       % #4CAF50
+\definecolor{materialGreenLight}{RGB}{200, 230, 201} % #C8E6C9
+
+\definecolor{materialPurple}{RGB}{156, 39, 176}     % #9C27B0
+\definecolor{materialPurpleLight}{RGB}{225, 190, 231} % #E1BEE7
+
+\newcommand\subsetsim{\mathrel{\substack{
+  \textstyle\subset\\[-0.2ex]\textstyle\sim}}}
+
+%%%%%=============================================================================%%%%
+%%%%  Remarks: This template is provided to aid authors with the preparation
+%%%%  of original research articles intended for submission to journals published
+%%%%  by Springer Nature. The guidance has been prepared in partnership with
+%%%%  production teams to conform to Springer Nature technical requirements.
+%%%%  Editorial and presentation requirements differ among journal portfolios and
+%%%%  research disciplines. You may find sections in this template are irrelevant
+%%%%  to your work and are empowered to omit any such section if allowed by the
+%%%%  journal you intend to submit to. The submission guidelines and policies
+%%%%  of the journal take precedence. A detailed User Manual is available in the
+%%%%  template package for technical guidance.
+%%%%%=============================================================================%%%%
+
+%% as per the requirement new theorem styles can be included as shown below
+\theoremstyle{thmstyleone}%
+\newtheorem{theorem}{Theorem}%  meant for continuous numbers
+%%\newtheorem{theorem}{Theorem}[section]% meant for sectionwise numbers
+%% optional argument [theorem] produces theorem numbering sequence instead of independent numbers for Proposition
+\newtheorem{proposition}[theorem]{Proposition}%
+%%\newtheorem{proposition}{Proposition}% to get separate numbers for theorem and proposition etc.
+
+\theoremstyle{thmstyletwo}%
+\newtheorem{example}{Example}%
+\newtheorem{remark}{Remark}%
+
+\theoremstyle{thmstylethree}%
+\newtheorem{definition}{Definition}%
+
+\newcommand{\new}[1]{\textcolor{blue}{#1}}
+
+\raggedbottom
+%\unnumbered% uncomment this for unnumbered level heads
+
+\begin{document}
+\linenumbers
+
+\title[Minomaly]{Minomaly: A Subgraph Mining Framework for Unsupervised and Interpretable Anomaly Detection in Graphs}
+
+%%=============================================================%%
+%% GivenName	-> \fnm{Joergen W.}
+%% Particle	-> \spfx{van der} -> surname prefix
+%% FamilyName	-> \sur{Ploeg}
+%% Suffix	-> \sfx{IV}
+%% \author*[1,2]{\fnm{Joergen W.} \spfx{van der} \sur{Ploeg}
+%%  \sfx{IV}}\email{iauthor@gmail.com}
+%%=============================================================%%
+
+\author[1]{\fnm{Ahmed Youcef} \sur{Benhalima}}
+
+\author*[2]{\fnm{Seif-Eddine} \sur{Benkabou}}
+
+\author[2]{\fnm{Amin} \sur{Mesmoudi}}
+\author[1]{\fnm{Allel} \sur{Hadjali}}
+
+
+\affil[1]{\orgdiv{ISAE-ENSMA}, \country{France}}
+
+\affil[2]{\orgdiv{Université de Poitiers}, \country{France}}
+
+%%==================================%%
+%% Sample for unstructured abstract %%
+%%==================================%%
+
+\abstract{Detecting structural anomalies in graphs is crucial to uncover unexpected patterns and mitigate risks in fields such as cybersecurity, social network analysis, and biological research. Existing methods, which often rely on machine learning approaches, struggle to balance detection effectiveness, scalability, and interpretability.
+In this paper, we introduce Minomaly, an unsupervised framework that combines subgraph mining with Graph Neural Networks (GNNs) to detect rare node neighborhoods indicative of structural anomalies. By embedding subgraphs into an Order Embedding Space (OES), Minomaly efficiently estimates subgraph frequencies and employs a greedy search algorithm to expand infrequent node structures, with interpretable and controllable hyperparameters. This approach enables the detection of anomalies in a way that is both interpretable and computationally efficient. Experiments on well-established benchmark datasets demonstrate that Minomaly consistently outperforms \new{competitive baselines} in detection quality and scalability, handling large graphs without memory overhead issues. The implementation of Minomaly along with the associated experimental setup, is available at \href{https://github.com/gbay7/minomaly}{https://github.com/gbay7/minomaly}.}
+
+%%================================%%
+%% Sample for structured abstract %%
+%%================================%%
+
+% \abstract{\textbf{Purpose:} The abstract serves both as a general introduction to the topic and as a brief, non-technical summary of the main results and their implications. The abstract must not include subheadings (unless expressly permitted in the journal's Instructions to Authors), equations or citations. As a guide the abstract should not exceed 200 words. Most journals do not set a hard limit however authors are advised to check the author instructions for the journal they are submitting to.
+%
+% \textbf{Methods:} The abstract serves both as a general introduction to the topic and as a brief, non-technical summary of the main results and their implications. The abstract must not include subheadings (unless expressly permitted in the journal's Instructions to Authors), equations or citations. As a guide the abstract should not exceed 200 words. Most journals do not set a hard limit however authors are advised to check the author instructions for the journal they are submitting to.
+%
+% \textbf{Results:} The abstract serves both as a general introduction to the topic and as a brief, non-technical summary of the main results and their implications. The abstract must not include subheadings (unless expressly permitted in the journal's Instructions to Authors), equations or citations. As a guide the abstract should not exceed 200 words. Most journals do not set a hard limit however authors are advised to check the author instructions for the journal they are submitting to.
+%
+% \textbf{Conclusion:} The abstract serves both as a general introduction to the topic and as a brief, non-technical summary of the main results and their implications. The abstract must not include subheadings (unless expressly permitted in the journal's Instructions to Authors), equations or citations. As a guide the abstract should not exceed 200 words. Most journals do not set a hard limit however authors are advised to check the author instructions for the journal they are submitting to.}
+
+\keywords{Graph Anomaly Detection, Unsupervised Learning, Graph Neural Networks, Order Embedding}
+
+%%\pacs[JEL Classification]{D8, H51}
+
+%%\pacs[MSC Classification]{35A01, 65L10, 65L12, 65L20, 65L70}
+
+\maketitle
+
+\section{Introduction}\label{sec:intro}
+Graph Anomaly Detection (GAD) plays a crucial role in uncovering hidden insights and mitigating risks in various domains. For example, in cybersecurity, detecting anomalous network traffic patterns can help identify potential intrusions or malicious activities. In social network analysis, identifying anomalous behaviors can assist in detecting fake accounts, spam, or unusual communication patterns. Similarly, in biological networks, anomaly detection can highlight proteins or genes with unusual interactions, shedding light on disease mechanisms or novel biological processes \cite{akoglu2015graph, Ma_2023,Ruff_2021}. In financial transaction networks, the presence of cliques might indicate unusual or suspicious activity. For instance, if multiple accounts are found to be tightly connected through transactions (forming a clique), it could suggest fraudulent activity such as money laundering or collusion between accounts (See Figure~\ref{fig:gad_concept}).
+\begin{figure}[H]
+   \centering
+   \resizebox{\linewidth}{!}{\input{figs/gad_concept}}
+   \caption{Financial fraud detection using Graph Anomaly Detection. The figure illustrates how suspicious money flow patterns form cliques among accounts (S1-S5), suggesting potential money laundering activities. A GAD algorithm processes the financial network to identify these unusual structural transaction patterns, enabling financial institutions to flag suspicious accounts for further investigation.}
+   \label{fig:gad_concept}
+\end{figure}
+
+Regardless of the specific application area (e.g., fraud detection, security monitoring), unsupervised node anomaly detection has attracted considerable research attention due to its broad applicability \cite{NEURIPS2022-acc1ec4a,Ma_2023}. In graph data, nodes are interconnected through edges to form intricate patterns and structural relationships. These patterns represent interactions, connections, or relationships between entities and often encode meaningful insights relevant to various analytical tasks. The structural arrangement and frequency of these connections can reveal typical behaviors, communities, or clusters, making them critical for identifying deviations indicative of anomalies. Nodes with attribute vectors that deviate considerably from the global attribute norm are often considered global anomalies. While node attributes provide valuable information, the edges between nodes offer additional insights. If a node belongs to an unusual connection pattern or neighborhood, all nodes within this structure are collectively anomalous and called structural anomalies. When node attributes are considered within this abnormal structure, these anomalies are referred to as contextual anomalies \cite{NEURIPS2022-acc1ec4a,Ma_2023}.
+
+
+Our primary focus, however, is on \textbf{structural anomalies}. While existing methods have advanced in detecting these anomalies, they often lack generality and interpretability. For instance, BOND \cite{NEURIPS2022-acc1ec4a} considers structural anomalies as densely connected nodes. However, in some real-world geometric graphs, dense connections are common, making this assumption inadequate. Other methods rely on specific motif distributions \cite{bandyopadhyay2020outlier,xu2022contrastive,yuan2024higherorder}, which limits their applicability to diverse real-world contexts such as fraud detection because they do not generalize to all motifs that may exist. Existing unsupervised deep learning techniques often lack solid explanations for their results, limiting their interpretability \cite{angelov2021explainable}. Traditionally, frequent pattern outlier detection methods provided interpretable results but were computationally expensive due to the need to enumerate patterns and match similar ones \cite{bressan2021faster,he2004frequent,yan2002gspan}. This computational burden arises because the problem reduces to the subgraph isomorphism problem, which is NP-complete. In these methods, frequency serves as a measure of abnormality because rare structures are more likely to be anomalous.
+
+To address these limitations, we propose \textbf{Minomaly}, an unsupervised, interpretable, and scalable framework for structural anomaly detection in graphs. Our approach proceeds in two distinct steps:
+\begin{itemize}
+    \item \textbf{\textit{Order Embedding Space (OES) construction}}  --- Minomaly combines subgraph mining with GNN-based order embeddings to encode graph neighborhoods efficiently. This step allows for accurate frequency estimation of subgraphs.
+    \item \textbf{\textit{Anomalous structures search}}  --- Using the geometrical properties of the OES, Minomaly employs a novel greedy search algorithm to identify rare and unusual node structures, allowing interpretable anomaly detection.
+\end{itemize}
+% \new{
+% Experiments on benchmark datasets validate the effectiveness of Minomaly, demonstrating its superior performance compared to existing methods in both detection accuracy and scalability.
+% }
+Our contributions can be summarized as follows:
+\begin{itemize}
+    \item A new formalization of structural anomaly detection in graphs using subgraph mining. A proof of the correctness of the counting measure used to enumerate anomalous subgraphs, based on the anti-monotonicity property, is provided. Additionally, a generalized definition of structural node anomaly detection is proposed to support anomaly detection across multiple contexts.
+    \item A novel application of order embeddings to graph anomaly detection. Minomaly leverages GNN order embeddings to efficiently encode graph structures.
+    \item \new{DSAN (Deep Subgraph Anomaly Network), an order-embedding model for subgraph mining in the purpose of structural anomaly detection, trained on synthetic graphs and transferable to real-world datasets without retraining, with GLASS-style structural labeling and a smooth softplus loss for stable convergence.}
+    \item A new optimization technique in anomalous structures search by exploiting the geometrical properties of the OES which significantly reduces the number of nodes that need to be verified during the search for anomalous structures.
+    \item A novel, computationally efficient greedy search algorithm for identifying and interpreting unusual structures in graphs, enabling interpretable GAD.
+    \item An in-depth experimental study on widely used benchmark datasets to validate Minomaly's performance.
+    % Our results demonstrate superior detection accuracy and scalability compared to state-of-the-art methods.
+\end{itemize}
+
+The rest of this paper is organized as follows:
+{Section~\ref{sec:relatedworks}} introduces the related works.
+{Section~\ref{sec:framework}} presents the Minomaly framework in detail while formalizing the problem of node anomaly detection in graphs.
+{Section~\ref{sec:eval}} includes our performance study and experimental results compared with existing approaches. {Section~\ref{sec:discussion}} highlights key insights from our experiments and discusses their implications. Finally, {Section~\ref{sec:conclusion}} concludes the paper and outlines future research directions.
+
+\section{Related Work}
+\label{sec:relatedworks}
+
+Anomaly Detection (AD) research spans diverse data modalities, each presenting unique challenges. Classical methods for tabular data rely on statistical, distance-based, and isolation approaches \cite{Ruff_2021,nassif2021machine,han2022adbench,agrawal2015survey}, while time series analysis employs techniques designed to capture temporal dependencies \cite{blazquez2021review,schmidl2022anomaly,benkabou2021local,benkabou2018unsupervised}. Recent deep learning advancements have further refined anomaly detection across these domains \cite{chalapathy2019deep,choi2021deep,Ma_2023}. In contrast, graph-structured data introduces additional complexity, as anomalies may emerge within individual nodes, across relationships, or through unexpected structural patterns. Unlike tabular data, where observations are independent, graphs require specialized methods that simultaneously model structural connections and node attributes to identify irregularities effectively.
+
+\subsection{\new{Graph Anomaly Detection}}
+
+Graph Anomaly Detection (GAD) has been extensively studied, employing a range of methods from traditional algorithms to advanced deep learning approaches \cite{Ma_2023}. These techniques aim to identify anomalous patterns in graph-structured data, which can be critical for applications such as fraud detection, cybersecurity, and biological network analysis. Traditional methods for graph anomaly detection can be divided into two main categories: machine learning-based approaches and pattern mining techniques.
+
+Machine learning methods often rely on matrix decomposition and clustering algorithms to detect anomalies. Radar (residual analysis) \cite{li2017radar} identifies anomalies by examining residuals between node attributes and their network coherence, scoring outliers based on reconstruction residual norms. ANOMALOUS (CUR decomposition) \cite{peng2018anomalous} applies CUR decomposition \cite{mahoney2009cur} and residual analysis to jointly detect anomalies and select relevant node attributes. Clustering-based approaches, such as SCAN (structural clustering) \cite{xu2007scan}, identify irregularities by grouping similar nodes and flagging those that deviate from expected patterns. While these methods provide interpretable results, they often suffer from performance limitations when applied to complex graph structures, particularly in large-scale graphs where scalability remains a challenge. Matrix decomposition operations face high computational complexity in both dense and sparse adjacency matrices, with memory requirements growing quadratically with the number of nodes. Similarly, clustering-based methods require computing pairwise similarities across the entire graph, which becomes prohibitive for graphs with millions of nodes.
+
+Recent advances in deep learning have significantly improved graph anomaly detection \cite{zhang2020deep,wu2020comprehensive,Ma_2023,wu2022graph}. In this context, Graph neural networks (GNNs) have demonstrated exceptional performance in various graph mining tasks, making them well-suited for detecting anomalous nodes \cite{NEURIPS2022-acc1ec4a}. These methods leverage representation learning to capture intricate structural dependencies and complex attribute relationships, allowing for more precise node anomaly detection.
+
+Reconstruction-based anomaly detection has gained popularity among deep learning techniques. These models aim to learn the global behavior of node information but often struggle with detecting rare patterns. DOMINANT \cite{ding2019deep} employs a GCN encoder with separate decoders for structural and attribute reconstruction, while AnomalyDAE \cite{fan2020anomalydae} uses two independent autoencoders (AEs) to combine reconstruction losses for anomaly scoring. DONE \cite{bandyopadhyay2020outlier} introduces MLP-based autoencoders for structural and attribute reconstruction, whereas AdONE \cite{bandyopadhyay2020outlier} enhances this method with adversarial learning. Similarly, CONAD \cite{xu2022contrastive} leverages graph augmentation and contrastive learning, incorporating human prior knowledge of structural and contextual anomalies. However, reconstruction-based approaches may generate high reconstruction errors for anomalous nodes, as balancing the learning of normal and abnormal patterns remains challenging and poorly controlled, which makes them difficult to interpret due to the black-box nature of deep neural network representations and the lack of direct semantic meaning in reconstruction errors \cite{Ruff_2021}.
+
+Generative models offer an alternative to reconstruction-based approaches by leveraging synthetic data to improve anomaly detection. GAAN \cite{chen2020generative} employs a generator to create synthetic graph nodes, an encoder to map nodes into latent space, and a discriminator to differentiate between real and synthetic nodes. However, these models assume that anomalous nodes resemble synthetic ones, which can reduce their interpretability and generalization capabilities.
+
+\new{A distinct line targets anomalies that take the form of dense subgraphs, which is closely related to our structural setting. Fraudar \cite{hooi2016fraudar} detects dense fraudulent blocks by greedy peeling on the unattributed graph, with density bounds that are provably robust to camouflage. Spade \cite{jiang2023spade} and its successor \cite{chen2024rush} incrementalize this idea for real-time fraud detection on evolving graphs at industrial scale. These methods share Minomaly's attribute-free, structure-only premise, but differ in mechanism: they optimize a global density objective over node blocks, whereas Minomaly measures how rare each node's local neighborhood is in an order-embedding space and returns the specific rare substructure, which yields node-level interpretability. They are also the natural prior art for the dynamic-graph extension that we discuss as future work.}
+
+\subsection{\new{Interpretable Anomaly Detection}}
+
+Interpreting the predictions of graph anomaly detection models is essential for real-world applications. Despite increasing research efforts in explainable artificial intelligence (XAI), most existing work focuses on general GNN explainability methods \cite{jaykumar2023explain,wu2022trustworthy,ying2019gnnexplainer}. While these methods provide insights into model behavior and hyperparameter tuning, they are not specifically tailored for anomaly detection. Only a few recent studies \cite{YANG2024106463,liu2023towards,neuro2023explain,sun2020graph,shneiderman2020bridging,mansouri2023cosp} have addressed the explainability of GAD results, highlighting a significant gap in interpretable anomaly detection techniques.
+
+\subsection{\new{Pattern Mining and Order Embedding}}
+
+\new{Pattern mining offers a complementary, structure-aware view of anomaly detection \cite{potin2023pattern,yuan2024higherorder}. Graph pattern mining discovers recurring substructures, from frequent subgraphs to specific motifs. Exact methods such as GSpan \cite{yan2002gspan} and GASTON \cite{nijssen2005gaston} enumerate all frequent patterns, while approximate approaches like Motivo \cite{bressan2021faster} trade completeness for efficiency. These methods scale exponentially with pattern size, which limits them on large graphs. PANG \cite{potin2023pattern} builds on this line for anomaly detection, converting graphs into vectors of discriminative subgraph patterns mined by GSpan, and GUIDE \cite{yuan2024higherorder} counts three- and four-node motifs. Both inherit the combinatorial cost of exact mining.}
+
+\new{To overcome this cost, recent work learns subgraph relations with GNNs, including FlowSC \cite{guo2025efficient}, SPMiner \cite{ying2024representation}, and D2Match \cite{liu2023d2match}. SPMiner is the closest to our work. It embeds subgraphs in an order-embedding space \cite{mcfee2009partial,vendrov2016orderembeddings} to mine frequent motifs at the graph level. Minomaly reuses this order-embedding idea but repurposes it for a different goal: rather than mining frequent motifs, it estimates the containment frequency of each node's neighborhood and flags rare ones as anomalies. Minomaly trains its own order-embedding network (DSAN) on synthetic graphs and transfers it to real-world datasets, exploiting the geometrical properties of the OES to grow infrequent neighborhoods into interpretable anomalous structures via a greedy search. We detail this divergence in Section~\ref{sec:framework}.}
+
+To address the limitations of existing graph anomaly detection techniques, we introduce Minomaly, a novel framework that redefines anomaly identification by optimally balancing performance, scalability, and interpretability. Unlike conventional methods, Minomaly integrates subgraph mining with GNN-based order embeddings, enabling more precise detection and a deeper understanding of rare structural anomalies in graphs. Specifically, it applies order embeddings to node-level and subgraph-level anomaly detection, leveraging infrequent patterns to identify structural anomalies with interpretable search mechanisms. While \new{most} existing methods focus solely on providing an anomaly score indicating that a node is structurally anomalous without revealing the specific structure responsible for the anomaly, Minomaly delivers essential interpretable results by explicitly identifying the anomalous structure itself.
+
+\section{Minomaly Framework}
+\label{sec:framework}
+In this section, we present Minomaly, an approach that uses a GNN for detecting structural anomalies in graphs. Through the GNN, Minomaly embeds graph structures into an Order Embedding Space (OES), where the embeddings provide an approximate frequency count of node structural neighborhoods to identify rare patterns indicative of node anomalies. These detected anomalous structures are identified through a greedy search method, which expands infrequent neighboring graphs using OES, showcasing the interpretability of Minomaly.
+
+For efficiency and effectiveness, a heuristic search is applied to reduce the anomaly search space by selecting potential nodes from the OES that produce anomalous patterns, rather than verifying the normality of all graph nodes.
+
+Overall, the Minomaly framework operates in two steps: \textbf{Order Embedding Space Construction} and \textbf{Anomalous Structures Search} (See Figure \ref{fig:framework}).
+
+We formally introduce the foundational graph-theoretic concepts of static graphs (representing the data), induced subgraphs and isomorphism, which serve as the basis for our order-based frequency measure, relying on subgraph matching to count rare node structures. \new{To clarify novelty, Definitions~\ref{def:graph}--\ref{def:isomorphism} restate standard graph-theoretic notions, whereas the notions introduced in this work are the node structure (Definition~\ref{def:node_structure}), the order embedding function adapted to subgraph containment, and our frequency measure $Freq_G$ together with its anti-monotonicity property.}
+
+\begin{definition}[Static Directed Graph]
+A static directed graph $G = (V, E)$ consists of a fixed set of nodes $V$, and edges $E \subseteq V \times V$ which represent the connections between nodes.
+The order of $G$ is its number of nodes $|V|$, and its size is its number of edges $|E|$.
+\label{def:graph}
+\end{definition}
+
+\begin{definition}[Induced Subgraph]
+Let $S \subseteq V$. The induced subgraph $G[S]$ in $G$ by $S$ is the graph $G[S] = (S, E_S)$, where $E_S = \{(u, v) \in E \mid u, v \in S\}$, the set of edges from $G$ that connect two nodes in $S$. We write $G' \subseteq G$ if $G'$ is subgraph of $G$, and we denote $\bm{\mathcal{G}(G)}$ the set of subgraphs of $G$.
+\end{definition}
+
+\begin{definition}[Isomorphism]
+Let $G[S], G[T] \in \mathcal{G}(G)$. We say $G[S]$ and $G[T]$ are isomorphic, denoted $G[S] \cong G[T]$, if and only if:
+\[
+\begin{cases}
+    \exists f: S \to T, \; f \text{ is bijective}, \\
+    \forall u_1, u_2 \in S: (u_1, u_2) \in E_S \iff (f(u_1), f(u_2)) \in E_T.
+\end{cases}
+\]
+\label{def:isomorphism}
+\end{definition}
+
+To provide a general definition of structural anomalies, beyond those based on specific assumptions \cite{NEURIPS2022-acc1ec4a,bandyopadhyay2020outlier,xu2022contrastive,yuan2024higherorder}, we propose our concept of a node structure:
+
+\begin{definition}[Node Structure]
+\label{def:node_structure}
+Let $u \in V$. The \textbf{structure} or \textbf{neighborhood graph} of the node $u$ is the connected subgraph induced by the set of nodes that are reachable from $u$, including $u$ itself.
+\begin{itemize}
+    \item The term \textit{reachable} refers to the nodes that can be reached by traversing edges starting from $u$.
+    \item This subgraph has a limited size, determined by the size of the neighborhood within a defined distance or number of nodes.
+    \item Ego graphs refer to one-hop neighbors, which is more restrictive.
+\end{itemize}
+\end{definition}
+
+\begin{figure}[H]
+    \centering
+    % \hspace*{0.3cm}
+    \resizebox{0.96\linewidth}{!}{\input{figs/framework}}
+    \caption{Minomaly Framework}
+    \label{fig:framework}
+\end{figure}
+
+\subsection{Order Embedding}
+
+Here, we introduce our method for estimating the \textbf{frequency} of small subgraphs to identify anomalous node structures based on their rarity. Under the assumption that rare structures are more likely to be anomalous \cite{Ruff_2021}, we therefore use subgraph containment frequency as our measure of abnormality. \new{We restrict attention to small subgraphs because anomalous signals are local, visible within a node's immediate neighborhood, and small subgraphs keep frequency estimation tractable, avoiding the combinatorial blow-up of large-pattern mining.}
+
+Intuitively, the frequency of a subgraph refers to the number of subgraphs that match it isomorphically. Finding these matches reduces to the NP-complete subgraph isomorphism problem \cite{cook2023complexity}. To address this, we first tackle the \textbf{subgraph matching} problem by training a GNN to determine whether a given graph is a subgraph of another.
+
+The subgraph matching problem naturally exhibits a partial order structure: if $G_1 \subseteq G_2$, then any graph containing $G_2$ must also contain $G_1$. Order embeddings provide an ideal framework for capturing this hierarchical containment relationship, allowing us to efficiently approximate the NP-complete subgraph isomorphism problem through learned continuous representations. By preserving the partial order in the embedding space, order embeddings enable efficient frequency estimation via geometric operations, transforming the discrete combinatorial problem into a continuous optimization task. Given these partial order properties of subgraph matching, we use \textbf{order embeddings} to map these graphs and capture these properties. We formalize this encoding through our proposed order embedding function:
+
+\begin{definition}[Order Embedding Function]
+An \textbf{order embedding} function for graphs, denoted as $\phi:\mathcal{G}(G) \to \mathbb{R}^d$, is an injective function that maps a subgraph of $G$ into a $d$-dimensional embedding space such that for two subgraphs $G_1, G_2 \in \mathcal{G}(G)$:
+\[
+G_1 \subsetsim G_2 \iff \phi(G_1) \preceq \phi(G_2), \quad
+\text{\scriptsize such that $G_1 \subsetsim G_2$  means $\exists G_{iso} \subseteq G_2 : G_{iso} \cong G_1$}
+\]
+Here, the partial order $\preceq$ on the embedding space is defined component-wise, meaning $\phi(G_1) \preceq \phi(G_2)$ if and only if $\phi_i(G_1) \leq \phi_i(G_2), \forall i \in \llbracket 1, d \rrbracket$ such that $\phi = (\phi_1, \phi_2, \dots, \phi_d)$. The partial order $\subsetsim$ on $\mathcal{G}(G)$ denotes subgraph isomorphism.
+\end{definition}
+
+\subsubsection{Subgraph Matching}
+In contrast to existing deep learning methods, \new{Minomaly trains its own order-embedding model, which we call \textbf{DSAN} (Deep Subgraph Anomaly Network), for subgraph matching once on synthetic graphs and transfers it across all target datasets without per-dataset retraining. While SPMiner \cite{ying2024representation} uses order embeddings to mine \emph{frequent} motifs at the graph level, Minomaly repurposes this idea for the opposite goal: estimating the containment frequency of each node's neighborhood and flagging \emph{rare} ones as anomalies. DSAN is trained from scratch on graphs sampled from a mix of random graph models, namely} Erdős-Rényi graphs \cite{erd6s1959random}, Watts-Strogatz graphs \cite{watts1998collective}, Barabási-Albert graphs \cite{barabasi1999emergence}, and Power Law Cluster graphs \cite{holme2002growing}. \new{This synthetic mix exposes the model to diverse local topologies, so the learned order embedding generalizes to real-world graphs. Two design choices make DSAN an accurate subgraph matcher: a GLASS-style node labeling that sharpens its structural expressiveness, and a smooth order-embedding loss that stabilizes training. We describe both below.}
+
+As illustrated in Figure \ref{fig:network}, the trained model employs GNN with a multi-layer perceptron (MLP) for binary classification (\( G_1 \subseteq G_2 \)). It takes two graphs, \( G_1 \) and \( G_2 \), as inputs. For the GNN architecture, we employ GraphSAGE \cite{hamilton2018inductive} due to its sampling-based neighborhood aggregation, which enables scalable processing of large graphs by avoiding the full neighborhood expansion required by other GNN architectures. The model processes the graph structure through 8 layers of GraphSAGE-based graph convolutions with learnable skip connections \cite{hamilton2018inductive}. \new{To make the matcher sensitive to which substructure is being queried, DSAN adopts the labeling trick of GLASS \cite{wang2022glass}: every node carries a two-dimensional structural label, an anchor indicator and an inside-subgraph indicator. The first marks the node from which the neighborhood is anchored, and the second marks the nodes that belong to the queried subgraph. This labeling supplies boundary information that plain node features cannot convey, and it provably increases the expressive power of message-passing GNNs on subgraph-level tasks \cite{wang2022glass}, sharpening the containment relation that the order embedding must capture.} A post-processing layer with linear transformations and Leaky ReLU activations produces the embeddings \( \phi(G_1) \) and \( \phi(G_2) \). These embeddings are concatenated and passed through an MLP to generate the output. The goal is to train the network to learn an order embedding function \( \phi \) that respects its definition. To train the model, a set of positive and negative training instances are generated. For positive examples, we sample random subgraphs \( G^+_1 \) and \( G^+_2 \) from the graph \( G \) such that \( G^+_1 \subseteq G^+_2 \). For negative examples, we add enough random nodes or edges to a subgraph \( G^-_1 \) to generate \( G^-_2 \), or we can use any other valid random generation. \new{The base order-embedding penalty \cite{vendrov2016orderembeddings} measures the violation of the partial order in the embedding space:}
+\[
+E(G_1, G_2) = \sum_{i \in \llbracket 1, d \rrbracket} \|\max(0, \phi_i(G_1) - \phi_i(G_2))\|^2
+\]
+\new{For positive pairs $G^+_1 \subseteq G^+_2$ this violation is minimized directly, driving $\phi(G^+_1) \preceq \phi(G^+_2)$. For negative pairs, rather than the hinge penalty $\max(0, \alpha - E)$ used in prior order-embedding work, DSAN minimizes a smooth \emph{softplus} penalty.} The total loss is
+\begin{equation}
+\label{eq:loss_function}
+{\color{blue}\sum_{(G^+_1, G^+_2) \in \text{Positives}} E(G^+_1, G^+_2) + \sum_{(G^-_1, G^-_2) \in \text{Negatives}} \operatorname{softplus}\!\left(\alpha - E(G^-_1, G^-_2)\right),}
+\end{equation}
+\new{where $\operatorname{softplus}(x) = \log(1 + e^{x})$ and $\alpha > 0$ is the margin that separates positive and negative penalties. The advantage of the softplus formulation is that it remains differentiable everywhere. The hinge penalty has exactly zero gradient once a negative pair exceeds the margin, so easy negatives stop contributing to learning; the softplus keeps a small but non-vanishing gradient beyond the margin. This continuous signal yields sharper separation between subgraph and non-subgraph pairs and more stable convergence, which in turn improves the accuracy of the containment-frequency estimates that drive the anomaly search.}
+
+\begin{figure}[H]
+    \centering
+    % \hspace*{0.3cm}
+    \resizebox{1\linewidth}{!}{\input{figs/network}}
+    \caption{Subgraph Matching Neural Network Architecture}
+    \label{fig:network}
+\end{figure}
+
+\begin{definition}[Anchor Node]
+For implementation purposes in the neural network architecture, we define the \textbf{anchor node} as a special node $u$ from which the subgraph is defined.
+\end{definition}
+In subgraph matching, the anchor node plays a crucial role in guiding the GNN to focus on a localized neighborhood, ensuring consistency in subgraph extraction and embedding. By centering the subgraph around an anchor node, the GNN learns structural patterns relative to a fixed reference point, facilitating more robust and meaningful comparisons in the OES.
+
+\subsubsection{Frequency Count}
+The primary function of the subgraph matching model based on Order Embedding is to determine whether a given graph is a subgraph of another, enabling the quantification of its frequency within the entire graph. This is represented by any function \text{$freq_G: \mathcal{G}(G) \to \mathbb{N}$}, which measures the existence of its similar (isomorphic) subgraphs in $G$.
+
+Building upon the order embedding framework, we now introduce our frequency measure \( Freq_G \), which is based on matching subgraphs in the graph. It is defined as the number of graphs that contain a matching of \( G' \) ($|UP_G(G')|$). Our proposed measure is formalized as follows:
+
+\begin{definition}[Proposed Frequency Measure]
+For any $G' \in \mathcal{G}(G)$, we define:
+\[
+\begin{cases}
+    UP_G(G') &= \{G_{up} \subseteq G \mid \exists G_{iso} \subseteq G_{up}: G_{iso} \cong G'\} \\
+    &= \{G_{up} \subseteq G \mid \phi(G') \preceq \phi(G_{up})\}, \\
+    Freq_G(G') &= |UP_G(G')|.
+\end{cases}
+\]
+\end{definition}
+
+The correctness of frequency measures in pattern mining is traditionally evaluated through the anti-monotonicity property \cite{calders2008anti}, a well-established criterion that ensures consistency in frequency-based anomaly detection.
+
+\begin{definition}[Anti-monotonicity Counting Property]
+$freq_G$ is anti-monotonic, if for all $G_1, G_2 \in \mathcal{G}(G)$: \[G_1 \subseteq G_2 \implies freq_G(G_2) \le freq_G(G_1)\]
+
+This implies that the frequency of a graph is never greater than the frequency of any of its subgraphs. Consequently, if a graph is infrequent, all graphs containing it are also infrequent.
+\end{definition}
+
+\vspace{13pt}
+\begin{proposition}
+\textbf{The proposed frequency measure $Freq_G$ is anti-monotonic.}
+\label{prop:antimonotonicity}
+\end{proposition}
+
+\begin{proof}
+Let $G_1, G_2 \in \mathcal{G}(G)$ such that $G_1=(S_1, E_1)$, $G_2=(S_2, E_2)$ and $G_1 \subseteq G_2$.
+\begin{itemize}
+    \item If $G_{up} \in UP_G(G_2)$, then $\exists G_{iso} \subseteq G_{up}$ such that $G_{iso} \cong G_2$.
+    \item Since $G_1 \subseteq G_2$, $\exists G_{iso}' \subseteq G_{iso} \subseteq G_{up}$ such that $G_{iso}' \cong G_1$ (by restricting the bijection $f: S_2 \to T$ from Definition~\ref{def:isomorphism} to $S_1 \subseteq S_2$).
+    \item Thus, $G_{up} \in UP_G(G_1)$, and we have $UP_G(G_2) \subseteq UP_G(G_1)$.
+\end{itemize}
+Taking cardinalities: $|UP_G(G_2)| \leq |UP_G(G_1)|$, i.e. $Freq_G(G_2) \leq Freq_G(G_1)$, therefore, $Freq_G$ \textit{is anti-monotonic}.
+\end{proof}
+\vspace{5pt}
+
+To estimate this frequency $Freq_G$ using the trained GNN model —since computing the exact $Freq_G$ via subgraph matching is NP-complete—, the approach leverages an efficient approximation. As illustrated in Figure~\ref{fig:encoder_process}, the method first decomposes the graph $G$ into random subgraphs \text{$\bm{RG}=\{G'_1, G'_2, \dots, G'_k\}$} of different sizes from \texttt{min\_neigh\_size} to \texttt{max\_neigh\_size}, \text{$\bm{k}$ must be sufficiently large}. Subgraph sampling follows the tree sampling approach \cite{kashtan2004efficient}, which extracts connected neighborhoods by randomly selecting an anchor node and performing breadth-first traversal until the desired size is reached. These subgraphs are then processed through the GNN model to generate their respective order embeddings in order to construct the Order Embedding Space (OES) that is used for counting subgraph occurrences. The approach of subgraph matching is considered advantageous for these reasons:
+
+\begin{itemize}
+    \item \textbf{\textit{Generalizability}} --- The model shows the generalization test performance of subgraph matching across real-world datasets, by training only on a general balanced synthetic dataset. On the other hand, the model only handles subgraph matching without considering features.
+    \item \textbf{\textit{OES geometric properties}} --- Using the partial order properties of the embeddings, the frequency of a subgraph $G'$ can be quantified by counting the upper-right embeddings of $RG$ graphs. Additionally, the anti-monotonicity property can be verified by how the space is organized according to graph size and order.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    % \hspace*{0.3cm}
+    \resizebox{0.9\linewidth}{!}{\input{figs/encoder/tex_rand_graph}}
+    \caption{Order Embedding Space construction process}
+    \label{fig:encoder_process}
+\end{figure}
+
+After constructing the OES, the frequency of a subgraph \( G' \), $Freq_G(G')$, is determined by counting the number of the random embedded subgraph \( G'_i \) from \text{$RG=\{G'_1, G'_2, \dots, G'_k\}$} in the space, where \( \phi(G') \preceq \phi(G_i') \) as predicted by the model's output layer.
+\textbf{\[Freq_G(G')=\frac{|\{G'_i \in RG \mid \phi(G') \preceq \phi(G'_i)\}|}{k}\]}
+The embeddings $\phi(G'_i)$ correspond to the upper-right points of $\phi(G')$ in the geometric space OES (see Figure \ref{fig:count_pred}).
+
+\begin{figure}[H]
+    \centering
+    \resizebox{0.35\linewidth}{!}{\input{figs/decoder/tex_oes_count}}
+    \caption{Geometric visualization of the count prediction procedure in the OES}
+    \label{fig:count_pred}
+\end{figure}
+
+To experimentally verify the anti-monotonicity of the estimated $Freq_G$, we analyze the results shown in Figure~\ref{fig:embs_neighs_size}. The trained GNN model, applied to the Cora dataset (see Table~\ref{tab:datasets}), organizes the space based on subgraph size (number of edges) and order (number of nodes), as larger graphs cannot be subgraphs of smaller ones. This observation indicates that $Freq_G$ exhibits anti-monotonicity, supporting its correctness.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.67\textwidth}
+        \includegraphics[width=\textwidth]{figs/pca_emb_c.pdf}
+        \caption{PCA-based visualization}
+        \label{fig:pca_embs}
+    \end{subfigure}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\textwidth]{figs/heatmap.pdf}
+        \caption{Heatmap}
+        \label{fig:heatmap}
+    \end{subfigure}
+    \caption{(a) PCA visualization of order embeddings for random neighborhoods of 1–30 nodes from the Cora dataset. PCA preserves straight lines, indicating subgraph containment of a point lies within a quadrilateral region \cite{ying2024representation}. (b) The heatmap shows average embedding norms by graph size and order, highlighting structure-embedding relationships. Lighter shades are for smaller graphs, darker for larger ones by size or order.}
+    \label{fig:embs_neighs_size}
+\end{figure}
+
+\subsection{Anomalous Structures}\label{sec:anomaly_search}
+Defining and estimating the frequency of subgraphs, along with verifying its correctness through the anti-monotonicity property on node-anchored structures, provides a foundational step in identifying structural node anomalies based on the rarity of their neighborhoods. To achieve this, we formally propose our general definition of structural anomalies using subgraph frequency, without imposing any specific subgraph patterns as in \cite{ying2024representation,rex2020neural}:
+
+\begin{definition}[Structural Anomaly]
+Let $u \in V$. The node $u$ is a \textbf{structural anomaly} of $G$ if and only if $u$ belongs to an unexpected structure graph of $u$.
+\begin{itemize}
+ \item We define an unexpected graph $G'=(V', E')$ in $G$ as a rare subgraph in terms of graph frequency $freq_G: \mathcal{G}(G) \to \mathbb{N}$ that quantifies the existence of its similar (isomorphic) subgraphs in $G$:
+ \[
+  freq_G(G') < T_F \quad \text{with} \quad T_F > 0
+ \]
+ \item All nodes $u' \in V'$ of the graph $G'$ are structural anomalies.
+\end{itemize}
+\end{definition}
+
+Given the estimated $Freq_G$ from the order embedding function $\phi$ and the OES, the goal of the search procedure is to identify rare node-anchored structures within the given graph. As illustrated in Figure~\ref{fig:decoder_process}, Minomaly detects anomalous small neighborhoods by iteratively expanding infrequent structures through the addition of neighboring nodes. Subgraphs that meet a certain frequency threshold $T_F$ are identified as structural anomalies. The resulting graph represents the anomalies, demonstrating the interpretability of the method.
+
+The approach adopts a greedy search (See Algorithm \ref{algo:algo} and Figure \ref{fig:anomaly_growth}) for anomalous structures $G'$, beginning from a starting node $u$ and growing by iteratively selecting a candidate node $u'$ from the current neighborhood frontier to obtain the most infrequent structure at each step. \new{To avoid scoring each candidate against all $k$ reference embeddings, the search draws a fixed random sample of $m \ll k$ references once and estimates frequency from this sample throughout.} This process continues until one of the following conditions is met: $Freq_G(G') < T_F$, the maximum subgraph order (\texttt{max\_steps}) is reached, or no significant change is observed (\texttt{max\_no\_change}). If the first condition is satisfied, the final small structure and all its nodes are identified as anomalies based on the final frequency, with the anomaly score defined as $1 - Freq_G(G')$.
+
+\begin{algorithm}[H]
+\caption{Greedy Search for Anomalous Structures}
+\label{algo:algo}
+\scriptsize
+\begin{algorithmic}[1]
+\Require Graph $G$, starting node $u$, threshold $T_F$, \texttt{max\_steps}, \texttt{max\_no\_change}, \texttt{max\_cands}\new{, sample size $m$, OES references $\mathcal{R} = \{\phi(G'_1), \dots, \phi(G'_k)\}$}
+\Ensure Anomalous structure $G'$, Anomaly score \texttt{score}
+
+\State \new{Draw a uniform random sample $\mathcal{S} \subset \mathcal{R}$, $|\mathcal{S}| = m$} \label{line:ref_sample}
+\State Initialize $G' \gets \{u\}$, \texttt{steps} $\gets 0$, \texttt{no\_change\_steps} $\gets 0$, \texttt{score} $\gets 0$
+
+\While{\texttt{steps} $<$ \texttt{max\_steps}}
+    \State \texttt{steps} $\gets$ \texttt{steps} + 1
+    \State Initialize $best\_freq \gets \infty$, $G'' \gets G'$
+    \State Sample a subset of \texttt{max\_cands} candidate nodes from the neighborhood frontier of $G'$ \label{line:sampling}
+    \State \new{Embed all candidates in a single batch: $\{\phi(G' \cup \{v\})\}_{v \in \text{cands}}$} \label{line:batch_embed}
+    \For{each sampled node $v$}
+        \State $G_{\text{temp}} \gets G' \cup \{v\}$
+        \State \new{$\widehat{Freq}_G(G_{\text{temp}}) \gets \frac{|\{e \in \mathcal{S} \mid \phi(G_{\text{temp}}) \preceq e\}|}{m}$} \label{line:sampled_freq}
+        \If{$\widehat{Freq}_G(G_{\text{temp}}) < best\_freq$}
+            \State $best\_freq \gets \widehat{Freq}_G(G_{\text{temp}})$
+            \State $G'' \gets G_{\text{temp}}$
+        \EndIf
+    \EndFor
+    \State $G' \gets G''$
+    \If{$\widehat{Freq}_G(G') < T_F$}
+        \State Mark $G'$ and all its nodes as anomalies
+        \State \textbf{break}
+    \EndIf
+    \If{$\widehat{Freq}_G(G')$ unchanged}
+        \State \texttt{no\_change\_steps} $\gets$ \texttt{no\_change\_steps} + 1
+    \Else
+        \State \texttt{no\_change\_steps} $\gets 0$
+    \EndIf
+    \If{\texttt{no\_change\_steps} $\geq$ \texttt{max\_no\_change}}
+        \State \textbf{break}
+    \EndIf
+\EndWhile
+\State \texttt{score} $\gets 1 - \widehat{Freq}_G(G')$
+\Return $G', \texttt{score}$
+\end{algorithmic}
+\end{algorithm}
+
+\smallskip
+\noindent{\small\textbf{Note on Candidate Sampling:} In Algorithm \ref{algo:algo} (line \ref{line:sampling}), candidate nodes are sampled using Weighted Random Sampling. Weights are based on node visit frequency during neighborhood exploration, with frequently visited nodes receiving higher weights as they contribute to infrequent patterns. Other relevant sampling strategies could also be applied.}
+
+\smallskip
+\new{\noindent{\small\textbf{Note on Reference Sampling:} In Algorithm~\ref{algo:algo} (line~\ref{line:ref_sample}), a fixed random sample of $m$ reference embeddings is drawn once from the $k$ embedded neighborhoods. All frequency estimates within the search use this same sample, reducing the per-candidate scoring cost from $O(k\,d)$ to $O(m\,d)$. Because the sample is drawn uniformly, $\widehat{Freq}_G$ is an unbiased estimator of $Freq_G$ with standard error $O(1/\sqrt{m})$.}}
+
+\vspace{10pt}
+
+This search can be viewed as a monotonic walk in the search space of OES, which also demonstrates the preserved anti-monotonicity property due to the organized structure of the OES (See Figure \ref{fig:monotonic_path}). If the resulting neighborhood $G'$ of $u$ is grown by the ordered sequence of subgraphs $G^{(1)}_u \subseteq G^{(2)}_u \subseteq \dots \subseteq G^{(l)}_u$ such that $l \in \llbracket 1, \texttt{max\_steps} \rrbracket$ and $G' = G^{(l)}_u$, a monotonic path of embedding search $\phi(G^{(1)}_u) \preceq \phi(G^{(2)}_u) \preceq \dots \preceq \phi(G^{(l)}_u)$ is observed, which in turn shows the anti-monotonicity of $Freq_G$: \[Freq_G(G^{(l)}_u) \le \dots \le Freq_G(G^{(2)}_u) \le Freq_G(G^{(1)}_u)\]
+
+\begin{figure}[H]
+    \centering
+    \resizebox{\linewidth}{!}{
+    \begin{tikzpicture}[node distance=0.5cm, auto]
+        % Nodes
+        \node (fig1) {\begin{minipage}{0.5\textwidth}
+            \centering
+            \resizebox{\linewidth}{!}{\input{figs/decoder/tex_oes_rand}}
+            \subcaption{OES construction}
+            \label{fig:encoded_oes}
+        \end{minipage}};
+
+        \node (fig2) [right=of fig1] {\begin{minipage}{0.5\textwidth}
+            \centering
+            \resizebox{\linewidth}{!}{\input{figs/decoder/tex_oes_rand_outliers}}
+            \subcaption{Starting nodes}
+            \label{fig:starting_nodes}
+        \end{minipage}};
+
+        \node (fig3) [below=of fig2] {\begin{minipage}{0.5\textwidth}
+            \centering
+            \resizebox{\linewidth}{!}{\input{figs/decoder/tex_oes_search}}
+            \subcaption{Monotonic path}
+            \label{fig:monotonic_path}
+        \end{minipage}};
+
+        \node (fig4) [left=of fig3] {\begin{minipage}{0.5\textwidth}
+            \centering
+            \resizebox{\linewidth}{!}{\input{figs/decoder/tex_graphs}}
+            \subcaption{Anomaly structure search}
+            \label{fig:anomaly_growth}
+        \end{minipage}};
+
+        % Arrows
+        \draw[->] (fig1) -- (fig2) node[midway, above] {\scriptsize Extract};
+        \draw[->] (fig2) -- (fig3) node[midway, right] {\scriptsize Search};
+        \draw[implies-implies,double equal sign distance, line width=1pt] (fig4) -- (fig3) node[midway, below] {};
+    \end{tikzpicture}
+    }
+    \caption{OES construction and anomalous structure search procedures}
+    \label{fig:decoder_process}
+\end{figure}
+
+The Algorithm \ref{algo:algo} is not applied to all graph nodes, but to potential \textbf{starting nodes} (See Figure \ref{fig:starting_nodes}) that are extracted from the OES in two ways:
+
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{\textit{OES infrequent embedded subgraphs}} --- The infrequent neighborhoods $G'_i$ from $RG=\{G'_1, G'_2, \dots, G'_k\}$ can be checked using the count prediction function $Freq_G(G'_i) < T_F$. The resulting anchors of these subgraphs are considered anomalous. Two types of neighborhoods can be selected: small infrequent ones, and larger ones that are infrequent due to the anti-monotonicity property, which may also contain smaller subgraphs contributing to their infrequency.
+    \item \textbf{\textit{OES frontier}} --- Taking advantage of the geometric properties of OES, isolated and boundary points are more likely not to have upper-right points, which can be approximately detected by an outlier detection method like Isolation Forest \cite{liu2008isolation}. These points are isolated due to the margin hyperparameter $\alpha$, which separates them from the rest of the embeddings.
+\end{enumerate}
+
+In addition, this method can be used to find anomalous structures of \textbf{node anomalies detected by other methods} that lack interpretations or have low precision by considering these anomalies as starting nodes.
+
+\section{Experiments}
+\label{sec:eval}
+% In this section, we present experiments to evaluate the effectiveness and performance of our proposed framework compared to other representative node anomaly detection methods. \textcolor{green}{We first introduce the datasets and the methods used for comparison. Next, we present the results. Finally, we conduct a study to analyze the properties of our framework through a series of experiments, focusing on the impact of its various components and its interpretability.}
+
+In this section, we evaluate Minomaly through extensive experiments. We begin by outlining the experimental protocol, which includes a description of the datasets used, an introduction to the representative node anomaly detection methods for comparison, and a discussion of the evaluation metrics commonly employed in anomaly detection. Next, we present the results, comparing the performance of our approach with the baseline methods. Finally, the performance study examines the impact of dataset characteristics and hyperparameters, along with an evaluation of interpretability, scalability, and the efficiency of our search method.
+
+\subsection{Experimental Protocol}
+This section describes the experimental setup used to evaluate Minomaly. Our experiments were conducted on a Linux machine with Python 3.12.2, CUDA 12, and an NVIDIA RTX A2000 GPU (12 GB). \new{We train our own order-embedding model (DSAN) for subgraph matching, following the order-embedding learning procedure used for pattern mining \cite{ying2024representation,vendrov2016orderembeddings}.} Minomaly was implemented using PyTorch 2.4 \new{and} Torch Geometric 2.6, while the benchmarked methods were implemented following \cite{JMLR:v25:23-0963}. We performed our benchmark following the protocol outlined in \cite{NEURIPS2022-acc1ec4a}, using the hyperparameter grid and datasets provided in the paper.
+
+We set the Minomaly hyperparameters shown in Table \ref{tab:all_minomaly_hyperparameters} as configurations (C\textsubscript{1}, A\textsubscript{1}, F\textsubscript{1}) for each dataset, fixing the OES dimension to $d = 64$, \texttt{min\_neigh\_size} to $1$, and \texttt{max\_neigh\_size} to $30$. Additionally, we utilized $8$ threads for the search phase. \texttt{batch\_size} for Minomaly refers to the number of embedded $RG$ subgraphs processed in a single batch.
+
+These hyperparameters, are interpretable and manually tuned to improve results. This allows refinement after each run by filtering user-relative positives, expanding search spaces, or reducing computational resources, without random hyperparameter search.
+
+\new{Minomaly's order-embedding model (DSAN), trained from scratch on synthetic graphs with margin $\alpha = 0.1$, achieves \(95\%\) accuracy in determining whether one graph is a subgraph of another. A single inference query costs $O(L\,d^2\,s_{\max})$ where $L$ is the number of GNN layers, $d$ the embedding dimension, and $s_{\max}$ the maximum neighborhood size, all fixed hyperparameters independent of the input graph size. The same trained model is reused across all benchmarked datasets without retraining.}
+
+\begin{table}[H]
+\centering
+\caption{Minomaly Hyperparameters Configurations}
+\scriptsize
+\label{tab:all_minomaly_hyperparameters}
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Parameter} & \textbf{C\textsubscript{1}} & \textbf{A\textsubscript{1}} & \textbf{F\textsubscript{1}} \\ \hline
+\textbf{Dataset}   & \textbf{Cora}           & \textbf{Amazon}         & \textbf{Flickr}         \\ \hline
+\boldmath$k$       & 10,000         & 50,000         & 175,000        \\ \hline
+\new{\boldmath$m$}       & \new{10,000}         & \new{10,000}         & \new{10,000}        \\ \hline
+\boldmath$T_F$     & $\frac{35}{2708}$ & $\frac{150}{13752}$ & $\frac{1000}{89250}$ \\
+                   & $\approx$ 0.013 & $\approx$ 0.011   & $\approx$ 0.011  \\ \hline
+\texttt{max\_steps} & 7             & 11             & 5              \\ \hline
+\texttt{max\_no\_change} & 5       & 3              & 3              \\ \hline
+\texttt{max\_cands} & All           & 20             & 10             \\ \hline
+\texttt{batch\_size} & 1,000         & 10,000         & 10,000         \\ \hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Datasets}
+To evaluate Minomaly, we use the following datasets, which are provided by \cite{NEURIPS2022-acc1ec4a,JMLR:v25:23-0963} and have been used in previous works \cite{chen2020generative,ding2019deep,fan2020anomalydae,gu2024three,yuan2024higherorder}: %We follow the evaluation protocol described in \cite{ding2019deep}. %These synthetic outliers are combined with real datasets. We rely on these injections due to the scarcity of datasets that explicitly distinguish between structural and contextual outliers.
+
+\begin{itemize}
+    \item \textbf{Cora} \cite{sen2008collective} : The Cora dataset is a network of machine learning papers, represented as a directed graph that illustrates the citation relationships between papers.
+    \item  \textbf{Amazon} \cite{shchur2018pitfalls} :  The Amazon Computers network consists of nodes representing products, with edges indicating that two products are frequently purchased together.
+    \item \textbf{Flickr} \cite{zeng2019graphsaint} :  The Flickr dataset is a network of online images from Flickr, with links formed between images that share common properties.
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\caption{Dataset Statistics}
+\label{tab:datasets}
+\scriptsize
+\begin{tabular}{lccccccc}
+\toprule
+Dataset       & Nodes  & Edges   & Avg. Degree & Anomalies \\
+\midrule
+Cora     & 2,708  & 11,060  & 4.1         & 70 (5.1\%)    \\
+Amazon   & 13,752 & 515,042 & 37.2        & 350 (5.0\%)    \\
+Flickr   & 89,250 & 933,804 & 10.5        & 2,240 (4.9\%)    \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The table \ref{tab:datasets} summarizes the key characteristics of the three datasets used in our experiments. It presents the number of nodes and edges for each dataset, the average node degree (which reflects the typical connectivity), and the number (and percentage) of anomalies detected.
+
+These datasets offer diverse graph structures—from the sparse connectivity of Cora to the high interconnectivity of Amazon, with Flickr balancing large size and moderate connectivity. The consistent anomaly ratio (around 5\%) across all datasets facilitates a fair evaluation of the performance and robustness of various anomaly detection methods.
+
+\subsubsection{Compared Methods}
+The following \new{established baselines} were selected to benchmark Minomaly's performance, representing diverse deep learning approaches to GAD. For the Cora and Amazon datasets, we employed full-batch training with 400 epochs, while the larger Flickr dataset required mini-batch processing with batch size 64 and reduced training to just 1 epoch with 3-hop neighborhood sampling. Hidden dimensions of $\{32, 64, 128, 256\}$ were explored for all three datasets. Across all methods, we maintained consistent regularization with dropout rates $\{0, 0.1, 0.3\}$, learning rates $\{0.01, 0.05, 0.1\}$, and weight decay of $0.01$. We tuned the balance weight $\alpha$ $\{0.2, 0.5, 0.8\}$ between reconstruction and structural losses, following the protocol of \cite{NEURIPS2022-acc1ec4a}. Hyperparameters were randomly selected over 20 trials, and we report the performance as the mean and standard deviation across these trials.
+
+\begin{itemize}
+    \item \textbf{GCNAE} \cite{kipf2016variational,NEURIPS2022-acc1ec4a}: An autoencoder using GCNs as encoder and decoder to learn node embeddings from graph structure and attributes. Anomaly scores are based on reconstruction error.
+    \item \textbf{DOMINANT} \cite{ding2019deep}: Uses a GCN encoder and dual decoders - one for node attribute reconstruction and another for graph structure reconstruction. The final anomaly score combines both reconstruction errors to capture different aspects of abnormality.
+    \item \textbf{AnomalyDAE} \cite{fan2020anomalydae}: Similar to DOMINANT but employs two separate autoencoders (AEs). Its structural encoder uniquely processes both adjacency information and node features simultaneously, while its attribute decoder leverages both structural and attribute embeddings for reconstruction.
+    \item \textbf{DONE} \cite{bandyopadhyay2020outlier}: Uses separate MLP-based autoencoders for structure and attributes, with a unified optimization objective that simultaneously learns node embeddings and anomaly scores through a joint loss function.
+    \item \textbf{AdONE} \cite{bandyopadhyay2020outlier}: Extends DONE by incorporating adversarial learning with a discriminator that works to align structural and attribute embeddings in the latent space.
+    \item \textbf{CONAD} \cite{xu2022contrastive}: Leverages graph augmentation and contrastive learning based on human prior knowledge of structural and contextual anomalies. Anomalies are scored using a combination of contrastive loss and graph reconstruction error.
+\end{itemize}
+
+\subsubsection{Evaluation Metrics}
+To comprehensively assess anomaly detection performance, we employed standard binary classification metrics that are particularly relevant for imbalanced datasets typical in anomaly detection. In the context of anomaly detection, true positives ($TP$) represent correctly identified anomalies, false positives ($FP$) are normal nodes incorrectly flagged as anomalies, true negatives ($TN$) are correctly identified normal nodes, and false negatives ($FN$) are anomalies that were missed. These metrics evaluate both the ranking quality of anomaly scores and the classification performance at various thresholds:
+
+\begin{itemize}
+    \item \textbf{Precision}: It measures the proportion of true positives among the predicted positives. \[\text{Precision} = \frac{TP}{TP + FP}\]
+    % \item \textbf{Precision@k}: It measures the proportion of true anomalies among the top $k$ instances when ranked by anomaly score. This metric is particularly relevant when only a fixed budget of alerts can be investigated. \[\text{Precision@k} = \frac{\text{Number of true anomalies in top k}}{k}\]
+    \item \textbf{Recall}: (or True Positive Rate TPR) It measures the proportion of true positives among the actual positives. \[\text{Recall} = \text{TPR} = \frac{TP}{TP + FN}\]
+    \item \textbf{F1 Score}: It is the harmonic mean of precision and recall. Balances recall and precision, providing a single measure of overall performance. \[\text{F1} = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}\]
+    \item \textbf{False Positive Rate} (FPR): It measures the proportion of false positives among the actual negatives. \[\text{FPR} = \frac{FP}{FP + TN}\]
+    \item \textbf{Average Precision (AP)}: It summarizes the precision-recall curve as the weighted mean of precision achieved at each threshold, with the increase in recall from the previous threshold used as the weight.
+    \[\text{AP} = \sum_{n} (R_n - R_{n-1}) \times P_n\]
+    where $P_n$ and $R_n$ are the precision and recall at the $n$th threshold.
+    \item \textbf{Area Under the ROC Curve (AUC)}: It measures the entire two-dimensional area underneath the ROC curve, which plots TPR against FPR at different classification thresholds.
+    % \[\text{AUC} = \int_{0}^{1} \text{TPR}(\text{FPR}^{-1}(t)) dt\]
+    The AUC ranges from 0 to 1, where 0.5 represents random classification performance, and 1.0 represents perfect classification.
+\end{itemize}
+
+\subsection{Results}
+
+% \begin{table}[h]
+% \centering
+% \caption{Comparison of AUC and F1 Scores of different methods}
+% \label{tab:bench_results}
+% \begin{tabular}{|l|c|c|c|}
+% \hline
+% Dataset & Model & AUC & F1 \\ \hline
+% \multirow{7}{*}{Cora}
+% & Minomaly & 95.3 $\pm$ 0.0 \tiny (Rank: 2.0) & \textbf{87.1} $\pm$ 0.0 \tiny (Rank: 1.0) \\
+% & GCNAE & 52.5 $\pm$ 0.0 \tiny (Rank: 7.0) & 5.3 $\pm$ 0.0 \tiny (Rank: 7.0) \\
+% & DOMINANT & 92.1 $\pm$ 9.3 \tiny (Rank: 3.0) & 32.3 $\pm$ 10.6 \tiny (Rank: 3.0) \\
+% & DONE & 90.1 $\pm$ 5.9 \tiny (Rank: 5.0) & 20.2 $\pm$ 11.0 \tiny (Rank: 5.0) \\
+% & AdONE & 91.1 $\pm$ 5.0 \tiny (Rank: 4.0) & 25.7 $\pm$ 11.1 \tiny (Rank: 4.0) \\
+% & AnomalyDAE & 81.7 $\pm$ 11.8 \tiny (Rank: 6.0) & 16.7 $\pm$ 14.1 \tiny (Rank: 6.0) \\
+% & CONAD & \textbf{95.4} $\pm$ 1.2 \tiny (Rank: 1.0) & 36.3 $\pm$ 3.9 \tiny (Rank: 2.0) \\ \hline
+% \multirow{7}{*}{Amazon}
+% & Minomaly & \textbf{95.4} $\pm$ 0.0 \tiny (Rank: 1.0) & \textbf{69.6} $\pm$ 0.0 \tiny (Rank: 1.0) \\
+% & GCNAE & 49.0 $\pm$ 0.0 \tiny (Rank: 7.0) & 3.7 $\pm$ 0.0 \tiny (Rank: 7.0) \\
+% & DOMINANT & 91.4 $\pm$ 0.1 \tiny (Rank: 2.0) & 21.6 $\pm$ 0.2 \tiny (Rank: 3.0) \\
+% & DONE & 87.3 $\pm$ 4.0 \tiny (Rank: 5.0) & 17.8 $\pm$ 6.8 \tiny (Rank: 5.0) \\
+% & AdONE & 85.5 $\pm$ 5.6 \tiny (Rank: 6.0) & 13.2 $\pm$ 7.2 \tiny (Rank: 6.0) \\
+% & AnomalyDAE & 89.7 $\pm$ 5.8 \tiny (Rank: 4.0) & 21.7 $\pm$ 3.4 \tiny (Rank: 2.0) \\
+% & CONAD & 91.3 $\pm$ 0.1 \tiny (Rank: 3.0) & 21.5 $\pm$ 0.2 \tiny (Rank: 4.0) \\ \hline
+% \multirow{2}{*}{Flickr}
+% & Minomaly & \textbf{90.5} $\pm$ 0.0 \tiny (Rank: 1.0) & \textbf{87.3} $\pm$ 0.0 \tiny (Rank: 1.0) \\
+% & GCNAE & 49.9 $\pm$ 0.1 \tiny (Rank: 2.0) & 4.4 $\pm$ 0.1 \tiny (Rank: 2.0) \\
+% & Others & \multicolumn{2}{c|}{Out of GPU Memory} \\ \hline
+% \multirow{7}{*}{Avg. Rank}
+% & Minomaly & \textbf{1.3} & \textbf{1.0} \\
+% & GCNAE & 5.3 & 5.3 \\
+% & DOMINANT & 2.5 & 3.0 \\
+% & DONE & 5.0 & 5.0 \\
+% & AdONE & 5.0 & 5.0 \\
+% & AnomalyDAE & 4.0 & 4.0 \\
+% & CONAD & 2.0 & 3.0 \\ \hline
+% \end{tabular}
+% \end{table}
+
+%at low recalls
+
+Table~\ref{tab:bench_results} presents a comprehensive comparison between Minomaly and \new{competitive GAD baselines} across three datasets of varying size and complexity. Minomaly demonstrates superior performance across all evaluation metrics, achieving the best average rank \new{(1.0) in every metric: AUC, F1, AP, Recall, and Precision}.
+
+On the Cora dataset, Minomaly achieves outstanding F1, AP, Recall, and Precision scores, significantly outperforming all competitors, with impressive margins of \new{60.8} percentage points in F1 and \new{72.1} percentage points in AP compared to the second-best method. For the Amazon dataset, Minomaly demonstrates even greater dominance, surpassing all alternatives across every metric, with particularly notable improvements in F1 (\new{68.5}\% versus 21.7\% for the next best) and AP (\new{57.3}\% versus 12.2\%). Perhaps most significantly, Minomaly is the only method capable of effectively handling the large-scale Flickr dataset, where most competing approaches fail due to memory limitations. Only GCNAE could execute on Flickr but performed poorly (49.9\% AUC versus Minomaly's \new{91.0}\%).
+
+\input{tables/bench}
+
+\subsubsection{\new{Effect of the DSAN matcher}}
+\label{sec:dsan_ablation}
+\new{To evaluate the impact of our DSAN matcher, we compare it against the SPMiner order-embedding model \cite{ying2024representation} integrated into the same Minomaly pipeline, with the search procedure held fixed. Both models share the same SkipLastGNN architecture (8 layers, 64 dimensions, GraphSAGE convolutions) but differ in key design choices, summarized in Table~\ref{tab:model_comparison}. DSAN uses GLASS-style two-dimensional structural labeling (anchor indicator and subgraph membership) instead of the single anchor bit, a smooth softplus order-embedding loss instead of the hinge penalty, and a more diverse training set covering five random graph generators instead of three. Despite requiring $10\times$ fewer training batches ($100{,}000$ vs.\ $1{,}000{,}000$), DSAN achieves stronger detection, as shown in Table~\ref{tab:dsan_vs_spminer}. DSAN improves detection on Cora (AUC $95.3 \rightarrow 97.1$, AP $74.6 \rightarrow 94.4$) and Amazon (AUC $95.4 \rightarrow 97.6$, Recall $92.9 \rightarrow 97.1$), and matches SPMiner on Flickr.}
+
+\begin{table}[H]
+    \footnotesize
+    \centering
+    \caption{\new{Training configurations of the SPMiner matcher and our DSAN model.}}
+    \label{tab:model_comparison}
+    \new{\begin{tabular}{|l|l|l|}
+    \hline
+    & \textbf{SPMiner} & \textbf{DSAN (ours)} \\ \hline
+    Encoder & SkipLastGNN (fixed skip) & SkipLastGNN (GLASS) \\ \hline
+    Conv type & SAGE & SAGE \\ \hline
+    Layers / dim & 8 / 64 & 8 / 64 \\ \hline
+    Input dim & 1 (anchor bit only) & 2 (anchor + subgraph) \\ \hline
+    Loss function & Hinge: $\max(0, \alpha - E)$ & Softplus: $\log(1+e^{\alpha - E})$ \\ \hline
+    Training batches & 1{,}000{,}000 & 100{,}000 \\ \hline
+    Generators & 3 (ER, WS, BA) & 5 (+ PLC, dense ER) \\ \hline
+    Graph sizes & 6--30 & 6--30 \\ \hline
+    \end{tabular}}
+\end{table}
+
+\begin{table}[H]
+    \footnotesize
+    \centering
+    \caption{\new{Comparison of the SPMiner matcher and our DSAN model integrated into the same Minomaly pipeline, with the search procedure fixed.}}
+    \label{tab:dsan_vs_spminer}
+    \begin{tabular}{|l|l|c|c|c|c|c|}
+    \hline
+    Dataset & Matcher & AUC & F1 & AP & Recall & Precision \\ \hline
+    \multirow{2}{*}{Cora} & SPMiner (original) & 95.3 & 87.1 & 74.6 & 91.4 & 83.1 \\
+     & \textbf{DSAN (ours)} & \textbf{97.1} & \textbf{97.1} & \textbf{94.4} & \textbf{94.3} & \textbf{100.0} \\ \hline
+    \multirow{2}{*}{Amazon} & SPMiner (original) & 95.4 & 69.6 & 57.7 & 92.9 & 55.7 \\
+     & \textbf{DSAN (ours)} & \textbf{97.6} & \textbf{68.5} & \textbf{57.3} & \textbf{97.1} & 52.9 \\ \hline
+    \multirow{2}{*}{Flickr} & SPMiner (original) & 90.5 & 87.3 & 77.7 & 81.2 & 94.3 \\
+     & \textbf{DSAN (ours)} & \textbf{91.0} & 87.3 & 77.7 & 82.1 & 93.3 \\ \hline
+    \end{tabular}
+\end{table}
+
+From the Precision-Recall curves in Figure \ref{fig:pr_curve}, we observe low Precision@k across all methods (precisions in left side region), which corresponds to low-frequency scores detected as anomalies for Minomaly. This is attributed to the existence of some unlabeled structures that are rarer than the labeled ones, as shown in the interpretations (See Figure \ref{fig:false_positive}). DONE achieves high Precision@k on Cora due to its restrictive anomaly definition but fails to maintain precision on other datasets and for higher recalls, unlike our frequency-based method. This demonstrates that using frequency as a measure of abnormality is more effective in identifying true anomalies, surpassing reconstruction-loss methods that struggle with rare patterns and fail to capture anomalous patterns across different contexts, as mentioned in Section \ref{sec:relatedworks}.
+
+
+% \vspace*{-30pt}
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.32\textwidth}
+        \resizebox{\linewidth}{!}{\input{figs/evaluation/cora_pr_curve.pgf}}
+        \caption{Cora}
+    \end{subfigure}
+    \begin{subfigure}{0.32\textwidth}
+        \resizebox{\linewidth}{!}{\input{figs/evaluation/amazon_pr_curve.pgf}}
+        \caption{Amazon}
+    \end{subfigure}
+    \begin{subfigure}{0.32\textwidth}
+        \resizebox{\linewidth}{!}{\input{figs/evaluation/flickr_pr_curve.pgf}}
+        \caption{Flickr}
+    \end{subfigure}
+    \caption{Precision-Recall curves for different models.}
+    \label{fig:pr_curve}
+\end{figure}
+
+\subsection{Performance Study}
+
+% GUIDE \cite{yuan2024higherorder}, which shares Minomaly's core approach of counting, uses a CPU-intensive graph motif counting algorithm for structural features but is excluded from the benchmark due to memory limitations.
+
+\paragraph{\new{Complexity analysis.}}
+\new{We analyze the two phases of Minomaly. Let $k$ be the number of sampled reference neighborhoods, $d$ the embedding dimension, $L$ the number of GNN layers, $s_{\max}$ the maximum neighborhood size, $m$ the reference-sample size used for scoring, and $|S|$ the number of starting nodes. Since $L$, $d$, and $s_{\max}$ are fixed hyperparameters, a single GNN forward pass on one bounded neighborhood costs}
+{\color{blue}\[
+c_{\phi} = O\!\left(L\, s_{\max}^{2}\, d^{2}\right),
+\]}
+\new{a constant that does not depend on the graph size $|V|$ or $|E|$.}
+
+\new{\emph{OES construction (performed once).} Drawing the $k$ reference neighborhoods by tree sampling costs $O(k\, s_{\max}^{2})$, and embedding them costs $O(k\, c_{\phi})$, which dominates. Selecting the $|S|$ starting nodes scores the $k$ embeddings with the outlier detectors: the order-embedding detector compares each embedding against the reference sample, $O(k\, m\, d)$, and the isolation-forest detector adds $O(k \log k \cdot d)$. This phase is computed once and reused for every subsequent query.}
+
+\new{\emph{Frequency estimation.} Estimating $Freq_G$ for a pattern reduces to one geometric comparison of its embedding against the $m$ references, $O(m\, d)$, which replaces the NP-complete subgraph-matching test; with a fixed sample size $m$ this is constant per query.}
+
+\new{\emph{Anomalous-structure search.} Starting from $|S|$ nodes, the greedy search runs $T=\texttt{max\_steps}$ steps; each step expands $n_b$ beams by up to $b=\texttt{max\_cands}$ candidates, embedding each candidate ($c_{\phi}$) and scoring it against the references ($O(m\, d)$). The total search cost is}
+{\color{blue}\[
+O\!\left(|S| \cdot T \cdot n_b \cdot b \cdot (c_{\phi} + m\, d)\right).
+\]}
+
+\new{\emph{Space.} Minomaly stores the graph as a sparse CSR adjacency, $O(|V|+|E|)$, the $k$ reference embeddings, $O(k\, d)$, and the GNN parameters, $O(L\, d^{2})$; the pairwise violation tensors are processed in fixed-size chunks. No $|V|\times|V|$ matrix is ever materialized.}
+
+\new{Two consequences support our scalability claim. First, because neighborhoods are bounded by $s_{\max}$, every per-neighborhood operation (sampling, embedding, comparison) is constant in $|V|$ and $|E|$; the cost grows only with the controllable counts $k$ and $|S|$, and the heuristic starting-node selection keeps $|S| \ll |V|$ (Table~\ref{tab:minomaly_results} shows between $49\%$ and $80\%$ of nodes are processed). Second, the memory footprint is linear in the graph size, $O(|V|+|E|+k\,d)$, in contrast with reconstruction-based detectors whose adjacency reconstruction grows as $O(|V|^{2})$; this is why Minomaly scales to Flickr, where those baselines exhaust memory.}
+
+In this section, we provide a deep comprehensive analysis of Minomaly's performance characteristics beyond comparative benchmarking. First, we evaluate the effectiveness of our starting node selection strategy, quantifying its computational benefits and impact on detection accuracy by examining how the size $k$ of $RG$ affects performance on Flickr. Next, we analyze how the \texttt{max\_cands} parameter balances effectiveness and efficiency across different levels of graph connectivity. Additionally, we present interpretable visualizations of detected anomalous structures and their frequency evolution. Finally, we conduct a detailed hyperparameter study, examining how $TF$ and \texttt{max\_steps} influence detection performance across various evaluation metrics, revealing clear trends that facilitate practical parameter tuning.
+
+To analyze the impact of the size $k$ of $RG$ on detection quality and its significance in covering patterns within large datasets, we extend Table~\ref{tab:all_minomaly_hyperparameters} by introducing two additional configurations, F\textsubscript{2} and F\textsubscript{3}, for the Flickr dataset, as shown in Table~\ref{tab:flickr_minomaly_hyperparameters}.
+
+% \begin{table}[H]
+% \centering
+% \caption{Minomaly Hyperparameters}
+% \scriptsize
+% \label{tab:minomaly_hyperparameters}
+% \begin{tabular}{|l|l|l|l|l|l|}
+% \hline
+% \textbf{Parameter} & \textbf{Run C\textsubscript{1}} & \textbf{Run A\textsubscript{1}} & \textbf{Run F\textsubscript{1}} & \textbf{Run F\textsubscript{2}} & \textbf{Run F\textsubscript{3}} \\ \hline
+% \textbf{Dataset}   & \textbf{Cora}           & \textbf{Amazon}         & \textbf{Flickr}         & \textbf{Flickr}         & \textbf{Flickr}         \\ \hline
+% \boldmath$k$       & 10,000         & 50,000         & 150,000        & 200,000        & 250,000        \\ \hline
+% \boldmath$T_F$     & $\frac{35}{2708}$ & $\frac{150}{13752}$ & $\frac{1000}{89250}$ & $\frac{1000}{89250}$ & $\frac{1000}{89250}$ \\
+%                    & $\approx$ 0.013 & $\approx$ 0.011   & $\approx$ 0.011  & $\approx$ 0.011  & $\approx$ 0.011 \\ \hline
+% \texttt{max\_steps} & 7             & 11             & 5              & 5              & 5              \\ \hline
+% \texttt{max\_no\_change} & 5       & 3              & 3              & 3              & 3              \\ \hline
+% \texttt{max\_cands} & All           & 20             & 10             & 10             & 10             \\ \hline
+% \texttt{batch\_size} & 1000         & 10,000         & 10,000         & 12,500         & 12,500         \\ \hline
+% \end{tabular}
+% \end{table}
+
+\begin{table}[H]
+\centering
+\caption{Minomaly Flickr Hyperparameters}
+\scriptsize
+\label{tab:flickr_minomaly_hyperparameters}
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Parameter} & \textbf{Run F\textsubscript{1}} & \textbf{Run F\textsubscript{2}} & \textbf{Run F\textsubscript{3}} \\ \hline
+\textbf{Dataset}   & \textbf{Flickr}         & \textbf{Flickr}         & \textbf{Flickr}         \\ \hline
+\boldmath$k$       & 175,000        & 200,000        & 250,000        \\ \hline
+\new{\boldmath$m$}       & \new{10,000}        & \new{10,000}        & \new{10,000}        \\ \hline
+\boldmath$T_F$     & $\frac{1000}{89250}$ & $\frac{1000}{89250}$ & $\frac{1000}{89250}$ \\
+                   & $\approx$ 0.011  & $\approx$ 0.011  & $\approx$ 0.011 \\ \hline
+\texttt{max\_steps} & 5              & 5              & 5              \\ \hline
+\texttt{max\_no\_change} & 3              & 3              & 3              \\ \hline
+\texttt{max\_cands} & 10             & 10             & 10             \\ \hline
+\texttt{batch\_size} & 10,000         & 12,500         & 12,500         \\ \hline
+\end{tabular}
+\end{table}
+
+The results corresponding to each hyperparameter configuration (C\textsubscript{1}, A\textsubscript{1}, F\textsubscript{1}, F\textsubscript{2}, F\textsubscript{3}) are detailed in Table \ref{tab:minomaly_results}.
+
+\begin{table}[H]
+\centering
+\caption{Minomaly Results}
+\label{tab:minomaly_results}
+\scriptsize
+\begin{tabular}{|p{45pt}|l|l|l|l|l|}
+\hline
+\textbf{Result} & \textbf{Run C\textsubscript{1}} & \textbf{Run A\textsubscript{1}} & \textbf{Run F\textsubscript{1}} & \textbf{Run F\textsubscript{2}} & \textbf{Run F\textsubscript{3}} \\ \hline
+\textbf{Dataset}   & Cora           & Amazon         & Flickr         & Flickr         & Flickr         \\ \hline
+\new{\textbf{Starting nodes}} & \makecell{$\frac{2152}{2708}$ \\ $\approx$ 79.5\%} & \makecell{$\frac{9935}{13752}$ \\ $\approx$ 72.2\%} & \makecell{$\frac{43582}{89250}$ \\ $\approx$ 48.8\%} & \makecell{$\frac{47648}{89250}$ \\ $\approx$ 53.4\%} & \makecell{$\frac{54614}{89250}$ \\ $\approx$ 61.2\%} \\ \hline
+\new{\textbf{Positive starting nodes}} & \makecell{$\frac{69}{70}$ \\ $\approx$ 98.6\%} & \makecell{$\frac{312}{350}$ \\ $\approx$ 89.1\%} & \makecell{$\frac{1733}{2240}$ \\ $\approx$ 77.4\%} & \makecell{$\frac{1833}{2240}$ \\ $\approx$ 81.8\%} & \makecell{$\frac{1977}{2240}$ \\ $\approx$ 88.3\%} \\ \hline
+\textbf{AUC} & \new{97.14}\% & \new{97.62}\% & \new{90.98}\% & \new{91.85}\% & \new{93.17}\% \\ \hline
+\textbf{AP} & \new{94.43}\% & \new{57.30}\% & \new{77.71}\% & \new{79.77}\% & \new{82.92}\% \\ \hline
+\textbf{Recall} & \new{94.29}\% & \new{97.14}\% & \new{82.10}\% & \new{83.84}\% & \new{86.47}\% \\ \hline
+\textbf{Precision} & \new{100.00}\% & \new{52.88}\% & \new{93.26}\% & \new{93.90}\% & \new{93.53}\% \\ \hline
+\textbf{Search time (s)} & \new{142} & \new{610} & \new{306} & \new{310} & \new{353} \\ \hline
+\textbf{OES build time (s)} & \new{22} & \new{118} & \new{542} & \new{1021} & \new{1335} \\ \hline
+\end{tabular}
+\end{table}
+
+\paragraph{Impact of Starting Nodes Strategy and $RG$ Size}
+
+Table~\ref{tab:minomaly_results} demonstrates the quantitative impact of our starting nodes selection strategy on both computational efficiency and detection performance. By selecting a subset of nodes as starting points based on methods (a) \textit{OES infrequent embedded subgraphs} and (b) \textit{OES frontier} detection, described in \ref{sec:anomaly_search}—rather than examining all nodes—Minomaly reduces computational complexity while maintaining high detection quality. For the larger Flickr dataset, the algorithm processes between \new{48.8\% and 61.2\%} of nodes depending on the reference set size $k$.
+
+The precision of these selected starting nodes is quantifiably high, with \new{98.6\%} of true anomalies in Cora and \new{89.1\%} in Amazon recovered among the starting nodes. In Flickr, as parameter $k$ increases from \new{175,000} in Run F\textsubscript{1} to 250,000 in Run F\textsubscript{3}, we observe a corresponding increase in the proportion of positive starting nodes from \new{77.4\%} to \new{88.3\%}. This improved node selection directly correlates with enhanced detection performance: AUC increases from \new{90.98\%} to \new{93.17\%}, AP from \new{77.71\%} to \new{82.92\%}, and recall from \new{82.10\%} to \new{86.47\%} across the three Flickr runs.
+
+This performance improvement introduces a computational trade-off: as the proportion of starting nodes in Flickr increases, search time increases from \new{306s} to \new{353s}. The consistently high precision (\new{93.26\%--93.90\%} across all Flickr runs) confirms that the approach minimizes unnecessary searches in regions prone to false positives, thus optimizing the balance between computational cost and detection effectiveness. These results validate that the strategic selection of starting nodes from anomalous neighborhoods effectively reduces the search space while preserving the algorithm's node anomaly detection capabilities.
+
+\paragraph{Impact of \texttt{max\_cands} Parameter}
+
+Table~\ref{tab:minomaly_results} and Table~\ref{tab:datasets} together reveal important insights about the \texttt{max\_cands} hyperparameter's effect on performance and computational efficiency across datasets with varying connectivity characteristics. This parameter, as shown in Algorithm~\ref{algo:algo}, limits the number of candidate nodes considered from the neighborhood frontier during the greedy search process.
+
+For the Cora dataset, with its relatively low average degree (4.1), all frontier nodes were considered during the search (\texttt{max\_cands} = "All"). This complete frontier exploration was computationally feasible due to Cora's limited connectivity and starting nodes, resulting in the shortest search time (293s) among the three datasets despite examining all possible candidates.
+
+In contrast, for the Amazon dataset with its high connectivity (average degree 37.2), restricting \texttt{max\_cands} to 20 was necessary to maintain computational tractability. Despite this significant frontier sampling restriction, the model achieved an AUC of \new{97.62\%} and a recall of \new{97.14\%}, demonstrating that examining only a smaller subset of the densely connected frontier can yield strong detection performance.
+
+For Flickr, the largest dataset with moderate connectivity (average degree 10.5), \texttt{max\_cands} was further restricted to 10. The model achieved AUC scores between \new{90.98\%} and \new{93.17\%} across different runs. The search time increased with the number of starting nodes examined (from \new{306s} to \new{353s}), but remained manageable despite the dataset's scale.
+
+The experimental findings suggest that even restrictive frontier sampling (examining only 10-20 candidates) can achieve strong anomaly detection performance on large, dense graphs, as the search still identifies structurally meaningful anomalous patterns despite not examining all possible expansions at each step. This is due to the \texttt{max\_neigh\_size} size of the random subgraphs that was limited to 30, so the OES was meaningful enough to extract the properties of the diversity of small neighborhoods, that enabled also parallel frequency calculations and significantly reduces the number of candidate nodes (\texttt{max\_cands}) to grow anomalous node structures.
+
+
+% \begin{table}[h]
+% \centering
+% \caption{Minomaly hyperparameters}
+% \label{tab:minomaly_hyperparameters}
+% \scriptsize
+% \begin{tabular}{|c|l|r|r|r|c|r|r|r|r|r|r|}
+% \hline
+% \textbf{Run} & \textbf{Dataset} & \boldmath$RG$ \textbf{size} & \boldmath$T_F$ & \texttt{max\_steps} & \texttt{max\_no\_change} & \texttt{max\_cands} & \texttt{batch\_size} \\ \hline
+% C\textsubscript{1}   & Cora   & 10,000  & $\frac{15}{2708}=0.006$    & 6  & 5  & All & 1000 \\ \hline
+% A\textsubscript{1}   & Amazon & 50,000   & $\frac{25}{13752}=0.002$   & 11 & 3  & 20 & 12,500 \\ \hline
+% F\textsubscript{1}   & Flickr & 175,000  & $\frac{1000}{89250}=0.011$ & 5  & 3  & 10 & 12,500 \\ \hline
+% F\textsubscript{2}   & Flickr & 200,000  & $\frac{1000}{89250}=0.011$ & 5  & 3  & 10 & 12,500 \\ \hline
+% F\textsubscript{3}   & Flickr & 250,000  & $\frac{1000}{89250}=0.011$ & 5  & 3  & 10 & 12,500 \\ \hline
+% \end{tabular}
+% \end{table}
+
+
+
+% \begin{table}[h]
+% \centering
+% \caption{Minomaly Results}
+% \label{tab:minomaly_results}
+% \scriptsize
+% \begin{tabular}{|c|c|c|r|r|r|r|r|r|r|}
+% \hline
+% \textbf{Run} & \textbf{Starting nodes} & \textbf{Positive nodes} & \textbf{AUC} & \textbf{AP} & \textbf{Recall} & \textbf{Precision} & \textbf{Search} & \textbf{OES build} \\ \hline
+% C\textsubscript{1}   & $\frac{1120}{2708}=41.4\%$  & $\frac{67}{70}=95.7\%$  & 95.25\%  & 74.62\%  & 91.43\%  & 83.12\%  & 293 s   & 22 s \\ \hline
+% A\textsubscript{1}   & $\frac{6977}{13752}=50.7\%$ & $\frac{300}{350}=85.7\%$ & 95.40\%  & 57.66\%  & 92.86\%  & 55.65\%  & 2770 s  & 118 s \\ \hline
+% F\textsubscript{1}   & $\frac{15988}{89250}=17.9\%$ & $\frac{1535}{2240}=68.5\%$ & 90.52\%  & 77.73\%  & 81.21\%  & 94.34\%  & 2521 s  & 542 s \\ \hline
+% F\textsubscript{2}   & $\frac{20057}{89250}=22.5\%$ & $\frac{1736}{2240}=77.5\%$ & 93.56\%  & 85.28\%  & 87.19\%  & 94.99\%  & 4098 s  & 1021 s \\ \hline
+% F\textsubscript{3}   & $\frac{24074}{89250}=27.0\%$ & $\frac{1898}{2240}=84.7\%$ & 94.06\%  & 85.82\%  & 88.21\%  & 93.73\%  & 5690 s  & 1335 s \\ \hline
+% \end{tabular}
+% \end{table}
+
+
+\paragraph{Extracted Anomalous Patterns}
+Tables \ref{tab:cora_patterns}, \ref{tab:amazon_patterns}, and \ref{tab:flickr_patterns} present the predicted anomalous pattern groups for the three datasets. After identifying anomalous structures in each dataset, we applied Weisfeiler-Lehman (WL) graph hashing to group structurally isomorphic patterns together; all nodes of these discovered structures are predicted as anomalous. Each table shows representative graphs for these pattern groups, where \textbf{red nodes} indicate true anomalous nodes and \textbf{green nodes} indicate true normal nodes from the ground-truth. The \textbf{Count} field shows how many times each pattern appears in the dataset, while \textbf{A/N} denotes the composition of true anomalous versus true normal nodes within each representative pattern.
+
+The pattern extraction results demonstrate Minomaly's strong interpretability advantage, enabling users to understand and validate detected anomalies through visual structural analysis. For Cora (Table~\ref{tab:cora_patterns}), the dominant pattern 7-0 (Count: 31, A/N: 7/0) reveals a fully connected clique structure consisting entirely of anomalous nodes, accounting for the majority of detected anomalies and contributing to the method's high precision (\new{100.00\%}) on this dataset. Flickr (Table~\ref{tab:flickr_patterns}) exhibits similar behavior with patterns 7-0, 7-1, and 7-2 (Count: 375, 49, and 6 respectively) showing pure anomalous structures, supporting the excellent precision (\new{93.26\%--93.90\%}) observed in Table~\ref{tab:minomaly_results}. In contrast, Amazon (Table~\ref{tab:amazon_patterns}) displays more complex pattern diversity with 10 distinct groups, where patterns like 11-1, 11-2, and 11-4 through 11-9 contain only normal nodes (A/N: 0/11) despite being structurally complex and similar to anomalous patterns, explaining the lower precision (\new{52.88\%}) while maintaining excellent recall (\new{97.14\%}). This visual pattern interpretation capability allows domain experts to manually filter false positives by examining structural characteristics and node compositions, effectively transforming the anomaly detection task into an interpretable pattern recognition problem. The visualization enables users to quickly identify which patterns merit further investigation versus those that can be safely filtered, significantly enhancing the practical utility of the detection results beyond raw performance metrics.
+
+\begin{table}[H]
+\centering
+\caption{Extracted anomalous patterns for Cora dataset}
+\label{tab:cora_patterns}
+\resizebox{\linewidth}{!}{
+\begin{tabular}{clclclclcl}
+\toprule
+\multicolumn{2}{c}{\textbf{7-0}} & \multicolumn{2}{c}{\textbf{7-1}} & \multicolumn{2}{c}{\textbf{7-2}} & \multicolumn{2}{c}{\textbf{7-3}} & \multicolumn{2}{c}{\textbf{7-4}} \\
+\cmidrule(lr){1-2} \cmidrule(lr){3-4} \cmidrule(lr){5-6} \cmidrule(lr){7-8} \cmidrule(lr){9-10}
+\scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} \\
+\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/cora_patterns/7-0}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 31 \\ \textbf{A/N}: 7/0\end{tabular} &
+\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/cora_patterns/7-1}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 3 \\ \textbf{A/N}: 0/7\end{tabular} &
+\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/cora_patterns/7-2}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 1 \\ \textbf{A/N}: 1/6\end{tabular} &
+\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/cora_patterns/7-3}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 1 \\ \textbf{A/N}: 6/1\end{tabular} &
+\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/cora_patterns/7-4}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 1 \\ \textbf{A/N}: 0/7\end{tabular} \\
+\midrule
+\multicolumn{2}{c}{\textbf{7-5}} & \multicolumn{2}{c}{\textbf{7-6}} & \multicolumn{2}{c}{\textbf{7-7}} & \multicolumn{2}{c}{\textbf{7-8}} & \multicolumn{2}{c}{} \\
+\cmidrule(lr){1-2} \cmidrule(lr){3-4} \cmidrule(lr){5-6} \cmidrule(lr){7-8}
+\scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & & \\
+\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/cora_patterns/7-5}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 1 \\ \textbf{A/N}: 1/6\end{tabular} &
+\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/cora_patterns/7-6}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 1 \\ \textbf{A/N}: 1/6\end{tabular} &
+\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/cora_patterns/7-7}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 1 \\ \textbf{A/N}: 1/6\end{tabular} &
+\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/cora_patterns/7-8}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 1 \\ \textbf{A/N}: 0/7\end{tabular} & & \\
+\bottomrule
+\end{tabular}
+}
+\begin{tikzpicture}
+    \node[circle,draw,fill=red,inner sep=2pt,label=right:\footnotesize True anomalous node] at (0,0) {};
+    \node[circle,draw,fill=green!70!black,inner sep=2pt,label=right:\footnotesize True normal node] at (3.5,0) {};
+\end{tikzpicture}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Extracted anomalous patterns for Amazon dataset}
+\label{tab:amazon_patterns}
+\resizebox{\linewidth}{!}{
+\begin{tabular}{clclclclcl}
+\toprule
+\multicolumn{2}{c}{\textbf{11-0}} & \multicolumn{2}{c}{\textbf{11-1}} & \multicolumn{2}{c}{\textbf{11-2}} & \multicolumn{2}{c}{\textbf{11-3}} & \multicolumn{2}{c}{\textbf{11-4}} \\
+\cmidrule(lr){1-2} \cmidrule(lr){3-4} \cmidrule(lr){5-6} \cmidrule(lr){7-8} \cmidrule(lr){9-10}
+\scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} \\
+\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/amazon_patterns/11-0}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 96 \\ \textbf{A/N}: 11/0\end{tabular} &
+\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/amazon_patterns/11-1}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 20 \\ \textbf{A/N}: 0/11\end{tabular} &
+\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/amazon_patterns/11-2}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 10 \\ \textbf{A/N}: 0/11\end{tabular} &
+\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/amazon_patterns/11-3}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 10 \\ \textbf{A/N}: 11/0\end{tabular} &
+\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/amazon_patterns/11-4}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 6 \\ \textbf{A/N}: 0/11\end{tabular} \\
+\midrule
+\multicolumn{2}{c}{\textbf{11-5}} & \multicolumn{2}{c}{\textbf{11-6}} & \multicolumn{2}{c}{\textbf{11-7}} & \multicolumn{2}{c}{\textbf{11-8}} & \multicolumn{2}{c}{\textbf{11-9}} \\
+\cmidrule(lr){1-2} \cmidrule(lr){3-4} \cmidrule(lr){5-6} \cmidrule(lr){7-8} \cmidrule(lr){9-10}
+\scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} \\
+\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/amazon_patterns/11-5}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 5 \\ \textbf{A/N}: 0/11\end{tabular} &
+\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/amazon_patterns/11-6}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 4 \\ \textbf{A/N}: 0/11\end{tabular} &
+\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/amazon_patterns/11-7}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 3 \\ \textbf{A/N}: 0/11\end{tabular} &
+\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/amazon_patterns/11-8}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 2 \\ \textbf{A/N}: 0/11\end{tabular} &
+\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/amazon_patterns/11-9}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 2 \\ \textbf{A/N}: 0/11\end{tabular} \\
+\bottomrule
+\end{tabular}
+}
+\begin{tikzpicture}
+    \node[circle,draw,fill=red,inner sep=2pt,label=right:\footnotesize True anomalous node] at (0,0) {};
+    \node[circle,draw,fill=green!70!black,inner sep=2pt,label=right:\footnotesize True normal node] at (3.5,0) {};
+\end{tikzpicture}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Extracted anomalous patterns for Flickr dataset}
+\label{tab:flickr_patterns}
+\resizebox{\linewidth}{!}{
+\begin{tabular}{clclclclcl}
+\toprule
+\multicolumn{2}{c}{\textbf{7-0}} & \multicolumn{2}{c}{\textbf{7-1}} & \multicolumn{2}{c}{\textbf{7-2}} & \multicolumn{2}{c}{\textbf{7-3}} & \multicolumn{2}{c}{\textbf{7-4}} \\
+\cmidrule(lr){1-2} \cmidrule(lr){3-4} \cmidrule(lr){5-6} \cmidrule(lr){7-8} \cmidrule(lr){9-10}
+\scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} \\
+\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/flickr_patterns/7-0}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 375 \\ \textbf{A/N}: 7/0\end{tabular} &
+\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/flickr_patterns/7-1}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 49 \\ \textbf{A/N}: 0/7\end{tabular} &
+\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/flickr_patterns/7-2}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 6 \\ \textbf{A/N}: 7/0\end{tabular} &
+\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/flickr_patterns/7-3}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 3 \\ \textbf{A/N}: 6/1\end{tabular} &
+\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/flickr_patterns/7-4}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 2 \\ \textbf{A/N}: 0/7\end{tabular} \\
+\midrule
+\multicolumn{2}{c}{\textbf{7-5}} & \multicolumn{2}{c}{\textbf{7-6}} & \multicolumn{2}{c}{\textbf{7-7}} & \multicolumn{2}{c}{\textbf{7-8}} & \multicolumn{2}{c}{\textbf{7-9}} \\
+\cmidrule(lr){1-2} \cmidrule(lr){3-4} \cmidrule(lr){5-6} \cmidrule(lr){7-8} \cmidrule(lr){9-10}
+\scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} \\
+\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/flickr_patterns/7-5}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 2 \\ \textbf{A/N}: 0/7\end{tabular} &
+\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/flickr_patterns/7-6}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 1 \\ \textbf{A/N}: 1/6\end{tabular} &
+\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/flickr_patterns/7-7}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 1 \\ \textbf{A/N}: 0/7\end{tabular} &
+\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/flickr_patterns/7-8}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 1 \\ \textbf{A/N}: 0/7\end{tabular} &
+\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/flickr_patterns/7-9}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 1 \\ \textbf{A/N}: 1/6\end{tabular} \\
+\bottomrule
+\end{tabular}
+}
+\begin{tikzpicture}
+    \node[circle,draw,fill=red,inner sep=2pt,label=right:\footnotesize True anomalous node] at (0,0) {};
+    \node[circle,draw,fill=green!70!black,inner sep=2pt,label=right:\footnotesize True normal node] at (3.5,0) {};
+\end{tikzpicture}
+\end{table}
+
+\paragraph{Interpretations}
+While Minomaly demonstrates strong overall performance across datasets (Table~\ref{tab:minomaly_results}), Amazon's precision (\new{52.88\%}) is notably lower than that of Cora (\new{100.00\%}) and Flickr (\new{93.26\%--93.90\%}). This discrepancy can be attributed to two primary factors revealed through our pattern interpretation analysis. Figure~\ref{fig:true_positive}, \ref{fig:false_positive} and \ref{fig:true_negative} illustrate examples of these interpretations. First, Amazon contains numerous structural patterns that are labeled as normal in the ground truth but exhibit strong structural similarities to true anomalous patterns. Second, nodes connected to anomalous structures are labeled as normal in the ground truth and can be labeled as anomalies in certain contexts. Despite these precision challenges, the method maintains excellent recall (\new{97.14\%}) on Amazon, demonstrating its effectiveness at identifying the complete set of true anomalies.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.2\textwidth}
+        \resizebox{\linewidth}{!}{\input{figs/evaluation/tracked_1235_graph}}
+        \caption{True positive}
+        \label{fig:true_positive}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.2\textwidth}
+        \resizebox{\linewidth}{!}{\input{figs/evaluation/tracked_2705_graph}}
+        \caption{False positive}
+        \label{fig:false_positive}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.2\textwidth}
+        \resizebox{\linewidth}{!}{\input{figs/evaluation/tracked_30_graph}}
+        \caption{True negative}
+        \label{fig:true_negative}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.3\textwidth}
+        \resizebox{\linewidth}{!}{\input{figs/evaluation/tracked_freq}}
+        \caption{Frequency changes}
+        \label{fig:frequency_track}
+    \end{subfigure}
+    \caption{Minomaly interpretation results on the Cora dataset, illustrating three examples: an anomalous structure (red), a normal one (green), and a falsely predicted node connected to an anomalous structure (blue), along with their frequency change curves.}
+    \label{fig:interpret_results}
+\end{figure}
+
+Figure~\ref{fig:analyze_oes_search} visually demonstrates the effectiveness of the method in identifying anomalous regions by step-walking over the embedded anomalous neighborhoods, which contributes to achieving high recall (92.86\%) on the all datasets. Additionally, the overall high precision observed across datasets indicates that the approach effectively filters out true positive nodes from the large visualized searched region.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\linewidth]{figs/evaluation/analyze_start.pdf}
+        \caption{True embedded anomalous neighborhoods}
+        \label{fig:analyze_start}
+    \end{subfigure}
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\linewidth]{figs/evaluation/analyze_search.pdf}
+        \caption{Anomalous neighborhoods search}
+        \label{fig:analyze_search}
+    \end{subfigure}
+
+    \caption{This figure shows the true anomalous neighborhood embeddings and their corresponding search analysis by the algorithm in the OES of Cora, visualized in two dimensions.}
+    \label{fig:analyze_oes_search}
+\end{figure}
+
+
+% Minomaly outperforms other methods in terms of AUC, F1, and AP scores (see Table~\ref{tab:bench_results} and Figure \ref{fig:pr_curve}). This shows that using frequency as a measure of abnormality has proven to be more effective in identifying true anomalies, surpassing reconstruction-loss methods in handling rare patterns. One can also see that Minomaly is scalable, as it avoids out-of-memory errors on large datasets like Flickr (see Table~\ref{tab:bench_results}).
+
+% \newpage
+\paragraph{$T_F$ and \texttt{max\_steps} Hyperparameters Study}
+We study the effect of $T_F$ and \texttt{max\_steps} on AUC, AP, Recall, and Precision metrics, evaluating the anomaly detection framework on the Cora and Amazon, Flickr datasets (Figures \ref{fig:analyze_hyperparameters_cora}, \ref{fig:analyze_hyperparameters_amazon} and \ref{fig:analyze_hyperparameters_flickr}). The ranges of hyperparameters for each dataset are summarized in Table \ref{tab:grid_range}.
+\begin{table}[H]
+\vspace*{-20pt}
+\caption{Hyperparameter ranges for different datasets}
+\label{tab:grid_range}
+\centering
+\begin{tabular}{lccc}
+\hline
+\textbf{Dataset} & \textbf{Cora} & \textbf{Amazon} & \textbf{Flickr} \\
+\hline
+Total nodes & 2,708 & 13,752 & 89,250 \\
+$T_F$ range (unnormalized) & $\llbracket 1, 40 \rrbracket$ & $\{10, 20, \ldots, 200\}$ & $\{100, 200, \ldots, 1400\}$ \\
+max\_steps range & $\llbracket 1, 11 \rrbracket$ & $\llbracket 1, 21 \rrbracket$ & $\llbracket 1, 11 \rrbracket$ \\
+\hline
+\end{tabular}
+\vspace*{-10pt}
+\end{table}
+
+$T_F$ and \texttt{max\_steps} control the threshold used to filter anomalous nodes from the search results, as shown in Figure \ref{fig:frequency_track}. Thus, it is important to study their effect on detection performance.
+
+The heatmaps indicate that Minomaly is highly sensitive to these hyperparameters, and performance can be improved only by tuning them, as they serve as key thresholds for the framework (See Figures \ref{fig:analyze_hyperparameters_cora}, \ref{fig:analyze_hyperparameters_amazon}, \ref{fig:analyze_hyperparameters_flickr} and \ref{fig:frequency_track}).
+
+Since AUC, AP, Recall, and F1 metrics share similar heatmaps, it is sufficient to use only AUC for manual tuning, as it is a reliable metric for this task. In contrast, the baseline methods that rely on reconstruction thresholds typically yield suboptimal results for the other metrics, despite having good AUC (See Table \ref{tab:bench_results}), because their reconstruction thresholds are independent of the hyperparameters, and choosing the right reconstruction threshold is another task to consider.
+
+We also observe that precision is generally high across the entire search grid and shows little sensitivity to the hyperparameters, as illustrated in the heatmaps \ref{fig:precision_heatmap_cora}, \ref{fig:precision_heatmap_amazon} and \ref{fig:precision_heatmap_flickr}, but it decreases for higher values of $T_F$ and \texttt{max\_steps}. This aligns with our focus on detecting rare small node neighborhoods.
+
+The AUC surfaces for both datasets are relatively smooth, with a few local maxima, as shown in Figures \ref{fig:cora_scatter_plot_auroc}, \ref{fig:amazon_scatter_plot_auroc} and \ref{fig:flickr_scatter_plot_auroc}. The AUC heatmap shows optimal hyperparameters of $T_F = \frac{24}{2708}\approx 0.88\%$ and \texttt{max\_steps} = 9 for Cora, $T_F = \frac{150}{13752}\approx 1.1\%$ and \texttt{max\_steps} = 11 for Amazon, and $T_F = \frac{1000}{89250}\approx 1.1\%$ and \texttt{max\_steps} = 5 for Flickr. These values are close to the used benchmark parameters in Table \ref{tab:all_minomaly_hyperparameters} and are within the region of interest. The AUC heatmap for Cora (Figure \ref{fig:auroc_heatmap_cora}), Amazon (Figure \ref{fig:auroc_heatmap_amazon}) and Flickr \ref{fig:auroc_heatmap_flickr}) show that high scores are achieved in a relatively continuous linear region of $T_F$ and \texttt{max\_steps}. Thus, finding the optimal values is straightforward. For small continuous values of $T_F$ and \texttt{max\_steps}, performance is high and stable, but it decreases outside these regions.
+
+Finding these regions is not difficult: the frequency threshold \( T_F \) is typically small since anomalies are rare and can be determined from the dataset characteristics. \texttt{max\_steps} is also small, as we focus on small neighborhoods, followed by manual tuning based on the interpretations. Alternatively, a faster automatic solution without varying the parameters in the greedy search is to predefine the search region by setting sufficiently high values for \texttt{max\_steps} and \( T_F \), then execute Minomaly with these values. The frequency curves will be generated and filtered for each frequency \(\texttt{freq} < T_F\) and step \(\texttt{step} < \texttt{max\_steps}\). The choice of optimal hyperparameters from \texttt{freq} and \texttt{step} is then left to the user based on the interpretations.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\textwidth]{figs/evaluation/cora_auroc_heatmap.pdf}
+        \caption{AUC heatmap}
+        \label{fig:auroc_heatmap_cora}
+    \end{subfigure}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\textwidth]{figs/evaluation/cora_ap_heatmap.pdf}
+        \caption{AP heatmap}
+    \end{subfigure}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\textwidth]{figs/evaluation/cora_precision_heatmap.pdf}
+        \caption{Precision heatmap}
+        \label{fig:precision_heatmap_cora}
+    \end{subfigure}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\textwidth]{figs/evaluation/cora_recall_heatmap.pdf}
+        \caption{Recall heatmap}
+    \end{subfigure}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\textwidth]{figs/evaluation/cora_f1_heatmap.pdf}
+        \caption{F1 heatmap}
+    \end{subfigure}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\textwidth]{figs/evaluation/cora_scatter_plot_auroc.pdf}
+        \caption{AUC 3D plot}
+        \label{fig:cora_scatter_plot_auroc}
+    \end{subfigure}
+
+    \caption{$T_F$ (y-axis) and \texttt{max\_steps} (x-axis) parameter analysis on the Cora dataset.}
+    \label{fig:analyze_hyperparameters_cora}
+\end{figure}
+\vspace*{-30pt}
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\textwidth]{figs/evaluation/amazon_auroc_heatmap.pdf}
+        \caption{AUC heatmap}
+        \label{fig:auroc_heatmap_amazon}
+    \end{subfigure}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\textwidth]{figs/evaluation/amazon_ap_heatmap.pdf}
+        \caption{AP heatmap}
+    \end{subfigure}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\textwidth]{figs/evaluation/amazon_precision_heatmap.pdf}
+        \caption{Precision heatmap}
+        \label{fig:precision_heatmap_amazon}
+    \end{subfigure}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\textwidth]{figs/evaluation/amazon_recall_heatmap.pdf}
+        \caption{Recall heatmap}
+    \end{subfigure}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\textwidth]{figs/evaluation/amazon_f1_heatmap.pdf}
+        \caption{F1 heatmap}
+    \end{subfigure}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\textwidth]{figs/evaluation/amazon_scatter_plot_auroc.pdf}
+        \caption{AUC 3D plot}
+        \label{fig:amazon_scatter_plot_auroc}
+    \end{subfigure}
+
+    \caption{$T_F$ (y-axis) and \texttt{max\_steps} (x-axis) parameter analysis on the Amazon dataset.}
+    \label{fig:analyze_hyperparameters_amazon}
+\end{figure}
+\vspace*{-30pt}
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\textwidth]{figs/evaluation/flickr_auroc_heatmap.pdf}
+        \caption{AUC heatmap}
+        \label{fig:auroc_heatmap_flickr}
+    \end{subfigure}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\textwidth]{figs/evaluation/flickr_ap_heatmap.pdf}
+        \caption{AP heatmap}
+    \end{subfigure}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\textwidth]{figs/evaluation/flickr_precision_heatmap.pdf}
+        \caption{Precision heatmap}
+        \label{fig:precision_heatmap_flickr}
+    \end{subfigure}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\textwidth]{figs/evaluation/flickr_recall_heatmap.pdf}
+        \caption{Recall heatmap}
+    \end{subfigure}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\textwidth]{figs/evaluation/flickr_f1_heatmap.pdf}
+        \caption{F1 heatmap}
+    \end{subfigure}
+    \begin{subfigure}{0.32\textwidth}
+        \includegraphics[width=\textwidth]{figs/evaluation/flickr_scatter_plot_auroc.pdf}
+        \caption{AUC 3D plot}
+        \label{fig:flickr_scatter_plot_auroc}
+    \end{subfigure}
+
+    \caption{$T_F$ (y-axis) and \texttt{max\_steps} (x-axis) parameter analysis on the Flickr dataset.}
+    \label{fig:analyze_hyperparameters_flickr}
+\end{figure}
+
+% \begin{figure}[H]
+%     \centering
+%     \begin{subfigure}{0.4\textwidth}
+%         \includegraphics[width=\textwidth]{assets/analyze_start-cora.png}
+%         \caption{Cora}
+%     \end{subfigure}
+% %     \hspace{0.1\textwidth}
+%     \begin{subfigure}{0.4\textwidth}
+%         \includegraphics[width=\textwidth]{assets/analyze_start-amazon.png}
+%         \caption{Amazon}
+%     \end{subfigure}
+%     \caption{This figure illustrates the true injected anomalous neighborhoods of Cora, Amazon and Flickr.}
+%     \label{fig:analyze_start}
+% \end{figure}
+
+
+
+
+% \begin{table}[h]
+% \centering
+% \caption{Comparison of AUC and F1 Scores of different methods}
+% \label{tab:bench_results}
+% \tiny
+% \begin{tabular}{|l|cc|cc|cc|cc|}
+% \hline
+%  & \multicolumn{2}{c|}{Cora} & \multicolumn{2}{c|}{Amazon} & \multicolumn{2}{c|}{Flickr} & \multicolumn{2}{c|}{Avg. Rank} \\ \cmidrule{2-9}
+% Model & AUC & F1 & AUC & F1 & AUC & F1 & AUC & F1 \\ \hline
+% Minomaly & \makecell{95.3 $\pm$ 0.0 \\ \tiny Rank: 2.0} & \makecell{\textbf{87.1} $\pm$ 0.0 \\ \tiny Rank: 1.0} & \makecell{\textbf{95.4} $\pm$ 0.0 \\ \tiny Rank: 1.0} & \makecell{\textbf{69.6} $\pm$ 0.0 \\ \tiny Rank: 1.0} & \makecell{\textbf{90.5} $\pm$ 0.0 \\ \tiny Rank: 1.0} & \makecell{\textbf{87.3} $\pm$ 0.0 \\ \tiny Rank: 1.0} & \textbf{1.3} & \textbf{1.0} \\ \hline
+% GCNAE & \makecell{52.5 $\pm$ 0.0 \\ \tiny Rank: 7.0} & \makecell{5.3 $\pm$ 0.0 \\ \tiny Rank: 7.0} & \makecell{49.0 $\pm$ 0.0 \\ \tiny Rank: 7.0} & \makecell{3.7 $\pm$ 0.0 \\ \tiny Rank: 7.0} & \makecell{49.9 $\pm$ 0.1 \\ \tiny Rank: 2.0} & \makecell{4.4 $\pm$ 0.1 \\ \tiny Rank: 2.0} & 5.3 & 5.3 \\ \hline
+% DOMINANT & \makecell{92.1 $\pm$ 9.3 \\ \tiny Rank: 3.0} & \makecell{32.3 $\pm$ 10.6 \\ \tiny Rank: 3.0} & \makecell{91.4 $\pm$ 0.1 \\ \tiny Rank: 2.0} & \makecell{21.6 $\pm$ 0.2 \\ \tiny Rank: 3.0} & \multicolumn{2}{c|}{Out of GPU Memory} & 2.5 & 3.0 \\ \hline
+% DONE & \makecell{90.1 $\pm$ 5.9 \\ \tiny Rank: 5.0} & \makecell{20.2 $\pm$ 11.0 \\ \tiny Rank: 5.0} & \makecell{87.3 $\pm$ 4.0 \\ \tiny Rank: 5.0} & \makecell{17.8 $\pm$ 6.8 \\ \tiny Rank: 5.0} & \multicolumn{2}{c|}{Out of GPU Memory} & 5.0 & 5.0 \\ \hline
+% AdONE & \makecell{91.1 $\pm$ 5.0 \\ \tiny Rank: 4.0} & \makecell{25.7 $\pm$ 11.1 \\ \tiny Rank: 4.0} & \makecell{85.5 $\pm$ 5.6 \\ \tiny Rank: 6.0} & \makecell{13.2 $\pm$ 7.2 \\ \tiny Rank: 6.0} & \multicolumn{2}{c|}{Out of GPU Memory} & 5.0 & 5.0 \\ \hline
+% AnomalyDAE & \makecell{81.7 $\pm$ 11.8 \\ \tiny Rank: 6.0} & \makecell{16.7 $\pm$ 14.1 \\ \tiny Rank: 6.0} & \makecell{89.7 $\pm$ 5.8 \\ \tiny Rank: 4.0} & \makecell{21.7 $\pm$ 3.4 \\ \tiny Rank: 2.0} & \multicolumn{2}{c|}{Out of GPU Memory} & 4.0 & 4.0 \\ \hline
+% CONAD & \makecell{\textbf{95.4} $\pm$ 1.2 \\ \tiny Rank: 1.0} & \makecell{36.3 $\pm$ 3.9 \\ \tiny Rank: 2.0} & \makecell{91.3 $\pm$ 0.1 \\ \tiny Rank: 3.0} & \makecell{21.5 $\pm$ 0.2 \\ \tiny Rank: 4.0} & \multicolumn{2}{c|}{Out of GPU Memory} & 2.0 & 3.0 \\ \hline
+% \end{tabular}
+% \end{table}
+
+\subsection{\new{Robustness to Injection Type and Ratio}}
+\label{sec:citeseer}
+\new{The experiments above inject dense cliques at a fixed ratio. To test whether Minomaly generalizes beyond this setting, we evaluate it on the CiteSeer citation network with a different, non-clique structural injection and across a range of injection ratios. We use \emph{DICE-structural} injection, which rewires a group's edges toward distant nodes and connects the group internally, producing a structural anomaly that is not a simple clique. We vary the fraction of injected anomalous nodes from $0.5\%$ to $8.1\%$, well beyond the single $5\%$ clique setting, keeping the DSAN matcher and the search procedure fixed.}
+
+\new{Table~\ref{tab:citeseer_ratios} reports the results. Minomaly detects this non-clique injection reliably across the whole range, with AUC between $91.7\%$ and $97.0\%$ and F1 between $85.2\%$ and $92.0\%$. Detection quality is consistently high across all ratios, with precision remaining above $80\%$ throughout. At the lowest ratio ($0.5\%$, only 18 anomalous nodes), the method still achieves $84.2\%$ precision and $88.9\%$ recall. As the ratio grows, precision increases further because larger injected groups are easier to separate from normal neighborhoods, reaching $96.7\%$ at $8.1\%$. This confirms that the approach is not specific to dense cliques at a single ratio: it detects structural anomalies of a different topology across an order of magnitude of injection ratios.}
+
+\begin{table}[H]
+    \footnotesize
+    \centering
+    \caption{\new{Minomaly on CiteSeer with DICE-structural (non-clique) injection across injection ratios. Detection is robust from $0.5\%$ to $8.1\%$.}}
+    \label{tab:citeseer_ratios}
+    \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    Injection ratio & AUC & AP & Recall & Precision & F1 \\ \hline
+    \new{0.5\%} & \new{94.4} & \new{79.5} & \new{88.9} & \new{84.2} & \new{86.5} \\
+    \new{0.8\%} & \new{92.5} & \new{76.9} & \new{85.2} & \new{85.2} & \new{85.2} \\
+    \new{1.4\%} & \new{95.4} & \new{72.6} & \new{91.1} & \new{80.4} & \new{85.4} \\
+    \new{2.7\%} & \new{\textbf{97.0}} & \new{86.4} & \new{94.4} & \new{81.7} & \new{87.6} \\
+    \new{4.1\%} & \new{91.7} & \new{76.7} & \new{83.7} & \new{91.9} & \new{87.6} \\
+    \new{5.4\%} & \new{95.8} & \new{\textbf{90.1}} & \new{91.7} & \new{85.5} & \new{88.5} \\
+    \new{8.1\%} & \new{93.8} & \new{85.9} & \new{87.8} & \new{96.7} & \new{\textbf{92.0}} \\ \hline
+    \end{tabular}
+\end{table}
+
+\subsection{Application to Real-World Fraud Detection}
+\label{sec:fraud}
+
+\new{The experiments above use synthetically injected anomalies because, to our knowledge, no public graph anomaly detection benchmark provides labels that explicitly distinguish structural anomalies from contextual or behavioral ones. To evaluate Minomaly in a setting where labels are organic rather than injected, we turn to a real-world fraud detection dataset and ask whether the structural anomalies that Minomaly discovers correspond to genuine fraudulent activity.}
+
+\subsubsection{Dataset and Structural Analysis}
+
+\new{We use the Amazon fraud detection graph introduced by \cite{dou2020enhancing}, which models user reviews on Amazon. The co-purchase (U-P-U) relation connects two users if they review the same product. This graph has 11{,}944 nodes, 351{,}216 edges, and 821 labeled fraud nodes (6.9\%). Unlike the injected benchmarks, no structural anomaly labels exist. We therefore analyze the fraud subgraph to identify which fraud nodes participate in structurally anomalous formations. Specifically, we extract connected components among fraud nodes and compute each component's internal edge density. Seven components with five or more nodes and density above 0.8 emerge, containing 136 fraud nodes in total (16.6\% of all fraud). The largest is a 79-node near-clique with density 0.95, and four components are perfect 10-node or 5-node cliques. The remaining 685 fraud nodes are scattered throughout the graph with no structural signature. This analysis confirms that real-world fraud contains a structurally anomalous component that a topology-based method can target.}
+
+\subsubsection{Detection Results}
+
+\new{Minomaly runs on the full graph with no knowledge of labels, using the DSAN matcher trained on synthetic graphs. The beam search verifies 6{,}765 anchor nodes as belonging to infrequent neighborhoods, of which 439 are fraud (53.5\% recall against all fraud). The fraud cliques are rare enough to fall within the infrequent band and be discovered by the search. Since this dataset has no structural anomaly annotations, verified patterns include both fraudulent and non-fraudulent rare structures. Minomaly returns each verified pattern as an explicit subgraph, so the analyst can inspect what kind of rare structure was discovered and interpret it accordingly.}
+
+\new{To characterize the discovered patterns, we define two structural features for every node in the graph. First, the \emph{verified-neighbor count} ($\mathrm{vn\_count}$): how many of the node's graph neighbors are themselves verified anchors. Second, the \emph{verified-neighbor density} ($\mathrm{vn\_density}$): among those verified-anchor neighbors, the fraction of all possible edges that actually exist. A node embedded in a fraud clique has many verified neighbors that are all connected to each other, producing $\mathrm{vn\_density} \approx 1.0$. A benign node may have a few verified neighbors, but they are scattered and unrelated, producing $\mathrm{vn\_density} \approx 0.0$. Dense cliques are a well-known structural signature of coordinated fraud, and filtering the discovered patterns for this topology isolates the fraudulent structures from the rest.}
+
+\new{Table~\ref{tab:fraud_profile} quantifies this separation. True-positive anchors (structural fraud nodes that Minomaly verified) have a median verified-neighbor density of 1.000 and a median verified-neighbor count of 116, while false-positive anchors have a median density of 0.000 and a median count of 1. The composite score $\log(\mathrm{vn\_count}+1) \times \mathrm{vn\_density}$ achieves an AUC of 94.1\% against the 136 structural fraud nodes. At the top 500 ranked nodes, 92 of the 136 structural fraud nodes are recovered (67.6\% recall at 18.4\% precision); at the top 1{,}000, recovery reaches 113 of 136 (83.1\%). Table~\ref{tab:fraud_clique_recovery} shows per-clique recovery: the 79-node clique is 97\% recovered, the 17-node clique 94\%, and two 10-node cliques 100\%.}
+
+\begin{table}[H]
+\footnotesize
+\centering
+\caption{\new{Structural profile of true-positive (structural fraud) and false-positive (benign) verified anchors on the Amazon fraud detection graph. The verified-neighbor density separates the two groups by two orders of magnitude.}}
+\label{tab:fraud_profile}
+\begin{tabular}{lcccc}
+\toprule
+& \textbf{Degree} & \textbf{VN count} & \textbf{VN density} & \textbf{Composite} \\
+\midrule
+\new{TP anchors (struct.\ fraud, $n{=}40$)} & \new{418} & \new{116} & \new{1.000} & \new{4.76} \\
+\new{FP anchors (benign, $n{=}2{,}535$)}     & \new{8}   & \new{1}   & \new{0.000} & \new{0.00} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\footnotesize
+\centering
+\caption{\new{Per-clique recovery on the Amazon fraud graph. Post-filter composite score (top 1{,}000 nodes). All large cliques are nearly fully recovered; only the smallest (5-node) cliques fall below the ranking threshold.}}
+\label{tab:fraud_clique_recovery}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Clique} & \textbf{Nodes} & \textbf{Density} & \textbf{Recovered (top-1000)} \\
+\midrule
+\new{$C_0$} & \new{79}  & \new{0.95} & \new{77/79 (97\%)} \\
+\new{$C_1$} & \new{17}  & \new{0.89} & \new{16/17 (94\%)} \\
+\new{$C_2$} & \new{10}  & \new{1.00} & \new{10/10 (100\%)} \\
+\new{$C_3$} & \new{10}  & \new{1.00} & \new{10/10 (100\%)} \\
+\new{$C_4$} & \new{10}  & \new{1.00} & \new{0/10 (0\%)} \\
+\new{$C_5$} & \new{5}   & \new{1.00} & \new{0/5 (0\%)} \\
+\new{$C_6$} & \new{5}   & \new{1.00} & \new{0/5 (0\%)} \\
+\midrule
+\new{Total} & \new{136} & & \new{113/136 (83\%)} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection{Implications}
+
+\new{Three conclusions follow from this experiment. First, structural anomalies are present in real-world fraud and are not an artifact of synthetic injection. Among the 821 fraud nodes, 16.6\% form dense cliques that are topologically distinguishable from the rest of the graph. A method that detects structural anomalies can recover these without any label supervision.}
+
+\new{Second, Minomaly's interpretability enables domain-specific filtering of the discovered patterns. Because Minomaly returns explicit subgraph patterns rather than opaque scores, the analyst can characterize each pattern structurally and filter for the clique topology that indicates coordinated fraud. This interpretation step achieves AUC 94.1\% against the structural fraud nodes. Methods that produce only a score would require additional post-hoc explanation; Minomaly provides the structure directly.}
+
+\new{Third, the remaining 84\% of fraud nodes are behavioral anomalies with no structural signature. Detecting them requires contextual features such as review text, timestamps, or cross-relation patterns. Integrating such features into the order-embedding framework is a natural extension of Minomaly and a direction for future work. The experiment demonstrates that structural and contextual anomalies are complementary: a complete fraud detection system should address both, and Minomaly provides the structural foundation.}
+
+\section{Discussion}
+\label{sec:discussion}
+
+After presenting the results, we now highlight the key insights from our experiments. Minomaly not only outperforms existing methods but also provides a deeper understanding of structural anomaly detection in graphs.
+
+\paragraph{Shifting from Reconstruction to Frequency-Based Detection}
+Minomaly's performance advantages across datasets validate our fundamental hypothesis that frequency-based anomaly detection captures structural abnormalities more effectively than reconstruction-based approaches. While reconstruction methods must compress graph information into lower-dimensional embeddings before reconstruction, potentially losing subtle structural differences, Minomaly directly measures structure rarity with minimal information loss. Traditional approaches often produce false positives or miss anomalies by directly using reconstruction error magnitude as their core measure of abnormality—assuming difficult-to-reconstruct structures are inherently anomalous. In contrast, Minomaly leverages a rich set of embeddings from multiple subgraphs and uses GNN-based comparisons to precisely quantify structure frequency without relying on a single reconstruction outcome. This approach provides a more deterministic and interpretable measure of abnormality compared to the often ambiguous nature of reconstruction errors. The conceptual shift proves particularly valuable on the Amazon dataset, where Minomaly achieves an F1 score of \new{68.5\%} compared to 21.7\% for the next best competitor, demonstrating superior discrimination between truly anomalous and normal structural patterns.
+
+\paragraph{Efficient and Scalable Search Strategy} Minomaly's selective processing of starting nodes (\new{79.5\%} of Cora nodes, \new{72.2\%} of Amazon nodes, and \new{48.8\%--61.2\%} of Flickr nodes) significantly reduces computation complexity without compromising detection quality. The high precision of these starting nodes (\new{98.6\%} in Cora, \new{89.1\%} in Amazon) shows that we effectively identify regions containing anomalies. Unlike competing methods that suffer from memory limitations due to neighborhood explosion when reconstructing node representations, Minomaly remains scalable even on large graphs like Flickr (achieving \new{91.0\%--93.2\%} AUC). This scalability comes from our frequency-based approach using a sufficiently $k$ embedded random small graphs  $RG$ to cover diverse graph patterns, avoiding the memory-intensive operations that cause other methods to fail on larger datasets.
+
+\paragraph{Interpretable Parameter Space}
+The analysis of $T_F$ and \texttt{max\_steps} reveals that Minomaly's hyperparameters have clear semantic meaning with predictable effects on performance. The continuous regions of high performance in Figures~\ref{fig:analyze_hyperparameters_cora}-\ref{fig:analyze_hyperparameters_flickr} suggest that finding effective configurations is straightforward compared to deep learning approaches. This interpretability facilitates practical deployment and tuning in real-world scenarios. Similarly, the \texttt{max\_cands} parameter effectively balances exploration thoroughness and computational complexity, as evidenced by strong performance on Amazon (\new{97.62\%} AUC) despite examining only 20 candidates per step in this highly connected graph.
+
+\paragraph{Integrated Detection and Explanation} Unlike other methods that explain results afterward, Minomaly unifies detection and explanation into a coherent process. The frequency curves and anomalous structures in Figure~\ref{fig:interpret_results} and Tables~\ref{tab:cora_patterns}-\ref{tab:flickr_patterns} provide transparent rationales for anomaly flags, making results more actionable for domain experts. Figure~\ref{fig:analyze_oes_search} visualizes how the search process effectively navigates the embedding space to identify anomalous regions, demonstrating that this integrated approach successfully captures meaningful anomalous structures.
+
+\paragraph{\new{Structural Anomalies in Real-World Fraud}}
+\new{The Amazon fraud experiment reveals that structural anomalies are not an artifact of synthetic injection. Among 821 organically labeled fraud nodes, 136 form dense cliques that Minomaly discovers without label supervision. Because Minomaly returns explicit subgraph patterns, the analyst can characterize each pattern and identify the dense cliques that indicate coordinated fraud. Fraud clique members produce verified-neighbor density of 1.0, while other rare structures produce 0.0. Filtering for this clique topology achieves AUC 94.1\% against the structural fraud. Dense cliques are a well-established indicator of coordinated fraud, and Minomaly provides a principled way to discover and characterize them. The experiment also delineates the boundary of structural methods: 84\% of fraud is behavioral and invisible to topology, motivating the integration of contextual features as future work.}
+
+These findings collectively demonstrate that Minomaly's frequency-based approach offers a robust foundation for structural anomaly detection that addresses fundamental limitations in current methods. By directly quantifying node structure rarity, selectively exploring the graph, and providing transparent interpretations, our method achieves superior performance while maintaining computational feasibility for large-scale applications. The clear interpretability of both the method and its results makes it particularly suitable for practical deployment in domains where understanding anomalies is as important as detecting them.
+
+% \textcolor{red}{\paragraph{Comparison with SPMiner} While SPMiner \cite{ying2024representation} successfully identifies frequent motifs for graph-level pattern mining, Minomaly adapts the order embedding framework for a fundamentally different task: node-level structural anomaly detection. Unlike SPMiner's focus on discovering common patterns, Minomaly specifically targets rare neighborhoods and provides interpretable anomaly scores through greedy search expansion. This divergence enables domain experts to understand why specific nodes are flagged as anomalous, making Minomaly more suitable for applications requiring explainable anomaly detection.}
+
+\section{Conclusion}
+\label{sec:conclusion}
+% We introduced \textbf{Minomaly}, an unsupervised framework for detecting node structural anomalies in static graphs through subgraph mining and Graph Neural Networks (GNNs). By leveraging an Order Embedding Space (OES), Minomaly effectively identifies rare node substructures, ensuring both high performance and interpretability. Our experiments show that Minomaly outperforms state-of-the-art methods across all metrics, while maintaining scalability on large datasets such as Flickr. Unlike reconstruction-based methods, Minomaly uses frequency as a measure of abnormality, with interpretable and controllable hyperparameters that can be manually tuned, avoiding memory issues and delivering superior performance. Future work will focus on integrating node attributes for contextual anomaly detection and extending the framework to graph-level anomaly detection.
+
+We introduced \textbf{Minomaly}, an unsupervised framework for detecting node structural anomalies in static graphs using subgraph mining and Graph Neural Networks. Our work formalizes structural anomaly detection through subgraph mining with theoretical foundations via the anti-monotonicity property, while generalizing structural node anomaly detection across multiple contexts.
+
+Minomaly applies order embeddings to graph anomaly detection, leveraging GNNs to efficiently encode graph structures. By exploiting the geometrical properties of the Order Embedding Space, our approach significantly reduces verification overhead during anomalous structure search. We developed a computationally efficient greedy search algorithm that enables understandable graph anomaly detection by identifying and interpreting unusual structures.
+
+Our comprehensive experiments demonstrate Minomaly's superior performance across all metrics while maintaining scalability on large datasets like Flickr. Unlike reconstruction-based methods, our approach uses frequency as a measure of abnormality with interpretable and controllable hyperparameters that can be manually tuned, avoiding memory issues while delivering better performance. \new{The experiment on the Amazon fraud detection graph further demonstrates that Minomaly generalizes beyond synthetic injection to real-world settings: the search discovers the fraud cliques as rare structures, and the structural interpretation of the returned patterns identifies them as dense cliques indicative of coordinated fraud (AUC 94.1\% against structurally anomalous fraud).} Future work will incorporate node attributes for contextual anomalies, develop more robust node candidate sampling strategies to optimize the anomalies search for highly connected graphs, and extend the framework to dynamic graphs with temporal order embeddings and graph-level anomaly detection. \new{A further direction is a formal study of the gap between the true subgraph frequency and the OES-based estimate, characterizing the conditions under which the learned order embedding preserves the exact containment-frequency ranking.} \new{The fraud experiment highlights that structural and contextual anomalies are complementary: 16.6\% of real-world fraud forms dense cliques that Minomaly recovers, while the remaining behavioral fraud requires contextual features. Building a method that integrates both is the natural next step.} Advancing structural anomaly detection is fundamental to addressing contextual anomalies due to their intrinsically related nature.
+
+\bibliography{newrefs}
+
+\end{document}
