@@ -19,8 +19,6 @@ jobs:
         uses: xu-cheng/latex-action@v3
         with:
           root_file: main.tex
-          latexmk_use_xelatex: false
-          extra_system_packages: "bibtex"
 
       - name: Zip paper project
         run: |
