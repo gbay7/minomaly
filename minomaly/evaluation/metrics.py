@@ -24,6 +24,7 @@ def get_stat_results(
     anomalous_nodes: Iterable[int],
     verified_beams: list[Any],
     all_nodes: list[int],
+    structural_scoring: bool = False,
 ) -> dict[str, Any]:
     """Compute detection metrics.
 
@@ -47,6 +48,10 @@ def get_stat_results(
     """
     anomalous_set = set(anomalous_nodes)
 
+    # Normalize to list (pipeline may pass a set)
+    if isinstance(verified_beams, set):
+        verified_beams = list(verified_beams)
+
     # Extract anchor for each verified beam
     verified_anchors: list[int] = [beam.anchor() for beam in verified_beams]
 
@@ -62,13 +67,48 @@ def get_stat_results(
 
     # Continuous anomaly scores: for verified nodes use (1 - beam.score),
     # for non-verified nodes use 0.
+    # When structural_scoring is enabled, uses multi-feature scoring
+    # via IsolationForest on (freq, density, grad, size, max_degree).
     anchor_to_score: dict[int, float] = {}
-    for beam in verified_beams:
-        a = beam.anchor()
-        s = beam.score if beam.score is not None else 0.0
-        score = 1.0 - s
-        if a not in anchor_to_score or score > anchor_to_score[a]:
-            anchor_to_score[a] = score
+
+    has_structural = (
+        verified_beams
+        and hasattr(verified_beams[0], "edge_density")
+        and structural_scoring
+    )
+
+    if has_structural and len(verified_beams) >= 5:
+        features = []
+        anchors_ordered = []
+        for beam in verified_beams:
+            f = beam.freq if beam.freq is not None else 0.0
+            d = beam.edge_density()
+            g = beam.freq_gradient()
+            s = len(beam.neigh)
+            md = beam.max_internal_degree()
+            features.append([f, d, g, s, md])
+            anchors_ordered.append(beam.anchor())
+        from sklearn.ensemble import IsolationForest
+        X = np.array(features)
+        iso = IsolationForest(contamination=0.5, random_state=42, n_estimators=200)
+        iso.fit(X)
+        raw_scores = -iso.decision_function(X)
+        raw_min, raw_max = raw_scores.min(), raw_scores.max()
+        if raw_max > raw_min:
+            norm_scores = (raw_scores - raw_min) / (raw_max - raw_min)
+        else:
+            norm_scores = np.ones_like(raw_scores) * 0.5
+        for anchor, sc in zip(anchors_ordered, norm_scores):
+            if anchor not in anchor_to_score or sc > anchor_to_score[anchor]:
+                anchor_to_score[anchor] = float(sc)
+    else:
+        for beam in verified_beams:
+            a = beam.anchor()
+            s = beam.score if beam.score is not None else 0.0
+            score = 1.0 - s
+            if a not in anchor_to_score or score > anchor_to_score[a]:
+                anchor_to_score[a] = score
+
     y_score = [anchor_to_score.get(node, 0.0) for node in all_nodes]
 
     # ROC curve and optimal threshold (Youden's J statistic)

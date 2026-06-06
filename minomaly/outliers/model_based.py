@@ -84,10 +84,12 @@ class ModelBasedDetector(OutlierDetector):
         all_embs_t = torch.cat(embs, dim=0).to(device)  # (N, D)
         N = all_embs_t.shape[0]
 
-        # Compute frequency for ALL embeddings at once via batched chunks
-        # to avoid OOM on large N×N matrices
+        # Precompute clf decision boundary: violations < threshold ≡ supergraph
+        from minomaly.search.beam_set import _precompute_clf_threshold
+        threshold = _precompute_clf_threshold(model.clf_model, device)
+
         freq_counts = torch.zeros(N, device=device)
-        chunk_size = 64  # small chunks to avoid GPU memory pressure
+        chunk_size = 512
 
         for start in tqdm(range(0, N, chunk_size), desc="Model-based outlier detection"):
             end = min(start + chunk_size, N)
@@ -95,10 +97,8 @@ class ModelBasedDetector(OutlierDetector):
 
             for emb_batch in embs:
                 emb_batch = emb_batch.to(device)
-                # batch_predict: (C, B) pairwise violations
                 violations = model.batch_predict(emb_batch, query_chunk)
-                preds = model.clf_model(violations.unsqueeze(-1))  # (C, B, 2)
-                supergraphs = torch.argmax(preds, dim=-1)  # (C, B)
+                supergraphs = violations < threshold  # (C, B) bool
                 freq_counts[start:end] += supergraphs.sum(dim=1).float()
 
         # Wait for GPU to finish all async operations

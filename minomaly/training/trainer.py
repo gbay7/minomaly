@@ -12,7 +12,9 @@ Optimizations over the original:
 from __future__ import annotations
 
 import logging
-from concurrent.futures import ThreadPoolExecutor
+import pickle
+from collections import deque
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 from pathlib import Path
 from typing import Any
 
@@ -29,6 +31,34 @@ from minomaly.training.losses import order_embedding_loss
 from minomaly.utils.device import get_device
 
 logger = logging.getLogger(__name__)
+
+
+# --- Process-pool data generation -------------------------------------------
+# Batch generation is GIL-bound networkx work that costs ~5x a GPU step, so a
+# single prefetch thread cannot hide it.  Worker processes generate CPU batches
+# in parallel; the main loop moves them to GPU.  Functions are module-level so
+# they pickle for ProcessPoolExecutor.
+
+_WORKER_DG: TrainingPairGenerator | None = None
+
+
+def _data_worker_init(dg_bytes: bytes, base_seed: int) -> None:
+    """Reconstruct the generator in each worker and seed it distinctly."""
+    global _WORKER_DG
+    import os
+    import random
+
+    import numpy as np
+
+    _WORKER_DG = pickle.loads(dg_bytes)
+    seed = (base_seed * 1_000_003 + os.getpid()) % (2 ** 31 - 1)
+    random.seed(seed)
+    np.random.seed(seed)
+
+
+def _data_worker_generate(batch_size: int) -> tuple[Batch, int]:
+    """Generate one combined batch on CPU (moved to GPU by the main loop)."""
+    return _WORKER_DG.generate_combined_batch(batch_size, device=torch.device("cpu"))
 
 
 class OrderEmbeddingTrainer:
@@ -73,8 +103,12 @@ class OrderEmbeddingTrainer:
             return optim.Adam(params, lr=self.config.lr, weight_decay=self.config.weight_decay)
 
     def _generate_batch(self):
-        """Generate a training batch (called in background thread)."""
-        return self.data_generator.generate_batch(
+        """Generate a training batch (called in background thread).
+
+        Returns one combined Batch (all four groups concatenated) plus the
+        per-group size, so the encoder runs a single large forward pass.
+        """
+        return self.data_generator.generate_combined_batch(
             self.config.batch_size, device=self.device,
         )
 
@@ -94,26 +128,48 @@ class OrderEmbeddingTrainer:
         best_auc = 0.0
         last_metrics: dict[str, Any] = {}
 
-        # Prefetch first batch
-        executor = ThreadPoolExecutor(max_workers=1)
-        future = executor.submit(self._generate_batch)
+        # Prefetch setup: process pool (parallel, hides data-gen cost) or a
+        # single background thread (default).
+        num_workers = getattr(cfg, "num_data_workers", 0) or 0
+        use_pool = num_workers > 0
+        if use_pool:
+            import multiprocessing as mp
+            pool = ProcessPoolExecutor(
+                max_workers=num_workers,
+                mp_context=mp.get_context("spawn"),
+                initializer=_data_worker_init,
+                initargs=(pickle.dumps(self.data_generator), 42),
+            )
+            prefetch_depth = num_workers + 2
+            futures = deque(
+                pool.submit(_data_worker_generate, batch_size)
+                for _ in range(prefetch_depth)
+            )
+            executor = None
+        else:
+            executor = ThreadPoolExecutor(max_workers=1)
+            future = executor.submit(self._generate_batch)
 
         pbar = tqdm(range(n_batches), desc="Training")
         for batch_idx in pbar:
             # Get current batch, prefetch next
-            pos_t, pos_q, neg_t, neg_q = future.result()
-            if batch_idx < n_batches - 1:
-                future = executor.submit(self._generate_batch)
+            if use_pool:
+                combined, gsz = futures.popleft().result()
+                if batch_idx < n_batches - prefetch_depth:
+                    futures.append(pool.submit(_data_worker_generate, batch_size))
+                combined = combined.to(self.device, non_blocking=True)
+            else:
+                combined, gsz = future.result()
+                if batch_idx < n_batches - 1:
+                    future = executor.submit(self._generate_batch)
 
-            # Single forward pass: merge all 4 into 2 batches
-            # (targets and queries separately, then split by pos/neg)
+            # Single forward pass on the combined batch, then split into the
+            # four groups [pos_t, neg_t, pos_q, neg_q] (each of size gsz).
             self.optimizer.zero_grad(set_to_none=True)
 
             with autocast("cuda", enabled=self.use_amp):
-                emb_pt = self.model.emb_model(pos_t)
-                emb_pq = self.model.emb_model(pos_q)
-                emb_nt = self.model.emb_model(neg_t)
-                emb_nq = self.model.emb_model(neg_q)
+                emb_all = self.model.emb_model(combined)
+                emb_pt, emb_nt, emb_pq, emb_nq = torch.split(emb_all, gsz)
 
                 n_pos = emb_pt.size(0)
                 n_neg = emb_nt.size(0)
@@ -199,7 +255,12 @@ class OrderEmbeddingTrainer:
                     if hasattr(cb, "on_epoch_end"):
                         cb.on_epoch_end(epoch, avg_loss, epoch_metrics)
 
-        executor.shutdown(wait=False)
+        if use_pool:
+            for f in futures:
+                f.cancel()
+            pool.shutdown(wait=False, cancel_futures=True)
+        else:
+            executor.shutdown(wait=False)
 
         final_metrics: dict[str, Any] = {
             "n_batches": n_batches,

@@ -15,6 +15,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch_geometric.nn as pyg_nn
+from torch_geometric.utils import degree
 
 from minomaly.models.base import GraphEncoder
 from minomaly.models.convolutions import GINConv, SAGEConv
@@ -46,12 +47,14 @@ class SkipLastGNN(GraphEncoder):
         conv_type: str = "SAGE",
         skip: str = "learnable",
         dropout: float = 0.0,
+        degree_normalize: bool = False,
     ) -> None:
         super().__init__()
         self.dropout = dropout
         self.n_layers = n_layers
         self.skip = skip
         self.conv_type = conv_type
+        self.degree_normalize = degree_normalize
 
         pre_mp_out = 3 * hidden_dim if conv_type == "PNA" else hidden_dim
         self.pre_mp = nn.Sequential(nn.Linear(input_dim, pre_mp_out))

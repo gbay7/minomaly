@@ -10,6 +10,15 @@ from minomaly.generators.erdos_renyi import ERGenerator
 from minomaly.generators.watts_strogatz import WSGenerator
 from minomaly.generators.barabasi_albert import BAGenerator
 from minomaly.generators.powerlaw_cluster import PowerLawClusterGenerator
+from minomaly.generators.dense_er import DenseERGenerator
+from minomaly.generators.structural import (
+    BiCliqueGenerator,
+    GridGenerator,
+    CycleGenerator,
+    NearCliqueGenerator,
+    WheelGenerator,
+    HypercubeGenerator,
+)
 from minomaly.registry import GENERATORS
 
 
@@ -51,12 +60,31 @@ class EnsembleGenerator(GraphGenerator):
         return self.generators[idx].generate(size=size)
 
 
-def build_default_ensemble(sizes: np.ndarray) -> EnsembleGenerator:
-    """Create the default ensemble of ER + WS + BA + PowerLaw generators."""
+def build_default_ensemble(
+    sizes: np.ndarray,
+    include_dense: bool = True,
+    include_structural: bool = False,
+) -> EnsembleGenerator:
+    """Create the default ensemble of ER + WS + BA + PowerLaw (+ DenseER) generators.
+
+    When *include_structural* is True, adds biclique, grid, cycle, and
+    near-clique generators so the model learns these topologies.
+    """
     generators: list[GraphGenerator] = [
         ERGenerator(sizes),
         WSGenerator(sizes),
         BAGenerator(sizes),
         PowerLawClusterGenerator(sizes),
     ]
+    if include_dense:
+        generators.append(DenseERGenerator(sizes))
+    if include_structural:
+        generators.extend([
+            BiCliqueGenerator(sizes),
+            GridGenerator(sizes),
+            CycleGenerator(sizes),
+            NearCliqueGenerator(sizes),
+            WheelGenerator(sizes),
+            HypercubeGenerator(sizes),
+        ])
     return EnsembleGenerator(generators)

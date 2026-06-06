@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import random
 import time
 from typing import Optional
 
@@ -60,6 +61,7 @@ class StrengthSearchAgent:
         min_neigh_repeat: int = 2,
         input_dim: int = 2,
         freq_cache: Optional[torch.Tensor] = None,
+        min_subgraph_size: int = 1,
         **kwargs,
     ) -> None:
         self.input_dim = input_dim
@@ -83,6 +85,8 @@ class StrengthSearchAgent:
         self.add_verified_neighs = add_verified_neighs
         self.min_neigh_repeat = min_neigh_repeat
 
+        self.min_subgraph_size = min_subgraph_size
+
         self.num_nodes = sum(g.num_nodes for g in graphs)
         self.node_votes: dict[int, int] = {}
 
@@ -90,6 +94,26 @@ class StrengthSearchAgent:
         self.verified = BeamSet()
         self.copied_verified = BeamSet()
         self.pattern_store = PatternStore(node_anchored=node_anchored)
+
+    @staticmethod
+    def _grow_beam_to_size(beam: Beam, target_size: int) -> Optional[Beam]:
+        """Grow a beam randomly to *target_size* without embedding/scoring."""
+        while len(beam.neigh) < target_size:
+            if not beam.frontier:
+                return beam
+            node = random.choice(beam.frontier)
+            beam = Beam(
+                node=node,
+                graph=beam.graph,
+                neigh=list(beam.neigh),
+                frontier=list(beam.frontier),
+                visited=set(beam.visited),
+                total_weight=beam.graph.num_nodes,
+                add_self_loop=beam._add_self_loop,
+                node_anchored=beam._node_anchored,
+                input_dim=beam._input_dim,
+            )
+        return beam
 
     def run(
         self,
@@ -125,9 +149,12 @@ class StrengthSearchAgent:
                 node_anchored=self.node_anchored,
                 input_dim=self.input_dim,
             )
-            beam_sets.append(BeamSet([beam]))
+            if self.min_subgraph_size > 1:
+                beam = self._grow_beam_to_size(beam, self.min_subgraph_size)
+            if beam is not None:
+                beam_sets.append(BeamSet([beam]))
 
-        steps = 1
+        steps = max(1, self.min_subgraph_size - 1)
         while beam_sets and steps < self.max_steps:
             steps += 1
             beam_sets = self._step(beam_sets, steps, cb)

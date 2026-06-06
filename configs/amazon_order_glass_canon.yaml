@@ -1,0 +1,65 @@
+# Amazon: OrderEmbedder + GLASS — canonical reproduction
+# = amazon_order_glass.yaml (base) with the SINGLE change max_freq 150 -> 30
+# Rationale: base's generous outlier_max_freq=300 restores recall, while the
+# tight max_freq=30 (from v3) restores precision/score-separation. Memory
+# documents the canonical param set as max_freq=30, max_steps=11, n_beams=2,
+# max_cands=20, nb=16, sampled.
+device:
+  device: auto
+
+dataset:
+  name: inj_amazon
+  task: struct-anomaly
+
+model:
+  method_type: order
+  conv_type: SAGE
+  skip: learnable
+  n_layers: 8
+  hidden_dim: 64
+  margin: 0.1
+  dropout: 0.0
+  input_dim: 2
+  model_path: ckpt_order_glass/best_model.pt
+  degree_normalize: false
+
+sampling:
+  n_neighborhoods: 50000
+  min_neighborhood_size: 1
+  max_neighborhood_size: 30
+  radial_radius: 2
+  node_anchored: true
+  add_self_loop: true
+
+search:
+  min_steps: 1
+  max_steps: 11
+  max_freq: 30.0
+  outlier_max_freq: 300.0
+  min_strength: 0.0
+  max_unchanged: 3
+  n_beams: 2
+  max_cands: 20
+  alpha: 0.33
+  scoring_function: freq
+  search_strategy: sampled
+  add_verified_neighs: true
+  min_neigh_repeat: 1
+  nodes_batch_size: 16
+  sample_size: 10000
+
+outlier:
+  methods:
+    - model_based
+    - isolation_forest
+  combine: union
+  isolation_contamination: auto
+
+training:
+  enabled: false
+
+visualization:
+  enabled: false
+
+seed: 42
+batch_size: 10000

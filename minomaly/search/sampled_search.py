@@ -23,9 +23,14 @@ from minomaly.data.convert import batch_pyg_data
 from minomaly.data.graph import GraphData
 from minomaly.registry import SEARCH
 from minomaly.scoring.base import ScoringFunction
+from minomaly.search._freq import chunked_freq_score
 from minomaly.search.beam import Beam
 from minomaly.search.beam_set import BeamSet
 from minomaly.search.pattern_store import PatternStore
+from minomaly.search.strength_search import StrengthSearchAgent
+
+
+from minomaly.search._batch import candidates_to_batch
 
 
 def _precompute_threshold(clf_model, device) -> float:
@@ -56,7 +61,7 @@ class SampledSearchAgent:
         max_cands=None, sample_random_cands=None,
         add_verified_neighs=False, min_neigh_repeat=2,
         input_dim=2, freq_cache=None,
-        sample_size=500, **kwargs,
+        sample_size=500, min_subgraph_size=1, **kwargs,
     ):
         self.model = model
         self.graphs = graphs
@@ -78,6 +83,7 @@ class SampledSearchAgent:
         self.min_neigh_repeat = min_neigh_repeat
         self.input_dim = input_dim
         self.sample_size = sample_size
+        self.min_subgraph_size = min_subgraph_size
 
         self.num_nodes = sum(g.num_nodes for g in graphs)
         self.all_embs = torch.cat(embs, dim=0)
@@ -108,7 +114,10 @@ class SampledSearchAgent:
                 add_self_loop=self.add_self_loop, node_anchored=self.node_anchored,
                 input_dim=self.input_dim,
             )
-            beam_sets.append(BeamSet([beam]))
+            if self.min_subgraph_size > 1:
+                beam = StrengthSearchAgent._grow_beam_to_size(beam, self.min_subgraph_size)
+            if beam is not None:
+                beam_sets.append(BeamSet([beam]))
 
         # Fixed random sample of reference embeddings
         m = min(self.sample_size, self.K)
@@ -121,7 +130,7 @@ class SampledSearchAgent:
             sampled_fc = self.freq_cache[sample_idx]  # (m,)
 
         t0 = time.time()
-        steps = 1
+        steps = max(1, self.min_subgraph_size - 1)
         while beam_sets and steps < self.max_steps:
             steps += 1
 
@@ -144,9 +153,8 @@ class SampledSearchAgent:
             if not all_cands:
                 break
 
-            # ── Mega-batch embed ──────────────────────────────────────
-            data_list = [c.get_pyg_data() for c in all_cands]
-            batch = batch_pyg_data(data_list, device=self.device)
+            # ── Mega-batch embed (vectorized batch construction) ───────
+            batch = candidates_to_batch(all_cands, self.device)
             with torch.no_grad():
                 if hasattr(self.model, "embed_and_project"):
                     cand_embs = self.model.embed_and_project(batch)
@@ -155,24 +163,12 @@ class SampledSearchAgent:
             for c, emb in zip(all_cands, cand_embs):
                 c.emb = emb.detach()
 
-            # ── Mega-batch score against ALL sampled refs ─────────────
+            # ── Chunked score against sampled refs (memory-safe) ────────
             all_emb_stack = torch.stack([c.emb for c in all_cands])
-            with torch.no_grad():
-                violations = self.model.batch_predict(ref_sample, all_emb_stack)
-                preds = self.model.clf_model(violations.unsqueeze(-1))  # (N, m, 2)
-                is_super = torch.argmax(preds, dim=-1).bool()  # (N, m)
-                freq_counts = is_super.float().sum(dim=1)
-
-            # ── Insight 1 (freq cache): Early non-anomalous detection ─
-            # For each candidate, if ANY confirmed supergraph ref has
-            # cached freq > max_strength, then Freq(candidate) > T_F
-            # by anti-monotonicity. The candidate is provably non-anomalous.
-            if sampled_fc is not None:
-                masked_fc = is_super.float() * sampled_fc.unsqueeze(0)  # (N, m)
-                lower_bounds = masked_fc.max(dim=1).values  # (N,)
-                non_anom = lower_bounds > self.max_strength
-                for i in non_anom.nonzero(as_tuple=True)[0].tolist():
-                    freq_counts[i] = lower_bounds[i].item() * m
+            freq_counts = chunked_freq_score(
+                self.model, ref_sample, all_emb_stack,
+                sampled_fc=sampled_fc, max_strength=self.max_strength,
+            )
 
             # Assign scores (normalize by m for comparable freq)
             freqs_this_step = []

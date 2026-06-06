@@ -143,11 +143,22 @@ class Beam:
         mapping.update({n: i + 1 for i, n in enumerate(neigh_set - {anchor})})
         num_nodes = len(mapping)
 
-        # Build edges via CSR neighbor lookup (fast)
+        # Build edges via CSR neighbor lookup using a cached CPU/numpy copy of
+        # the CSR arrays. The GPU CSR (graph.neighbors) does an .item()/.tolist()
+        # GPU->CPU sync per node, which dominates runtime when this is called
+        # for ~10^5 candidates per search step (GPU stalls at ~3%). The numpy
+        # cache removes those syncs entirely.
+        g = self.graph
+        if not hasattr(g, "_cpu_row_ptr"):
+            g._cpu_row_ptr = g._row_ptr.cpu().numpy()
+            g._cpu_col = g._col.cpu().numpy()
+        _rp, _col = g._cpu_row_ptr, g._cpu_col
+
         src, dst = [], []
         for node in self.neigh:
             m_node = mapping[node]
-            for nb in self.graph.neighbors(node).tolist():
+            for nb in _col[_rp[node]:_rp[node + 1]]:
+                nb = int(nb)
                 if nb in neigh_set:
                     src.append(m_node)
                     dst.append(mapping[nb])
@@ -183,6 +194,52 @@ class Beam:
         self.emb = emb_model(batch).squeeze(0).detach()
         return self.emb
 
+    # ── Structural features ─────────────────────────────────────────
+
+    def edge_count(self) -> int:
+        """Count internal edges (both directions counted once)."""
+        neigh_set = set(self.neigh)
+        count = 0
+        for node in self.neigh:
+            for nb in self.graph.neighbors(node).tolist():
+                if nb in neigh_set and nb > node:
+                    count += 1
+        return count
+
+    def edge_density(self) -> float:
+        """Edge density of the subgraph: |E| / (n*(n-1)/2)."""
+        n = len(self.neigh)
+        if n < 2:
+            return 0.0
+        max_edges = n * (n - 1) / 2
+        return self.edge_count() / max_edges
+
+    def max_internal_degree(self) -> int:
+        """Maximum degree within the subgraph."""
+        neigh_set = set(self.neigh)
+        max_deg = 0
+        for node in self.neigh:
+            deg = sum(1 for nb in self.graph.neighbors(node).tolist() if nb in neigh_set)
+            max_deg = max(max_deg, deg)
+        return max_deg
+
+    def freq_gradient(self) -> float:
+        """Average rate of frequency change per step (df/ds).
+
+        Negative gradient means frequency is dropping (pattern getting rarer).
+        Uses freq_history: list of (size, freq) tuples.
+        """
+        if len(self.freq_history) < 2:
+            return 0.0
+        total_df = 0.0
+        for i in range(1, len(self.freq_history)):
+            s_prev, f_prev = self.freq_history[i - 1]
+            s_curr, f_curr = self.freq_history[i]
+            ds = s_curr - s_prev
+            if ds > 0:
+                total_df += (f_curr - f_prev) / ds
+        return total_df / (len(self.freq_history) - 1)
+
     # ── Scoring ───────────────────────────────────────────────────────
 
     def compute_strength(
@@ -210,7 +267,7 @@ class Beam:
 
         self.freq = freq_count / n_embs if n_embs > 0 else 0.0
         self.freq_history.append((len(self.neigh), self.freq))
-        self.score = scorer(self.freq, self.weight, alpha, self.last_score)
+        self.score = scorer(self.freq, self.weight, alpha, self.last_score, beam=self)
 
         # Track convergence
         if unchange_direction:

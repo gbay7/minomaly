@@ -1,0 +1,60 @@
+# Flickr F2: OrderEmbedder + GLASS (k=200k)
+device:
+  device: auto
+
+dataset:
+  name: inj_flickr
+  task: struct-anomaly
+
+model:
+  method_type: order
+  conv_type: SAGE
+  skip: learnable
+  n_layers: 8
+  hidden_dim: 64
+  margin: 0.1
+  dropout: 0.0
+  input_dim: 2
+  model_path: ckpt_order_glass/best_model.pt
+  degree_normalize: false
+
+sampling:
+  n_neighborhoods: 200000
+  min_neighborhood_size: 1
+  max_neighborhood_size: 30
+  radial_radius: 2
+  node_anchored: true
+  add_self_loop: true
+
+search:
+  min_steps: 1
+  max_steps: 5
+  max_freq: 1000.0
+  outlier_max_freq: 1000.0
+  min_strength: 0.0
+  max_unchanged: 3
+  n_beams: 1
+  max_cands: 10
+  alpha: 0.33
+  scoring_function: freq
+  search_strategy: sampled
+  add_verified_neighs: true
+  min_neigh_repeat: 0
+  nodes_batch_size: 100
+  sample_size: 10000
+
+outlier:
+  methods:
+    - model_based
+    - isolation_forest
+  combine: union
+  isolation_contamination: auto
+
+training:
+  enabled: false
+
+visualization:
+  enabled: false
+
+seed: 42
+batch_size: 12500

@@ -6,7 +6,13 @@ from abc import ABC, abstractmethod
 
 
 class ScoringFunction(ABC):
-    """Score a beam during search (lower is more anomalous)."""
+    """Score a beam during search (lower is more anomalous).
+
+    Subclasses that need beam-level structural features (edge density,
+    degree distribution, etc.) can accept ``beam=`` via **kwargs.
+    When called without a beam (e.g. for max_strength threshold), the
+    scorer should fall back to frequency-only behavior.
+    """
 
     @abstractmethod
     def __call__(
@@ -15,6 +21,7 @@ class ScoringFunction(ABC):
         weight: float,
         alpha: float = 0.5,
         last_score: float = float("inf"),
+        **kwargs,
     ) -> float: ...
 
 
@@ -28,4 +35,5 @@ class VerificationScoringFunction(ABC):
         weight: float,
         alpha: float = 0.5,
         last_score: float = float("inf"),
+        **kwargs,
     ) -> float: ...

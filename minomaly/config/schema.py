@@ -32,6 +32,9 @@ class ModelConfig:
     temperature: float = 0.07        # InfoNCE temperature for contrastive
     proj_dim: int = 64               # projection dimension for hybrid/DSAN
     neg_weight: float = 0.05         # negative repulsion weight for hybrid
+    degree_normalize: bool = False   # degree-scaled readout before sum pool
+    encoder_name: str = "skip_last_gnn"  # encoder from ENCODERS registry
+    edge_n_layers: int = 4               # conv layers for edge GNN (edge_centric encoder)
 
 
 @dataclass
@@ -63,11 +66,24 @@ class SearchConfig:
     unchange_direction: bool = False
     scoring_function: str = "freq"
     verif_scoring_function: str = "freq_verif"
+    structural_scoring: bool = False  # use multi-feature IF for anomaly scores
     search_strategy: str = "strength"
     add_verified_neighs: bool = False
     min_neigh_repeat: int = 2
     nodes_batch_size: int = 16
+    min_subgraph_size: int = 1  # skip uninformative early steps (start beam at this size)
     sample_size: int = 500  # reference sample size for sampled search
+    policy_model_path: Optional[str] = None  # trained RL policy for rl search
+    rl_top_k: Optional[int] = None             # frontier candidates per step (None = all)
+    rl_temperature: float = 1.0               # policy sampling temperature (rl search)
+    vote_samples: int = 3                      # neighborhoods per frontier node per size (vote search)
+    vote_sizes: Optional[List[int]] = None     # lookahead neighborhood sizes (vote search)
+    vote_top_k: int = 5                        # top-voted frontier nodes to expand (vote search)
+    calibrate: bool = False                    # auto-calibrate max_freq from freq_cache distribution
+    score_mode: str = "min_freq"               # rarity search: "min_freq", "spike", "vote"
+    valley_threshold: Optional[float] = None   # rarity search: auto-verify below this freq
+    consensus: bool = False                    # rarity search: group-consensus AP boost
+    cohesion_top_k: int = 10                   # cohesion search: frontier candidates ranked by internal edges
 
 
 @dataclass
@@ -98,6 +114,8 @@ class TrainingConfig:
     checkpoint_dir: str = "ckpt"
     node_anchored: bool = True
     clip_grad: float = 1.0
+    include_structural: bool = False
+    num_data_workers: int = 0  # >0 → parallel process-pool batch generation
 
 
 @dataclass
@@ -117,26 +135,14 @@ class DatasetConfig:
     name: str = "inj_cora"
     task: str = "struct-anomaly"
     cache_dir: Optional[str] = None
-
-
-@dataclass
-class ContextConfig:
-    """Contextual anomaly detection configuration."""
-
-    enabled: bool = False
-    encoder: str = "skip_last_gnn"
-    n_layers: int = 4
-    hidden_dim: int = 64
-    conv_type: str = "SAGE"
-    skip: str = "learnable"
-    dropout: float = 0.0
-    n_clusters: int = 10
-    clustering: str = "kmeans"
-    beta: float = 0.5  # beta*structural + (1-beta)*contextual
-    training: str = "contrastive"  # "none" or "contrastive"
-    n_epochs: int = 50
-    lr: float = 1e-3
-    temperature: float = 0.5
+    injection: str = "none"
+    injection_ratio: float = 0.05
+    n_outliers: Optional[int] = None
+    dice_perturb: float = 0.5
+    group_size: int = 10
+    drop_prob: float = 0.0
+    anomaly_class: int = 0
+    relation: str = "upu"  # fraud datasets: which relation (upu, usu, uvu, homo)
 
 
 @dataclass
@@ -151,6 +157,5 @@ class MinomalyConfig:
     training: TrainingConfig = field(default_factory=TrainingConfig)
     visualization: VisualizationConfig = field(default_factory=VisualizationConfig)
     dataset: DatasetConfig = field(default_factory=DatasetConfig)
-    context: ContextConfig = field(default_factory=ContextConfig)
     seed: int = 42
     batch_size: int = 1000

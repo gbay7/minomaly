@@ -22,7 +22,8 @@ RUN pip install --no-cache-dir \
     tqdm \
     pyyaml \
     dacite \
-    requests
+    requests \
+    pygod
 
 # Copy package
 COPY minomaly/ /app/minomaly/

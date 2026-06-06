@@ -76,8 +76,10 @@ class RadialFastSampler(Sampler):
         graphs: list[GraphData],
         node_anchored: bool = True,
         add_self_loop: bool = True,
+        nx_graphs: list | None = None,
     ) -> SamplingResult:
-        nx_graphs = [g.to_nx() for g in graphs]
+        if nx_graphs is None:
+            nx_graphs = [g.to_nx() for g in graphs]
         result = SamplingResult()
 
         for i, nx_graph in enumerate(nx_graphs):

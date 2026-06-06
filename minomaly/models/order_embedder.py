@@ -131,9 +131,26 @@ class OrderEmbedder(EmbeddingModel):
         torch.Tensor
             Shape ``(N, B)`` — violations.
         """
-        # emb_bs (N, D), emb_as (B, D) → diff (N, B, D)
-        diff = emb_bs.unsqueeze(1) - emb_as.unsqueeze(0)
-        return torch.sum(torch.clamp(diff, min=0) ** 2, dim=2)
+        N, D = emb_bs.shape
+        B = emb_as.shape[0]
+        # Memory budget: keep the diff tensor below ~256 MB so that the
+        # full (N, B, D) intermediate never materialises on dense graphs
+        # with large reference sets (k = 20k–150k).
+        # 256 MB / (4 bytes * D) elements per slice = chunk along B.
+        budget_bytes = 256 * 1024 * 1024
+        chunk = max(1, budget_bytes // max(1, 4 * N * D))
+        if chunk >= B:
+            diff = emb_bs.unsqueeze(1) - emb_as.unsqueeze(0)
+            return torch.sum(torch.clamp(diff, min=0) ** 2, dim=2)
+        out = torch.empty(N, B, device=emb_bs.device, dtype=emb_bs.dtype)
+        for start in range(0, B, chunk):
+            end = min(start + chunk, B)
+            slice_diff = emb_bs.unsqueeze(1) - emb_as[start:end].unsqueeze(0)
+            out[:, start:end] = torch.sum(
+                torch.clamp(slice_diff, min=0) ** 2, dim=2
+            )
+            del slice_diff
+        return out
 
     def criterion(
         self,
@@ -179,4 +196,8 @@ class OrderEmbedder(EmbeddingModel):
         # Negative: softplus(margin - e) for continuous gradients
         neg_loss = F.softplus(self.margin - e[neg_mask]).mean() if neg_mask.any() else torch.tensor(0.0, device=emb_as.device)
 
-        return pos_loss + neg_loss
+        # Train clf_model jointly (NLL on violation → class prediction)
+        clf_pred = self.clf_model(e.detach().unsqueeze(1))
+        clf_loss = F.nll_loss(clf_pred, labels.long())
+
+        return pos_loss + neg_loss + clf_loss

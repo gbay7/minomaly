@@ -134,6 +134,62 @@ class TrainingPairGenerator:
 
         return pos_t_batch, pos_q_batch, neg_t_batch, neg_q_batch
 
+    def generate_combined_batch(
+        self,
+        batch_size: int,
+        device: Optional[torch.device] = None,
+    ) -> tuple[Batch, int]:
+        """Generate a batch as a single combined PyG Batch.
+
+        Builds one Batch from all four groups concatenated in the order
+        ``[pos_target, neg_target, pos_query, neg_query]`` (each of length
+        ``batch_size``), so the encoder runs once on a 4x-larger batch.
+        Small per-group batches leave the GPU under-utilized; one large
+        batch saturates it (~3x faster for the dual edge-centric encoder).
+
+        Returns ``(combined_batch, group_size)`` where ``group_size`` is the
+        per-group count used to split the embeddings back into four parts.
+        """
+        if device is None:
+            device = get_device()
+
+        pos_targets: list[nx.Graph] = []
+        pos_queries: list[nx.Graph] = []
+        pos_target_anchors: list[int] = []
+        pos_query_anchors: list[int] = []
+        neg_targets: list[nx.Graph] = []
+        neg_queries: list[nx.Graph] = []
+        neg_target_anchors: list[int] = []
+        neg_query_anchors: list[int] = []
+
+        for _ in range(batch_size):
+            t, q, a_t, a_q = self._positive_pair()
+            pos_targets.append(t)
+            pos_queries.append(q)
+            pos_target_anchors.append(a_t)
+            pos_query_anchors.append(a_q)
+
+            hard = random.random() < self.hard_neg_ratio
+            t, q, a_t, a_q = self._negative_pair(hard=hard)
+            neg_targets.append(t)
+            neg_queries.append(q)
+            neg_target_anchors.append(a_t)
+            neg_query_anchors.append(a_q)
+
+        graphs = pos_targets + neg_targets + pos_queries + neg_queries
+        anchors = (
+            pos_target_anchors + neg_target_anchors
+            + pos_query_anchors + neg_query_anchors
+            if self.node_anchored else None
+        )
+        combined = batch_nx_graphs(
+            graphs,
+            anchors=anchors,
+            node_anchored=self.node_anchored,
+            device=device,
+        )
+        return combined, batch_size
+
     def _positive_pair(self) -> tuple[nx.Graph, nx.Graph, int, int]:
         """Sample a graph and a true subgraph of it.
 

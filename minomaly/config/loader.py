@@ -103,6 +103,15 @@ def _set_nested_attr(obj: Any, dotted_key: str, value: Any) -> None:
                         value = _str_to_bool(value)
                     else:
                         value = target_type(value)
+                else:
+                    # Handle Optional[T] as string annotation
+                    import re
+                    m = re.match(r"Optional\[(\w+)\]", str(target_type))
+                    if m and m.group(1) in _COERCIBLE:
+                        if isinstance(value, str) and value.lower() in ("none", "null"):
+                            value = None
+                        else:
+                            value = _COERCIBLE[m.group(1)](value)
                 break
 
     setattr(obj, final_key, value)
