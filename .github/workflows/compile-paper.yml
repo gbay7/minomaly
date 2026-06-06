@@ -3,9 +3,10 @@ name: Compile Paper
 on:
   push:
     branches: [paper]
-  pull_request:
-    branches: [paper]
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -20,21 +21,21 @@ jobs:
         with:
           root_file: main.tex
 
-      - name: Zip paper project
+      - name: Zip paper source
         run: |
-          mkdir -p artifact
-          cp main.pdf artifact/
-          zip -r artifact/minomaly-paper-source.zip \
+          zip -r minomaly-paper-source.zip \
             main.tex refs.bib newrefs.bib \
             figs/ tables/ \
             sn-jnl.cls sn-basic.bst sn-apacite.bst sn-aps.bst \
             sn-chicago.bst sn-mathphys-ay.bst sn-mathphys-num.bst \
-            sn-nature.bst sn-vancouver.bst \
-            .gitignore
+            sn-nature.bst sn-vancouver.bst
 
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+      - name: Create release
+        uses: softprops/action-gh-release@v2
         with:
-          name: minomaly-paper
-          path: artifact/
-          retention-days: 30
+          tag_name: paper-${{ github.sha }}
+          name: Paper Build ${{ github.run_number }}
+          body: Compiled paper and source from commit ${{ github.sha }}
+          files: |
+            main.pdf
+            minomaly-paper-source.zip
