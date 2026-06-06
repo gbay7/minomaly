@@ -1,0 +1,42 @@
+name: Compile Paper
+
+on:
+  push:
+    branches: [paper]
+  pull_request:
+    branches: [paper]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Compile LaTeX
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: main.tex
+          latexmk_use_xelatex: false
+          extra_system_packages: "bibtex"
+
+      - name: Zip paper project
+        run: |
+          mkdir -p artifact
+          cp main.pdf artifact/
+          zip -r artifact/minomaly-paper-source.zip \
+            main.tex refs.bib newrefs.bib \
+            figs/ tables/ \
+            sn-jnl.cls sn-basic.bst sn-apacite.bst sn-aps.bst \
+            sn-chicago.bst sn-mathphys-ay.bst sn-mathphys-num.bst \
+            sn-nature.bst sn-vancouver.bst \
+            .gitignore
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: minomaly-paper
+          path: artifact/
+          retention-days: 30

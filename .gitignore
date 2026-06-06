@@ -1,0 +1,30 @@
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.lof
+*.lot
+*.nav
+*.snm
+*.vrb
+texput.log
+
+# Compiled output
+*.pdf
+# Keep figure PDFs
+!figs/**/*.pdf
+
+# EPS intermediates
+*.eps
+
+# IDE / OS
+.DS_Store
+.vscode/
+*.swp
+*.swo
