@@ -28,3 +28,6 @@ texput.log
 .vscode/
 *.swp
 *.swo
+
+# microtype
+*.spl
