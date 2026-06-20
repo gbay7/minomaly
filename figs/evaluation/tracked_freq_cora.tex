@@ -1,0 +1,37 @@
+\begin{tikzpicture}
+\begin{axis}[
+log basis y={10},
+width=\linewidth, height=5cm,
+tick align=outside, tick pos=both,
+xlabel={Step}, ylabel={$\log$ Frequency},
+xmin=1, xmax=6, xtick={1,2,3,4,5,6},
+xticklabels={1,2,3,4,5,\footnotesize\texttt{max\_steps}},
+ymin=0.0005, ymax=1.6, ymode=log,
+ytick={1,0.1,0.001}, yticklabels={$10^{0}$,$10^{-1}$,$10^{-3}$},
+legend style={font=\scriptsize, at={(0.03,0.03)}, anchor=south west},
+extra y ticks={0.0055},
+extra y tick labels={\footnotesize $T_F$},
+extra y tick style={yticklabel style={color=red}}
+]
+\path [draw=red, fill=red, opacity=0.15]
+(axis cs:1,0.0055) --(axis cs:1,0.0005) --(axis cs:6,0.0005) --(axis cs:6,0.0055) --cycle;
+\addplot [semithick, red, mark=*, mark size=2.5] table {%
+1 1
+2 0.9611
+3 0.3877
+4 0.0494
+5 0.0101
+6 0.0009
+};
+\addlegendentry{True positive}
+\addplot [semithick, green!55!black, mark=*, mark size=2.5] table {%
+1 1
+2 0.9611
+3 0.9117
+4 0.832
+5 0.6862
+6 0.5341
+};
+\addlegendentry{True negative}
+\end{axis}
+\end{tikzpicture}

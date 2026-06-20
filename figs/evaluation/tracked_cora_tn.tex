@@ -1,0 +1,17 @@
+\begin{tikzpicture}
+  \draw
+    (0.000:2) node[fill=orange, text=black, font=\scriptsize, minimum size=4mm, inner sep=1pt, circle, draw] (1626){1626}
+    (60.000:2) node[fill=green, font=\scriptsize, minimum size=3mm, inner sep=1pt, circle, draw, text=black] (164){164}
+    (120.000:2) node[fill=green, font=\scriptsize, minimum size=3mm, inner sep=1pt, circle, draw, text=black] (210){210}
+    (180.000:2) node[fill=green, font=\scriptsize, minimum size=3mm, inner sep=1pt, circle, draw, text=black] (1614){1614}
+    (240.000:2) node[fill=green, font=\scriptsize, minimum size=3mm, inner sep=1pt, circle, draw, text=black] (1671){1671}
+    (300.000:2) node[fill=green, font=\scriptsize, minimum size=3mm, inner sep=1pt, circle, draw, text=black] (2309){2309};
+  \begin{scope}[-]
+    \draw (164) to (210);
+    \draw (210) to (1614);
+    \draw (210) to (1626);
+    \draw (210) to (1671);
+    \draw (210) to (2309);
+    \draw (1614) to (1671);
+  \end{scope}
+\end{tikzpicture}

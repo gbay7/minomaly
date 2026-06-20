@@ -1,0 +1,50 @@
+\begin{tikzpicture}
+  \draw
+    (0.000:3.000) node[fill={rgb,140:red,255;green,0;blue,0}, minimum size=4mm, circle, draw, text=white] (4326){4326}
+    (40.000:3.000) node[fill={rgb,140:red,255;green,0;blue,0}, minimum size=2mm, circle, draw, text=white] (1207){1207}
+    (80.000:3.000) node[fill={rgb,140:red,255;green,0;blue,0}, minimum size=2mm, circle, draw, text=white] (3945){3945}
+    (120.000:3.000) node[fill={rgb,140:red,255;green,0;blue,0}, minimum size=2mm, circle, draw, text=white] (13079){13079}
+    (160.000:3.000) node[fill={rgb,140:red,255;green,0;blue,0}, minimum size=2mm, circle, draw, text=white] (2671){2671}
+    (200.000:3.000) node[fill={rgb,140:red,255;green,0;blue,0}, minimum size=2mm, circle, draw, text=white] (7048){7048}
+    (240.000:3.000) node[fill={rgb,140:red,255;green,0;blue,0}, minimum size=2mm, circle, draw, text=white] (6039){6039}
+    (280.000:3.000) node[fill={rgb,140:red,255;green,0;blue,0}, minimum size=2mm, circle, draw, text=white] (9632){9632}
+    (320.000:3.000) node[fill={rgb,140:red,255;green,0;blue,0}, minimum size=2mm, circle, draw, text=white] (8014){8014};
+  \begin{scope}[-]
+    \draw (4326) to (1207);
+    \draw (4326) to (3945);
+    \draw (4326) to (13079);
+    \draw (4326) to (2671);
+    \draw (4326) to (7048);
+    \draw (4326) to (6039);
+    \draw (4326) to (9632);
+    \draw (4326) to (8014);
+    \draw (1207) to (3945);
+    \draw (1207) to (13079);
+    \draw (1207) to (2671);
+    \draw (1207) to (7048);
+    \draw (1207) to (6039);
+    \draw (1207) to (9632);
+    \draw (1207) to (8014);
+    \draw (3945) to (13079);
+    \draw (3945) to (2671);
+    \draw (3945) to (7048);
+    \draw (3945) to (6039);
+    \draw (3945) to (9632);
+    \draw (3945) to (8014);
+    \draw (13079) to (2671);
+    \draw (13079) to (7048);
+    \draw (13079) to (6039);
+    \draw (13079) to (9632);
+    \draw (13079) to (8014);
+    \draw (2671) to (7048);
+    \draw (2671) to (6039);
+    \draw (2671) to (9632);
+    \draw (2671) to (8014);
+    \draw (7048) to (6039);
+    \draw (7048) to (9632);
+    \draw (7048) to (8014);
+    \draw (6039) to (9632);
+    \draw (6039) to (8014);
+    \draw (9632) to (8014);
+  \end{scope}
+\end{tikzpicture}

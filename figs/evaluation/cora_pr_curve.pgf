@@ -488,18 +488,9 @@
 \definecolor{currentstroke}{rgb}{0.000000,0.447059,0.741176}%
 \pgfsetstrokecolor{currentstroke}%
 \pgfsetdash{}{0pt}%
-\pgfpathmoveto{\pgfqpoint{4.992341in}{0.812052in}}%
-\pgfpathlineto{\pgfqpoint{4.630003in}{4.128505in}}%
-\pgfpathlineto{\pgfqpoint{0.946237in}{1.477759in}}%
-\pgfpathlineto{\pgfqpoint{0.946237in}{1.529237in}}%
-\pgfpathlineto{\pgfqpoint{0.946237in}{1.588068in}}%
-\pgfpathlineto{\pgfqpoint{0.885847in}{1.391964in}}%
-\pgfpathlineto{\pgfqpoint{0.825457in}{1.117418in}}%
-\pgfpathlineto{\pgfqpoint{0.825457in}{1.163176in}}%
-\pgfpathlineto{\pgfqpoint{0.825457in}{2.078327in}}%
-\pgfpathlineto{\pgfqpoint{0.825457in}{2.764691in}}%
-\pgfpathlineto{\pgfqpoint{0.825457in}{4.823782in}}%
-\pgfpathlineto{\pgfqpoint{0.765068in}{4.823782in}}%
+\pgfpathmoveto{\pgfqpoint{4.992341in}{0.763827in}}%
+\pgfpathlineto{\pgfqpoint{4.750783in}{4.775557in}}%
+\pgfpathlineto{\pgfqpoint{0.765068in}{4.775557in}}%
 \pgfusepath{stroke}%
 \end{pgfscope}%
 \begin{pgfscope}%
@@ -1373,7 +1364,7 @@
 \pgfusepath{stroke}%
 \end{pgfscope}%
 \begin{pgfscope}%
-\pgftext[x=3.134256in,y=4.800524in,left,base]{\rmfamily\fontsize{10.000000}{12.000000}\selectfont MINOMALY (AP = 74.62\%)}%
+\pgftext[x=3.134256in,y=4.800524in,left,base]{\rmfamily\fontsize{10.000000}{12.000000}\selectfont MINOMALY (AP = 94.43\%)}%
 \end{pgfscope}%
 \begin{pgfscope}%
 \pgfsetrectcap%

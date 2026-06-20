@@ -310,8 +310,7 @@ Let $u \in V$. The \textbf{structure} or \textbf{neighborhood graph} of the node
 
 \begin{figure}[H]
     \centering
-    % \hspace*{0.3cm}
-    \resizebox{0.96\linewidth}{!}{\input{figs/framework}}
+    \resizebox{\linewidth}{!}{\input{figs/framework}}
     \caption{Minomaly Framework}
     \label{fig:framework}
 \end{figure}
@@ -568,6 +567,27 @@ The Algorithm \ref{algo:algo} is not applied to all graph nodes, but to potentia
 
 In addition, this method can be used to find anomalous structures of \textbf{node anomalies detected by other methods} that lack interpretations or have low precision by considering these anomalies as starting nodes.
 
+\subsection{\new{Complexity Analysis}}\label{sec:complexity}
+
+\new{We analyze the two phases of Minomaly. Let $k$ be the number of sampled reference neighborhoods, $d$ the embedding dimension, $L$ the number of GNN layers, $s_{\max}$ the maximum neighborhood size, $m$ the reference-sample size used for scoring, and $|S|$ the number of starting nodes. Since $L$, $d$, and $s_{\max}$ are fixed hyperparameters, a single GNN forward pass on one bounded neighborhood costs}
+{\color{blue}\[
+c_{\phi} = O\!\left(L\, s_{\max}^{2}\, d^{2}\right),
+\]}
+\new{a constant that does not depend on the graph size $|V|$ or $|E|$.}
+
+\new{\emph{OES construction (performed once).} Drawing the $k$ reference neighborhoods by tree sampling costs $O(k\, s_{\max}^{2})$, and embedding them costs $O(k\, c_{\phi})$, which dominates. Selecting the $|S|$ starting nodes scores the $k$ embeddings with the outlier detectors: the order-embedding detector compares each embedding against the reference sample, $O(k\, m\, d)$, and the isolation-forest detector adds $O(k \log k \cdot d)$. This phase is computed once and reused for every subsequent query.}
+
+\new{\emph{Frequency estimation.} Estimating $Freq_G$ for a pattern reduces to one geometric comparison of its embedding against the $m$ references, $O(m\, d)$, which replaces the NP-complete subgraph-matching test; with a fixed sample size $m$ this is constant per query.}
+
+\new{\emph{Anomalous-structure search.} Starting from $|S|$ nodes, the greedy search runs $T=\texttt{max\_steps}$ steps; each step expands $n_b$ beams by up to $b=\texttt{max\_cands}$ candidates, embedding each candidate ($c_{\phi}$) and scoring it against the references ($O(m\, d)$). The total search cost is}
+{\color{blue}\[
+O\!\left(|S| \cdot T \cdot n_b \cdot b \cdot (c_{\phi} + m\, d)\right).
+\]}
+
+\new{\emph{Space.} Minomaly stores the graph as a Compressed Sparse Row (CSR) adjacency, $O(|V|+|E|)$, the $k$ reference embeddings, $O(k\, d)$, and the GNN parameters, $O(L\, d^{2})$; the pairwise violation tensors are processed in fixed-size chunks. No $|V|\times|V|$ matrix is ever materialized.}
+
+\new{Two consequences support our scalability claim. First, because neighborhoods are bounded by $s_{\max}$, every per-neighborhood operation (sampling, embedding, comparison) is constant in $|V|$ and $|E|$; the cost grows only with the controllable counts $k$ and $|S|$, and the heuristic starting-node selection keeps $|S| \ll |V|$. Second, the memory footprint is linear in the graph size, $O(|V|+|E|+k\,d)$, in contrast with reconstruction-based detectors whose adjacency reconstruction grows as $O(|V|^{2})$; this is why Minomaly scales to large graphs like Flickr, where those baselines exhaust memory.}
+
 \section{Experiments}
 \label{sec:eval}
 % In this section, we present experiments to evaluate the effectiveness and performance of our proposed framework compared to other representative node anomaly detection methods. \textcolor{green}{We first introduce the datasets and the methods used for comparison. Next, we present the results. Finally, we conduct a study to analyze the properties of our framework through a series of experiments, focusing on the impact of its various components and its interpretability.}
@@ -594,9 +614,9 @@ These hyperparameters, are interpretable and manually tuned to improve results. 
 \textbf{Dataset}   & \textbf{Cora}           & \textbf{Amazon}         & \textbf{Flickr}         \\ \hline
 \boldmath$k$       & 10,000         & 50,000         & 175,000        \\ \hline
 \new{\boldmath$m$}       & \new{10,000}         & \new{10,000}         & \new{10,000}        \\ \hline
-\boldmath$T_F$     & $\frac{35}{2708}$ & $\frac{150}{13752}$ & $\frac{1000}{89250}$ \\
-                   & $\approx$ 0.013 & $\approx$ 0.011   & $\approx$ 0.011  \\ \hline
-\texttt{max\_steps} & 7             & 11             & 5              \\ \hline
+\boldmath$T_F$     & \new{$\frac{15}{2708}$} & \new{$\frac{25}{13752}$} & $\frac{1000}{89250}$ \\
+                   & \new{$\approx$ 0.006} & \new{$\approx$ 0.002}   & $\approx$ 0.011  \\ \hline
+\texttt{max\_steps} & \new{6}             & 11             & 5              \\ \hline
 \texttt{max\_no\_change} & 5       & 3              & 3              \\ \hline
 \texttt{max\_cands} & All           & 20             & 10             \\ \hline
 \texttt{batch\_size} & 1,000         & 10,000         & 10,000         \\ \hline
@@ -749,7 +769,7 @@ On the Cora dataset, Minomaly achieves outstanding F1, AP, Recall, and Precision
     \end{tabular}
 \end{table}
 
-From the Precision-Recall curves in Figure \ref{fig:pr_curve}, we observe low Precision@k across all methods (precisions in left side region), which corresponds to low-frequency scores detected as anomalies for Minomaly. This is attributed to the existence of some unlabeled structures that are rarer than the labeled ones, as shown in the interpretations (See Figure \ref{fig:false_positive}). DONE achieves high Precision@k on Cora due to its restrictive anomaly definition but fails to maintain precision on other datasets and for higher recalls, unlike our frequency-based method. This demonstrates that using frequency as a measure of abnormality is more effective in identifying true anomalies, surpassing reconstruction-loss methods that struggle with rare patterns and fail to capture anomalous patterns across different contexts, as mentioned in Section \ref{sec:relatedworks}.
+From the Precision-Recall curves in Figure \ref{fig:pr_curve}, \new{we observe low Precision@k for the other methods (precisions in left side region), whereas Minomaly maintains high precision across the recall range.} DONE achieves high Precision@k on Cora due to its restrictive anomaly definition but fails to maintain precision on other datasets and for higher recalls, unlike our frequency-based method. This demonstrates that using frequency as a measure of abnormality is more effective in identifying true anomalies, surpassing reconstruction-loss methods that struggle with rare patterns and fail to capture anomalous patterns across different contexts, as mentioned in Section \ref{sec:relatedworks}.
 
 
 % \vspace*{-30pt}
@@ -774,26 +794,6 @@ From the Precision-Recall curves in Figure \ref{fig:pr_curve}, we observe low Pr
 \subsection{Performance Study}
 
 % GUIDE \cite{yuan2024higherorder}, which shares Minomaly's core approach of counting, uses a CPU-intensive graph motif counting algorithm for structural features but is excluded from the benchmark due to memory limitations.
-
-\paragraph{\new{Complexity analysis.}}
-\new{We analyze the two phases of Minomaly. Let $k$ be the number of sampled reference neighborhoods, $d$ the embedding dimension, $L$ the number of GNN layers, $s_{\max}$ the maximum neighborhood size, $m$ the reference-sample size used for scoring, and $|S|$ the number of starting nodes. Since $L$, $d$, and $s_{\max}$ are fixed hyperparameters, a single GNN forward pass on one bounded neighborhood costs}
-{\color{blue}\[
-c_{\phi} = O\!\left(L\, s_{\max}^{2}\, d^{2}\right),
-\]}
-\new{a constant that does not depend on the graph size $|V|$ or $|E|$.}
-
-\new{\emph{OES construction (performed once).} Drawing the $k$ reference neighborhoods by tree sampling costs $O(k\, s_{\max}^{2})$, and embedding them costs $O(k\, c_{\phi})$, which dominates. Selecting the $|S|$ starting nodes scores the $k$ embeddings with the outlier detectors: the order-embedding detector compares each embedding against the reference sample, $O(k\, m\, d)$, and the isolation-forest detector adds $O(k \log k \cdot d)$. This phase is computed once and reused for every subsequent query.}
-
-\new{\emph{Frequency estimation.} Estimating $Freq_G$ for a pattern reduces to one geometric comparison of its embedding against the $m$ references, $O(m\, d)$, which replaces the NP-complete subgraph-matching test; with a fixed sample size $m$ this is constant per query.}
-
-\new{\emph{Anomalous-structure search.} Starting from $|S|$ nodes, the greedy search runs $T=\texttt{max\_steps}$ steps; each step expands $n_b$ beams by up to $b=\texttt{max\_cands}$ candidates, embedding each candidate ($c_{\phi}$) and scoring it against the references ($O(m\, d)$). The total search cost is}
-{\color{blue}\[
-O\!\left(|S| \cdot T \cdot n_b \cdot b \cdot (c_{\phi} + m\, d)\right).
-\]}
-
-\new{\emph{Space.} Minomaly stores the graph as a sparse CSR adjacency, $O(|V|+|E|)$, the $k$ reference embeddings, $O(k\, d)$, and the GNN parameters, $O(L\, d^{2})$; the pairwise violation tensors are processed in fixed-size chunks. No $|V|\times|V|$ matrix is ever materialized.}
-
-\new{Two consequences support our scalability claim. First, because neighborhoods are bounded by $s_{\max}$, every per-neighborhood operation (sampling, embedding, comparison) is constant in $|V|$ and $|E|$; the cost grows only with the controllable counts $k$ and $|S|$, and the heuristic starting-node selection keeps $|S| \ll |V|$ (Table~\ref{tab:minomaly_results} shows between $49\%$ and $80\%$ of nodes are processed). Second, the memory footprint is linear in the graph size, $O(|V|+|E|+k\,d)$, in contrast with reconstruction-based detectors whose adjacency reconstruction grows as $O(|V|^{2})$; this is why Minomaly scales to Flickr, where those baselines exhaust memory.}
 
 In this section, we provide a deep comprehensive analysis of Minomaly's performance characteristics beyond comparative benchmarking. First, we evaluate the effectiveness of our starting node selection strategy, quantifying its computational benefits and impact on detection accuracy by examining how the size $k$ of $RG$ affects performance on Flickr. Next, we analyze how the \texttt{max\_cands} parameter balances effectiveness and efficiency across different levels of graph connectivity. Additionally, we present interpretable visualizations of detected anomalous structures and their frequency evolution. Finally, we conduct a detailed hyperparameter study, examining how $TF$ and \texttt{max\_steps} influence detection performance across various evaluation metrics, revealing clear trends that facilitate practical parameter tuning.
 
@@ -834,7 +834,7 @@ To analyze the impact of the size $k$ of $RG$ on detection quality and its signi
 \texttt{max\_steps} & 5              & 5              & 5              \\ \hline
 \texttt{max\_no\_change} & 3              & 3              & 3              \\ \hline
 \texttt{max\_cands} & 10             & 10             & 10             \\ \hline
-\texttt{batch\_size} & 10,000         & 12,500         & 12,500         \\ \hline
+\texttt{batch\_size} & 12,500         & 12,500         & 12,500         \\ \hline
 \end{tabular}
 \end{table}
 
@@ -859,6 +859,9 @@ The results corresponding to each hyperparameter configuration (C\textsubscript{
 \textbf{OES build time (s)} & \new{22} & \new{118} & \new{542} & \new{1021} & \new{1335} \\ \hline
 \end{tabular}
 \end{table}
+
+\paragraph{\new{Empirical runtime.}}
+\new{The measured times in Table~\ref{tab:minomaly_results} bear out the complexity analysis of Section~\ref{sec:complexity}. The one-time OES construction dominates and grows with the reference-set size $k$, rising from 542\,s at $k=175{,}000$ to 1335\,s at $k=250{,}000$ on Flickr, while the per-dataset search stays between 142\,s and 610\,s. Because the starting-node heuristic processes only 48.8\% to 79.5\% of nodes and no $|V|\times|V|$ matrix is built, Minomaly runs on the 89{,}250-node Flickr graph, where reconstruction-based baselines exhaust memory.}
 
 \paragraph{Impact of Starting Nodes Strategy and $RG$ Size}
 
@@ -917,141 +920,83 @@ The experimental findings suggest that even restrictive frontier sampling (exami
 
 
 \paragraph{Extracted Anomalous Patterns}
-Tables \ref{tab:cora_patterns}, \ref{tab:amazon_patterns}, and \ref{tab:flickr_patterns} present the predicted anomalous pattern groups for the three datasets. After identifying anomalous structures in each dataset, we applied Weisfeiler-Lehman (WL) graph hashing to group structurally isomorphic patterns together; all nodes of these discovered structures are predicted as anomalous. Each table shows representative graphs for these pattern groups, where \textbf{red nodes} indicate true anomalous nodes and \textbf{green nodes} indicate true normal nodes from the ground-truth. The \textbf{Count} field shows how many times each pattern appears in the dataset, while \textbf{A/N} denotes the composition of true anomalous versus true normal nodes within each representative pattern.
+\new{Table~\ref{tab:patterns} reports the anomalous pattern groups that Minomaly extracts from each dataset. We group the verified connected subgraphs by their Weisfeiler-Lehman (WL) hash, so that structurally isomorphic neighborhoods form a single group. Each group is labelled by its size and its frequency rank. The \textbf{Count} field gives the number of occurrences and \textbf{A/N} the anomalous-to-normal composition of a representative instance. Every node drawn in a pattern is flagged anomalous by Minomaly. Red nodes are therefore true positives and green nodes false positives, according to the ground-truth labels. Because the grouping depends only on structure, the same topology can appear with different compositions across its occurrences.}
 
-The pattern extraction results demonstrate Minomaly's strong interpretability advantage, enabling users to understand and validate detected anomalies through visual structural analysis. For Cora (Table~\ref{tab:cora_patterns}), the dominant pattern 7-0 (Count: 31, A/N: 7/0) reveals a fully connected clique structure consisting entirely of anomalous nodes, accounting for the majority of detected anomalies and contributing to the method's high precision (\new{100.00\%}) on this dataset. Flickr (Table~\ref{tab:flickr_patterns}) exhibits similar behavior with patterns 7-0, 7-1, and 7-2 (Count: 375, 49, and 6 respectively) showing pure anomalous structures, supporting the excellent precision (\new{93.26\%--93.90\%}) observed in Table~\ref{tab:minomaly_results}. In contrast, Amazon (Table~\ref{tab:amazon_patterns}) displays more complex pattern diversity with 10 distinct groups, where patterns like 11-1, 11-2, and 11-4 through 11-9 contain only normal nodes (A/N: 0/11) despite being structurally complex and similar to anomalous patterns, explaining the lower precision (\new{52.88\%}) while maintaining excellent recall (\new{97.14\%}). This visual pattern interpretation capability allows domain experts to manually filter false positives by examining structural characteristics and node compositions, effectively transforming the anomaly detection task into an interpretable pattern recognition problem. The visualization enables users to quickly identify which patterns merit further investigation versus those that can be safely filtered, significantly enhancing the practical utility of the detection results beyond raw performance metrics.
-
-\begin{table}[H]
-\centering
-\caption{Extracted anomalous patterns for Cora dataset}
-\label{tab:cora_patterns}
-\resizebox{\linewidth}{!}{
-\begin{tabular}{clclclclcl}
-\toprule
-\multicolumn{2}{c}{\textbf{7-0}} & \multicolumn{2}{c}{\textbf{7-1}} & \multicolumn{2}{c}{\textbf{7-2}} & \multicolumn{2}{c}{\textbf{7-3}} & \multicolumn{2}{c}{\textbf{7-4}} \\
-\cmidrule(lr){1-2} \cmidrule(lr){3-4} \cmidrule(lr){5-6} \cmidrule(lr){7-8} \cmidrule(lr){9-10}
-\scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} \\
-\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/cora_patterns/7-0}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 31 \\ \textbf{A/N}: 7/0\end{tabular} &
-\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/cora_patterns/7-1}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 3 \\ \textbf{A/N}: 0/7\end{tabular} &
-\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/cora_patterns/7-2}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 1 \\ \textbf{A/N}: 1/6\end{tabular} &
-\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/cora_patterns/7-3}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 1 \\ \textbf{A/N}: 6/1\end{tabular} &
-\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/cora_patterns/7-4}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 1 \\ \textbf{A/N}: 0/7\end{tabular} \\
-\midrule
-\multicolumn{2}{c}{\textbf{7-5}} & \multicolumn{2}{c}{\textbf{7-6}} & \multicolumn{2}{c}{\textbf{7-7}} & \multicolumn{2}{c}{\textbf{7-8}} & \multicolumn{2}{c}{} \\
-\cmidrule(lr){1-2} \cmidrule(lr){3-4} \cmidrule(lr){5-6} \cmidrule(lr){7-8}
-\scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & & \\
-\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/cora_patterns/7-5}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 1 \\ \textbf{A/N}: 1/6\end{tabular} &
-\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/cora_patterns/7-6}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 1 \\ \textbf{A/N}: 1/6\end{tabular} &
-\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/cora_patterns/7-7}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 1 \\ \textbf{A/N}: 1/6\end{tabular} &
-\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/cora_patterns/7-8}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 1 \\ \textbf{A/N}: 0/7\end{tabular} & & \\
-\bottomrule
-\end{tabular}
-}
-\begin{tikzpicture}
-    \node[circle,draw,fill=red,inner sep=2pt,label=right:\footnotesize True anomalous node] at (0,0) {};
-    \node[circle,draw,fill=green!70!black,inner sep=2pt,label=right:\footnotesize True normal node] at (3.5,0) {};
-\end{tikzpicture}
-\end{table}
+\new{Minomaly concentrates its detections on a few recurring structures. On Cora it finds a single group, the 6-node clique~6-0, which occurs 66 times and contains only anomalous nodes. Every verified neighborhood belongs to this group, so precision reaches 100.00\% (Figures~\ref{fig:true_positive}--\ref{fig:frequency_track}). Flickr is almost as concentrated. Its detections form nine groups, and the 5-node clique~5-0 alone covers 99\% of them. Of these, 1835 are true anomalous cliques and 110 are structurally identical normal cliques that Minomaly cannot distinguish, so they become false positives and hold Flickr precision between 93.26\% and 93.53\% (Table~\ref{tab:minomaly_results}). The remaining Flickr groups are rare near-cliques. Amazon is more diverse, with 26 groups. The two dominant cliques~10-0 and~9-1 occur 443 and 194 times and together cover 93\% of detections. The rest are rare near-cliques of size~11. Amazon is densely connected, so these cliques also form around normal nodes that are structurally indistinguishable from the injected anomalies. This lowers Amazon precision to 52.88\% while recall stays at 97.14\%.}
 
 \begin{table}[H]
 \centering
-\caption{Extracted anomalous patterns for Amazon dataset}
-\label{tab:amazon_patterns}
-\resizebox{\linewidth}{!}{
-\begin{tabular}{clclclclcl}
+\caption{\new{Anomalous pattern groups extracted from each dataset. Connected subgraphs are grouped by Weisfeiler-Lehman (WL) hash and labelled by size and frequency rank. \textbf{Count} is the number of occurrences and \textbf{A/N} the anomalous-to-normal composition of a representative instance. Every drawn node is flagged anomalous by Minomaly, so red nodes are true positives and green nodes are false positives under the ground-truth labels. Flickr's 5-clique 5-0 is listed twice, in its anomalous (red) and normal (green) instances, because the same structure produces both true and false positives. The dominant groups account for nearly all detections and the rest are rare near-cliques.}}
+\label{tab:patterns}
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.0}
+\newcommand{\patcell}[5]{\begin{tabular}[t]{@{}c@{}}\resizebox{1.45cm}{!}{\input{figs/evaluation/#1/#2}}\\[1pt]{\scriptsize\textbf{#2}}\\{\scriptsize Count: #3}\\{\scriptsize A/N: #4/#5}\end{tabular}}
+\begin{tabular}{@{}cccc@{}}
 \toprule
-\multicolumn{2}{c}{\textbf{11-0}} & \multicolumn{2}{c}{\textbf{11-1}} & \multicolumn{2}{c}{\textbf{11-2}} & \multicolumn{2}{c}{\textbf{11-3}} & \multicolumn{2}{c}{\textbf{11-4}} \\
-\cmidrule(lr){1-2} \cmidrule(lr){3-4} \cmidrule(lr){5-6} \cmidrule(lr){7-8} \cmidrule(lr){9-10}
-\scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} \\
-\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/amazon_patterns/11-0}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 96 \\ \textbf{A/N}: 11/0\end{tabular} &
-\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/amazon_patterns/11-1}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 20 \\ \textbf{A/N}: 0/11\end{tabular} &
-\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/amazon_patterns/11-2}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 10 \\ \textbf{A/N}: 0/11\end{tabular} &
-\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/amazon_patterns/11-3}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 10 \\ \textbf{A/N}: 11/0\end{tabular} &
-\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/amazon_patterns/11-4}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 6 \\ \textbf{A/N}: 0/11\end{tabular} \\
+\multicolumn{4}{@{}l@{}}{\textbf{Cora}: 1 unique pattern} \\
 \midrule
-\multicolumn{2}{c}{\textbf{11-5}} & \multicolumn{2}{c}{\textbf{11-6}} & \multicolumn{2}{c}{\textbf{11-7}} & \multicolumn{2}{c}{\textbf{11-8}} & \multicolumn{2}{c}{\textbf{11-9}} \\
-\cmidrule(lr){1-2} \cmidrule(lr){3-4} \cmidrule(lr){5-6} \cmidrule(lr){7-8} \cmidrule(lr){9-10}
-\scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} \\
-\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/amazon_patterns/11-5}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 5 \\ \textbf{A/N}: 0/11\end{tabular} &
-\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/amazon_patterns/11-6}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 4 \\ \textbf{A/N}: 0/11\end{tabular} &
-\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/amazon_patterns/11-7}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 3 \\ \textbf{A/N}: 0/11\end{tabular} &
-\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/amazon_patterns/11-8}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 2 \\ \textbf{A/N}: 0/11\end{tabular} &
-\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/amazon_patterns/11-9}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 2 \\ \textbf{A/N}: 0/11\end{tabular} \\
+\patcell{cora_patterns}{6-0}{66}{6}{0} & & & \\
+\midrule
+\multicolumn{4}{@{}l@{}}{\textbf{Amazon}: 26 unique patterns (top 8 by frequency shown)} \\
+\midrule
+\patcell{amazon_patterns}{10-0}{443}{10}{0} & \patcell{amazon_patterns}{9-1}{194}{9}{0} & \patcell{amazon_patterns}{11-2}{11}{0}{11} & \patcell{amazon_patterns}{11-3}{5}{0}{11} \\[3pt]
+\patcell{amazon_patterns}{11-4}{3}{0}{11} & \patcell{amazon_patterns}{11-5}{3}{0}{11} & \patcell{amazon_patterns}{11-6}{3}{0}{11} & \patcell{amazon_patterns}{11-7}{2}{0}{11} \\
+\midrule
+\multicolumn{4}{@{}l@{}}{\textbf{Flickr}: 9 unique patterns (top 8 by frequency shown)} \\
+\midrule
+\patcell{flickr_patterns}{5-0}{1835}{5}{0} & \begin{tabular}[t]{@{}c@{}}\resizebox{1.45cm}{!}{\input{figs/evaluation/flickr_patterns/5-0fp}}\\[1pt]{\scriptsize\textbf{5-0}}\\{\scriptsize Count: 110}\\{\scriptsize A/N: 0/5}\end{tabular} & \patcell{flickr_patterns}{5-1}{6}{0}{5} & \patcell{flickr_patterns}{5-2}{4}{0}{5} \\[3pt]
+\patcell{flickr_patterns}{5-3}{2}{0}{5} & \patcell{flickr_patterns}{5-4}{2}{0}{5} & \patcell{flickr_patterns}{5-5}{1}{0}{5} & \patcell{flickr_patterns}{5-6}{1}{4}{1} \\
 \bottomrule
 \end{tabular}
-}
-\begin{tikzpicture}
-    \node[circle,draw,fill=red,inner sep=2pt,label=right:\footnotesize True anomalous node] at (0,0) {};
-    \node[circle,draw,fill=green!70!black,inner sep=2pt,label=right:\footnotesize True normal node] at (3.5,0) {};
-\end{tikzpicture}
-\end{table}
-
-\begin{table}[H]
-\centering
-\caption{Extracted anomalous patterns for Flickr dataset}
-\label{tab:flickr_patterns}
-\resizebox{\linewidth}{!}{
-\begin{tabular}{clclclclcl}
-\toprule
-\multicolumn{2}{c}{\textbf{7-0}} & \multicolumn{2}{c}{\textbf{7-1}} & \multicolumn{2}{c}{\textbf{7-2}} & \multicolumn{2}{c}{\textbf{7-3}} & \multicolumn{2}{c}{\textbf{7-4}} \\
-\cmidrule(lr){1-2} \cmidrule(lr){3-4} \cmidrule(lr){5-6} \cmidrule(lr){7-8} \cmidrule(lr){9-10}
-\scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} \\
-\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/flickr_patterns/7-0}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 375 \\ \textbf{A/N}: 7/0\end{tabular} &
-\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/flickr_patterns/7-1}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 49 \\ \textbf{A/N}: 0/7\end{tabular} &
-\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/flickr_patterns/7-2}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 6 \\ \textbf{A/N}: 7/0\end{tabular} &
-\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/flickr_patterns/7-3}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 3 \\ \textbf{A/N}: 6/1\end{tabular} &
-\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/flickr_patterns/7-4}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 2 \\ \textbf{A/N}: 0/7\end{tabular} \\
-\midrule
-\multicolumn{2}{c}{\textbf{7-5}} & \multicolumn{2}{c}{\textbf{7-6}} & \multicolumn{2}{c}{\textbf{7-7}} & \multicolumn{2}{c}{\textbf{7-8}} & \multicolumn{2}{c}{\textbf{7-9}} \\
-\cmidrule(lr){1-2} \cmidrule(lr){3-4} \cmidrule(lr){5-6} \cmidrule(lr){7-8} \cmidrule(lr){9-10}
-\scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} & \scriptsize \textit{Pattern} & \scriptsize \textit{Stats} \\
-\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/flickr_patterns/7-5}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 2 \\ \textbf{A/N}: 0/7\end{tabular} &
-\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/flickr_patterns/7-6}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 1 \\ \textbf{A/N}: 1/6\end{tabular} &
-\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/flickr_patterns/7-7}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 1 \\ \textbf{A/N}: 0/7\end{tabular} &
-\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/flickr_patterns/7-8}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 1 \\ \textbf{A/N}: 0/7\end{tabular} &
-\begin{tabular}[c]{@{}c@{}}\resizebox{2cm}{!}{\input{figs/evaluation/flickr_patterns/7-9}}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Count}: 1 \\ \textbf{A/N}: 1/6\end{tabular} \\
-\bottomrule
-\end{tabular}
-}
-\begin{tikzpicture}
-    \node[circle,draw,fill=red,inner sep=2pt,label=right:\footnotesize True anomalous node] at (0,0) {};
-    \node[circle,draw,fill=green!70!black,inner sep=2pt,label=right:\footnotesize True normal node] at (3.5,0) {};
-\end{tikzpicture}
+\\[4pt]
+{\footnotesize All displayed nodes are flagged as anomalous by Minomaly. \quad \tikz{\node[circle,draw,fill=red,inner sep=1.5pt]{};}~True positive (ground-truth anomalous) \quad \tikz{\node[circle,draw,fill=green!70!black,inner sep=1.5pt]{};}~False positive (ground-truth normal)}
 \end{table}
 
 \paragraph{Interpretations}
-While Minomaly demonstrates strong overall performance across datasets (Table~\ref{tab:minomaly_results}), Amazon's precision (\new{52.88\%}) is notably lower than that of Cora (\new{100.00\%}) and Flickr (\new{93.26\%--93.90\%}). This discrepancy can be attributed to two primary factors revealed through our pattern interpretation analysis. Figure~\ref{fig:true_positive}, \ref{fig:false_positive} and \ref{fig:true_negative} illustrate examples of these interpretations. First, Amazon contains numerous structural patterns that are labeled as normal in the ground truth but exhibit strong structural similarities to true anomalous patterns. Second, nodes connected to anomalous structures are labeled as normal in the ground truth and can be labeled as anomalies in certain contexts. Despite these precision challenges, the method maintains excellent recall (\new{97.14\%}) on Amazon, demonstrating its effectiveness at identifying the complete set of true anomalies.
+\new{Minomaly performs strongly across datasets, yet Amazon precision of 52.88\% is lower than Cora's 100.00\% and Flickr's 93.26\% to 93.53\% (Table~\ref{tab:minomaly_results}). Amazon's dense connectivity explains the gap. Dense cliques and near-cliques recur throughout the graph around nodes that the ground truth labels normal, and these structures are indistinguishable from the injected anomalous cliques (Figures~\ref{fig:flickr_tp}--\ref{fig:false_positive_freq}). The rare near-clique groups in Table~\ref{tab:patterns} therefore consist almost entirely of false positives. Despite this, Amazon recall stays high at 97.14\%, so Minomaly still recovers the full set of true anomalies.}
 
 \begin{figure}[H]
     \centering
-    \begin{subfigure}{0.2\textwidth}
-        \resizebox{\linewidth}{!}{\input{figs/evaluation/tracked_1235_graph}}
-        \caption{True positive}
+    \begin{subfigure}{0.22\textwidth}
+        \resizebox{\linewidth}{!}{\input{figs/evaluation/tracked_cora_tp}}
+        \caption{Anomalous (Cora)}
         \label{fig:true_positive}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{0.2\textwidth}
-        \resizebox{\linewidth}{!}{\input{figs/evaluation/tracked_2705_graph}}
-        \caption{False positive}
-        \label{fig:false_positive}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.2\textwidth}
-        \resizebox{\linewidth}{!}{\input{figs/evaluation/tracked_30_graph}}
-        \caption{True negative}
+    \begin{subfigure}{0.22\textwidth}
+        \resizebox{\linewidth}{!}{\input{figs/evaluation/tracked_cora_tn}}
+        \caption{Normal (Cora)}
         \label{fig:true_negative}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{0.3\textwidth}
-        \resizebox{\linewidth}{!}{\input{figs/evaluation/tracked_freq}}
-        \caption{Frequency changes}
+    \begin{subfigure}{0.5\textwidth}
+        \resizebox{\linewidth}{!}{\input{figs/evaluation/tracked_freq_cora}}
+        \caption{Frequency (Cora)}
         \label{fig:frequency_track}
     \end{subfigure}
-    \caption{Minomaly interpretation results on the Cora dataset, illustrating three examples: an anomalous structure (red), a normal one (green), and a falsely predicted node connected to an anomalous structure (blue), along with their frequency change curves.}
+    \\[8pt]
+    \begin{subfigure}{0.22\textwidth}
+        \resizebox{\linewidth}{!}{\input{figs/evaluation/tracked_flickr_tp}}
+        \caption{Anomalous (Flickr)}
+        \label{fig:flickr_tp}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.22\textwidth}
+        \resizebox{\linewidth}{!}{\input{figs/evaluation/tracked_flickr_fp}}
+        \caption{False positive (Flickr)}
+        \label{fig:false_positive}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.5\textwidth}
+        \resizebox{\linewidth}{!}{\input{figs/evaluation/tracked_freq_flickr}}
+        \caption{Frequency (Flickr)}
+        \label{fig:false_positive_freq}
+    \end{subfigure}
+    \caption{Minomaly interpretation results on the Cora \new{and Flickr datasets}, illustrating three examples: an anomalous structure (red), a normal one (green), and a falsely predicted \new{clique, structurally identical to an anomalous one,} (blue), along with their frequency change curves.}
     \label{fig:interpret_results}
 \end{figure}
 
-Figure~\ref{fig:analyze_oes_search} visually demonstrates the effectiveness of the method in identifying anomalous regions by step-walking over the embedded anomalous neighborhoods, which contributes to achieving high recall (92.86\%) on the all datasets. Additionally, the overall high precision observed across datasets indicates that the approach effectively filters out true positive nodes from the large visualized searched region.
+Figure~\ref{fig:analyze_oes_search} visually demonstrates the effectiveness of the method in identifying anomalous regions by step-walking over the embedded anomalous neighborhoods, which contributes to achieving high recall (\new{82.10\%--97.14\%}) across all datasets. Additionally, the overall high precision observed across datasets indicates that the approach effectively filters out true positive nodes from the large visualized searched region.
 
 \begin{figure}[H]
     \centering
@@ -1095,13 +1040,13 @@ max\_steps range & $\llbracket 1, 11 \rrbracket$ & $\llbracket 1, 21 \rrbracket$
 
 $T_F$ and \texttt{max\_steps} control the threshold used to filter anomalous nodes from the search results, as shown in Figure \ref{fig:frequency_track}. Thus, it is important to study their effect on detection performance.
 
-The heatmaps indicate that Minomaly is highly sensitive to these hyperparameters, and performance can be improved only by tuning them, as they serve as key thresholds for the framework (See Figures \ref{fig:analyze_hyperparameters_cora}, \ref{fig:analyze_hyperparameters_amazon}, \ref{fig:analyze_hyperparameters_flickr} and \ref{fig:frequency_track}).
+\new{The metrics form two groups that respond differently to the hyperparameters. AUC and recall share nearly identical heatmaps, since both measure how completely the anomalous nodes are detected. Precision, AP, and F1 form the second group, since all three are sensitive to the false positives in the flagged set, and F1 follows precision because precision is the smaller of its two terms here. It is therefore sufficient to track AUC and precision, one metric from each group, during manual tuning. In contrast, the baseline methods rely on reconstruction thresholds that are independent of these hyperparameters, so they yield suboptimal results on the other metrics despite a good AUC (See Table \ref{tab:bench_results}), and selecting the right reconstruction threshold is a separate task to consider.}
 
-Since AUC, AP, Recall, and F1 metrics share similar heatmaps, it is sufficient to use only AUC for manual tuning, as it is a reliable metric for this task. In contrast, the baseline methods that rely on reconstruction thresholds typically yield suboptimal results for the other metrics, despite having good AUC (See Table \ref{tab:bench_results}), because their reconstruction thresholds are independent of the hyperparameters, and choosing the right reconstruction threshold is another task to consider.
+\new{The AUC and recall heatmaps are high over a wide region rather than a narrow band, as shown in Figures \ref{fig:auroc_heatmap_cora}, \ref{fig:auroc_heatmap_amazon} and \ref{fig:auroc_heatmap_flickr}. Both hyperparameters act in the same direction. Growing a neighborhood for more steps lowers its frequency, since larger subgraphs are rarer, and increasing $T_F$ loosens the threshold. A node is flagged once its frequency falls below $T_F$ within \texttt{max\_steps}, so raising either hyperparameter can only add detections. Recall therefore increases with both and approaches one once \texttt{max\_steps} is large enough to grow each injected clique. AUC stays high over the same region, since the anomalous cliques reach much lower frequencies than the normal nodes. It decreases only in the corner of large $T_F$ and large \texttt{max\_steps}, where over-grown normal structures also become rare, and this decrease is stronger on the densely connected Amazon.}
 
-We also observe that precision is generally high across the entire search grid and shows little sensitivity to the hyperparameters, as illustrated in the heatmaps \ref{fig:precision_heatmap_cora}, \ref{fig:precision_heatmap_amazon} and \ref{fig:precision_heatmap_flickr}, but it decreases for higher values of $T_F$ and \texttt{max\_steps}. This aligns with our focus on detecting rare small node neighborhoods.
+\new{Precision and AP behave differently because they penalize false positives, as illustrated in the heatmaps \ref{fig:precision_heatmap_cora}, \ref{fig:precision_heatmap_amazon} and \ref{fig:precision_heatmap_flickr}. They are highest at small $T_F$, where only the genuine rare cliques fall below the threshold, and they decrease as $T_F$ and \texttt{max\_steps} grow, since dense normal structures then also become rare enough to be flagged. The region of high precision is widest on Cora and Flickr, whose anomalies are clean cliques, and narrowest on Amazon, whose dense connectivity produces many normal cliques. This matches our focus on detecting rare small node neighborhoods.}
 
-The AUC surfaces for both datasets are relatively smooth, with a few local maxima, as shown in Figures \ref{fig:cora_scatter_plot_auroc}, \ref{fig:amazon_scatter_plot_auroc} and \ref{fig:flickr_scatter_plot_auroc}. The AUC heatmap shows optimal hyperparameters of $T_F = \frac{24}{2708}\approx 0.88\%$ and \texttt{max\_steps} = 9 for Cora, $T_F = \frac{150}{13752}\approx 1.1\%$ and \texttt{max\_steps} = 11 for Amazon, and $T_F = \frac{1000}{89250}\approx 1.1\%$ and \texttt{max\_steps} = 5 for Flickr. These values are close to the used benchmark parameters in Table \ref{tab:all_minomaly_hyperparameters} and are within the region of interest. The AUC heatmap for Cora (Figure \ref{fig:auroc_heatmap_cora}), Amazon (Figure \ref{fig:auroc_heatmap_amazon}) and Flickr \ref{fig:auroc_heatmap_flickr}) show that high scores are achieved in a relatively continuous linear region of $T_F$ and \texttt{max\_steps}. Thus, finding the optimal values is straightforward. For small continuous values of $T_F$ and \texttt{max\_steps}, performance is high and stable, but it decreases outside these regions.
+\new{The AUC surfaces are smooth with a single broad maximum, as shown in Figures \ref{fig:cora_scatter_plot_auroc}, \ref{fig:amazon_scatter_plot_auroc} and \ref{fig:flickr_scatter_plot_auroc}. The best AUC is reached at $T_F = \frac{23}{2708} \approx 0.85\%$ and \texttt{max\_steps} $= 8$ for Cora, $T_F = \frac{20}{13752} \approx 0.15\%$ and \texttt{max\_steps} $= 11$ for Amazon, and $T_F = \frac{200}{89250} \approx 0.22\%$ and \texttt{max\_steps} $= 10$ for Flickr. These values lie within the wide high-AUC region, which also contains the benchmark configurations in Table \ref{tab:all_minomaly_hyperparameters}. Thus, finding effective values is straightforward. A small $T_F$, chosen from the expected anomaly rate, together with a \texttt{max\_steps} large enough to grow the target neighborhoods, reaches the high-performing region.}
 
 Finding these regions is not difficult: the frequency threshold \( T_F \) is typically small since anomalies are rare and can be determined from the dataset characteristics. \texttt{max\_steps} is also small, as we focus on small neighborhoods, followed by manual tuning based on the interpretations. Alternatively, a faster automatic solution without varying the parameters in the greedy search is to predefine the search region by setting sufficiently high values for \texttt{max\_steps} and \( T_F \), then execute Minomaly with these values. The frequency curves will be generated and filtered for each frequency \(\texttt{freq} < T_F\) and step \(\texttt{step} < \texttt{max\_steps}\). The choice of optimal hyperparameters from \texttt{freq} and \texttt{step} is then left to the user based on the interpretations.
 
@@ -1341,9 +1286,9 @@ Minomaly's performance advantages across datasets validate our fundamental hypot
 \paragraph{Efficient and Scalable Search Strategy} Minomaly's selective processing of starting nodes (\new{79.5\%} of Cora nodes, \new{72.2\%} of Amazon nodes, and \new{48.8\%--61.2\%} of Flickr nodes) significantly reduces computation complexity without compromising detection quality. The high precision of these starting nodes (\new{98.6\%} in Cora, \new{89.1\%} in Amazon) shows that we effectively identify regions containing anomalies. Unlike competing methods that suffer from memory limitations due to neighborhood explosion when reconstructing node representations, Minomaly remains scalable even on large graphs like Flickr (achieving \new{91.0\%--93.2\%} AUC). This scalability comes from our frequency-based approach using a sufficiently $k$ embedded random small graphs  $RG$ to cover diverse graph patterns, avoiding the memory-intensive operations that cause other methods to fail on larger datasets.
 
 \paragraph{Interpretable Parameter Space}
-The analysis of $T_F$ and \texttt{max\_steps} reveals that Minomaly's hyperparameters have clear semantic meaning with predictable effects on performance. The continuous regions of high performance in Figures~\ref{fig:analyze_hyperparameters_cora}-\ref{fig:analyze_hyperparameters_flickr} suggest that finding effective configurations is straightforward compared to deep learning approaches. This interpretability facilitates practical deployment and tuning in real-world scenarios. Similarly, the \texttt{max\_cands} parameter effectively balances exploration thoroughness and computational complexity, as evidenced by strong performance on Amazon (\new{97.62\%} AUC) despite examining only 20 candidates per step in this highly connected graph.
+The analysis of $T_F$ and \texttt{max\_steps} reveals that Minomaly's hyperparameters have clear semantic meaning with predictable effects on performance. \new{AUC and recall increase with both hyperparameters and stay high over a wide region, while precision and AP are highest at small $T_F$, so a small $T_F$ with a sufficiently large \texttt{max\_steps} reaches the high-performing region (Figures~\ref{fig:analyze_hyperparameters_cora}-\ref{fig:analyze_hyperparameters_flickr}).} This suggests that finding effective configurations is straightforward compared to deep learning approaches. This interpretability facilitates practical deployment and tuning in real-world scenarios. Similarly, the \texttt{max\_cands} parameter effectively balances exploration thoroughness and computational complexity, as evidenced by strong performance on Amazon (\new{97.62\%} AUC) despite examining only 20 candidates per step in this highly connected graph.
 
-\paragraph{Integrated Detection and Explanation} Unlike other methods that explain results afterward, Minomaly unifies detection and explanation into a coherent process. The frequency curves and anomalous structures in Figure~\ref{fig:interpret_results} and Tables~\ref{tab:cora_patterns}-\ref{tab:flickr_patterns} provide transparent rationales for anomaly flags, making results more actionable for domain experts. Figure~\ref{fig:analyze_oes_search} visualizes how the search process effectively navigates the embedding space to identify anomalous regions, demonstrating that this integrated approach successfully captures meaningful anomalous structures.
+\paragraph{Integrated Detection and Explanation} Unlike other methods that explain results afterward, Minomaly unifies detection and explanation into a coherent process. The frequency curves and anomalous structures in Figure~\ref{fig:interpret_results} and Table~\ref{tab:patterns} provide transparent rationales for anomaly flags, making results more actionable for domain experts. Figure~\ref{fig:analyze_oes_search} visualizes how the search process effectively navigates the embedding space to identify anomalous regions, demonstrating that this integrated approach successfully captures meaningful anomalous structures.
 
 \paragraph{\new{Structural Anomalies in Real-World Fraud}}
 \new{The Amazon fraud experiment reveals that structural anomalies are not an artifact of synthetic injection. Among 821 organically labeled fraud nodes, 136 form dense cliques that Minomaly discovers without label supervision. Because Minomaly returns explicit subgraph patterns, the analyst can characterize each pattern and identify the dense cliques that indicate coordinated fraud. Fraud clique members produce verified-neighbor density of 1.0, while other rare structures produce 0.0. Filtering for this clique topology achieves AUC 94.1\% against the structural fraud. Dense cliques are a well-established indicator of coordinated fraud, and Minomaly provides a principled way to discover and characterize them. The experiment also delineates the boundary of structural methods: 84\% of fraud is behavioral and invisible to topology, motivating the integration of contextual features as future work.}

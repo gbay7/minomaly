@@ -1,0 +1,17 @@
+\begin{tikzpicture}
+  \draw
+    (0.000:3.000) node[fill={rgb,140:red,255;green,0;blue,0}, minimum size=4mm, circle, draw, text=white] (38198){38198}
+    (72.000:3.000) node[fill={rgb,140:red,255;green,0;blue,0}, minimum size=2mm, circle, draw, text=white] (35800){35800}
+    (144.000:3.000) node[fill={rgb,140:red,255;green,0;blue,0}, minimum size=2mm, circle, draw, text=white] (61623){61623}
+    (216.000:3.000) node[fill={rgb,140:red,255;green,0;blue,0}, minimum size=2mm, circle, draw, text=white] (68968){68968}
+    (288.000:3.000) node[fill=green!70!black, minimum size=2mm, circle, draw, text=white] (80118){80118};
+  \begin{scope}[-]
+    \draw (38198) to (35800);
+    \draw (38198) to (61623);
+    \draw (38198) to (68968);
+    \draw (38198) to (80118);
+    \draw (35800) to (61623);
+    \draw (35800) to (68968);
+    \draw (61623) to (68968);
+  \end{scope}
+\end{tikzpicture}

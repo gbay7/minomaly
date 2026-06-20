@@ -1,0 +1,26 @@
+\begin{tikzpicture}
+  \draw
+    (0.000:2) node[fill=orange, text=black, font=\scriptsize, minimum size=4mm, inner sep=1pt, circle, draw] (641){641}
+    (60.000:2) node[fill={rgb,140:red,255;green,0;blue,0}, font=\scriptsize, minimum size=3mm, inner sep=1pt, circle, draw, text=white] (50){50}
+    (120.000:2) node[fill={rgb,140:red,255;green,0;blue,0}, font=\scriptsize, minimum size=3mm, inner sep=1pt, circle, draw, text=white] (170){170}
+    (180.000:2) node[fill={rgb,140:red,255;green,0;blue,0}, font=\scriptsize, minimum size=3mm, inner sep=1pt, circle, draw, text=white] (1854){1854}
+    (240.000:2) node[fill={rgb,140:red,255;green,0;blue,0}, font=\scriptsize, minimum size=3mm, inner sep=1pt, circle, draw, text=white] (2600){2600}
+    (300.000:2) node[fill={rgb,140:red,255;green,0;blue,0}, font=\scriptsize, minimum size=3mm, inner sep=1pt, circle, draw, text=white] (2654){2654};
+  \begin{scope}[-]
+    \draw (50) to (170);
+    \draw (50) to (641);
+    \draw (50) to (1854);
+    \draw (50) to (2600);
+    \draw (50) to (2654);
+    \draw (170) to (641);
+    \draw (170) to (1854);
+    \draw (170) to (2600);
+    \draw (170) to (2654);
+    \draw (641) to (1854);
+    \draw (641) to (2600);
+    \draw (641) to (2654);
+    \draw (1854) to (2600);
+    \draw (1854) to (2654);
+    \draw (2600) to (2654);
+  \end{scope}
+\end{tikzpicture}
