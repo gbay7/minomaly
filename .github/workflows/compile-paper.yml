@@ -1,8 +1,8 @@
-name: Compile Paper
+name: Compile Paper (Neurocomputing)
 
 on:
   push:
-    branches: [paper]
+    branches: [neurocomputing]
   workflow_dispatch:
 
 permissions:
@@ -23,19 +23,16 @@ jobs:
 
       - name: Zip paper source
         run: |
-          zip -r minomaly-paper-source.zip \
+          zip -r minomaly-neurocomputing-source.zip \
             main.tex refs.bib newrefs.bib \
-            figs/ tables/ \
-            sn-jnl.cls sn-basic.bst sn-apacite.bst sn-aps.bst \
-            sn-chicago.bst sn-mathphys-ay.bst sn-mathphys-num.bst \
-            sn-nature.bst sn-vancouver.bst
+            figs/ tables/
 
       - name: Create release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: paper-${{ github.sha }}
-          name: Paper Build ${{ github.run_number }}
-          body: Compiled paper and source from commit ${{ github.sha }}
+          tag_name: neurocomputing-${{ github.sha }}
+          name: Neurocomputing Build ${{ github.run_number }}
+          body: Compiled Neurocomputing (Elsevier elsarticle) paper and source from commit ${{ github.sha }}
           files: |
             main.pdf
-            minomaly-paper-source.zip
+            minomaly-neurocomputing-source.zip

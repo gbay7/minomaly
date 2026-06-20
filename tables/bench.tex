@@ -1,8 +1,9 @@
-\begin{table}[H]
+\begin{table}[htbp]
     \footnotesize
     \centering
     \caption{Comparison of AUC, F1, AP, Recall, and Precision across methods}
     \label{tab:bench_results}
+    \resizebox{\linewidth}{!}{%
     \begin{tabular}{|l|c|c|c|c|c|c|}
     \hline
     Dataset & Model & AUC & F1 & AP & Recall & Precision \\ \hline
@@ -34,5 +35,6 @@
     & AdONE & 5.0 & 5.0 & 5.5 & 5.0 & 5.0 \\
     & AnomalyDAE & 4.0 & 4.0 & 5.0 & 4.0 & 4.0 \\
     & CONAD & 2.0 & 3.0 & 3.0 & 3.0 & 3.0 \\ \hline
-    \end{tabular}
+    \end{tabular}%
+    }
 \end{table}
